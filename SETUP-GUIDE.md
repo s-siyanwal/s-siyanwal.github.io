@@ -4,7 +4,7 @@ Follow this once, top to bottom. It takes about 20 minutes.
 No coding required. Everything here is free.
 
 **What you'll end up with:** a public website at
-`https://shivanshu-siyanwal.github.io` that you update by dropping your CV
+`https://s-siyanwal.github.io/shivanshu-siyanwal.github.io/` that you update by dropping your CV
 into a folder.
 
 ---
@@ -23,13 +23,15 @@ into a folder.
 Go to <https://github.com/join>. Free. Remember your **username** — it becomes
 part of your web address.
 
-> The rest of this guide assumes your username is `shivanshu-siyanwal`.
+> The rest of this guide assumes your username is `s-siyanwal`.
 > Wherever you see that, use your own.
 
 ### Step 1.2 — Create the repository
 1. Go to <https://github.com/new>
 2. **Repository name:** `shivanshu-siyanwal.github.io`
-   *(your username, then `.github.io` — this exact pattern gives you the clean web address)*
+   *(Only a repo named exactly `<username>.github.io` — here `s-siyanwal.github.io` — gets
+   the short address `https://s-siyanwal.github.io`. Any other name, like this one, is
+   served under `https://s-siyanwal.github.io/<repo-name>/`. Both work.)*
 3. Choose **Public**
 4. Leave every checkbox unticked
 5. Click **Create repository**
@@ -71,7 +73,7 @@ Repeat the same process for `scripts/ingest.py` if that's missing too.
 
 Wait about a minute, then refresh. A green banner shows your live address:
 
-**https://shivanshu-siyanwal.github.io**
+**https://s-siyanwal.github.io/shivanshu-siyanwal.github.io/**
 
 ✅ Your site is now public. If you stop here, everything works — you'd just
 update it by editing `data/content.json` by hand.
@@ -270,6 +272,6 @@ a **partial JSON file** into `inbox/` — those are merged without any AI at all
 | Fix a typo | Edit `data/content.json` directly |
 | Change my CV PDF | Upload to `assets/` |
 | Change colours or fonts | Edit the `:root` block at the top of `style.css` |
-| See my site | `https://shivanshu-siyanwal.github.io` |
+| See my site | `https://s-siyanwal.github.io/shivanshu-siyanwal.github.io/` |
 | Check on the robot | **Actions** tab |
 | Approve a change | **Pull requests** tab |
