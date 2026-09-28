@@ -141,7 +141,8 @@ def article_ld(pub):
            "headline": pub.get("title")}
     if pub.get("year"):
         obj["datePublished"] = pub["year"]
-    names = [a.strip() for a in re.split(r",|\band\b", pub.get("authors") or "") if a.strip()]
+    authors = re.sub(r"\bet al\.?", "", pub.get("authors") or "")
+    names = [a.strip() for a in re.split(r",|\band\b", authors) if a.strip()]
     if names:
         obj["author"] = [{"@type": "Person", "name": n} for n in names]
     if pub.get("venue"):

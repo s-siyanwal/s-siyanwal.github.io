@@ -384,7 +384,11 @@ a.card:hover h3 { color: var(--accent-ink); }
 .pubcard-meta { font-size: .88rem; color: var(--ink-faint); margin: 0 0 .8rem; }
 .pubcard-abstract { font-size: .93rem; color: var(--ink-soft); margin: 0 0 .9rem; flex: 1; }
 .pubcard-links { margin-top: auto; padding-top: .7rem; border-top: 1px solid var(--rule); }
-.pubcard-links a { font-family: var(--mono); font-size: .72rem; }
+.pubcard-links { display: flex; flex-wrap: wrap; align-items: center; gap: .9rem; }
+.pubcard-links a, .bib-btn, .bib-status { font-family: var(--mono); font-size: .72rem; }
+.bib-btn { background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.bib-btn:hover { color: var(--ink); }
+.bib-status { color: var(--ink-soft); }
 #pub-filter { margin-top: 1.2rem; flex-wrap: wrap; }
 
 /* ---------- About page ---------- */
