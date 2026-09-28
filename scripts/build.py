@@ -196,7 +196,7 @@ def not_found(data, site):
 <link rel="stylesheet" href="{site}/style.css"/>
 </head>
 <body>
-<div class="topbar"><div class="wrap topbar-inner"><a class="topbar-name" href="{site}/">{esc(p.get("name"))}</a></div></div>
+<header class="topbar"><div class="wrap topbar-inner"><a class="topbar-name" href="{site}/">{esc(p.get("name"))}</a></div></header>
 <main id="main">
   <header class="page-head">
     <div class="wrap narrow">

@@ -11,7 +11,7 @@
   --paper-3: #eceadf;
   --ink: #1b1a17;
   --ink-soft: #4a483f;
-  --ink-faint: #86836f;
+  --ink-faint: #6a6756;
   --rule: #dcd8c9;
   --rule-strong: #c9c4b2;
   --accent: #1f5c54;
@@ -255,7 +255,7 @@ details > summary::-webkit-details-marker { display: none; }
 .footer { background: var(--ink); color: var(--paper); padding: 2.6rem 0; }
 .footer-grid { display: flex; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; align-items: flex-end; }
 .footer-name { font-family: var(--display); font-size: 1.3rem; margin: 0 0 .25rem; }
-.footer-loc { font-family: var(--mono); font-size: .74rem; color: var(--ink-faint); margin: 0; }
+.footer-loc { font-family: var(--mono); font-size: .74rem; color: #b9b5a5; margin: 0; }
 .footer-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
 .footer-links a { font-family: var(--mono); font-size: .78rem; color: var(--paper); text-decoration: none; }
 .footer-links a:hover { color: var(--accent-soft); text-decoration: underline; }
