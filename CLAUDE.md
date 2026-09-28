@@ -27,7 +27,8 @@ negotiable; everything else is guidance.
 ```
 index.html            Home: hero + animated circuit, metrics, profile links,
                       experience (<details>), project cards with filter, recent papers
-project.html          Project deep-dive, addressed as project.html?id=<id>
+project.html          Project deep-dive template; built into project-<id>.html
+                      (project.html?id=<id> redirects there on the live site)
 publications.html     Full bibliography, abstracts, type filter
 about.html            Research statement, interests, training, skills, education
 style.css             All styling; design tokens in :root
@@ -38,7 +39,9 @@ data/content.json     ★ Single source of truth for ALL content
 assets/               CV PDF
 inbox/                Drop zone for updates; processed files → inbox/archive/
 scripts/ingest.py     Text extraction + LLM extraction + deterministic merge + validation
+scripts/build.py      Prerender into _site/ (headless Chromium runs the JS renderers)
 .github/workflows/update-content.yml   The inbox → PR automation
+.github/workflows/pages.yml            Build (every PR) + deploy (push to main)
 SETUP-GUIDE.md        Beginner walkthrough for Shiv (keep it accurate!)
 README.md             Technical overview
 ```

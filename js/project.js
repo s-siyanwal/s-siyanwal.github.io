@@ -1,4 +1,4 @@
-import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, audLabel } from "./site.js";
+import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, audLabel, projectHref } from "./site.js";
 
 (async function () {
   let data;
@@ -8,7 +8,7 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, aud
   mountChrome(data, "projects");
   mountFooter(data);
 
-  const id = new URLSearchParams(location.search).get("id");
+  const id = document.body.dataset.projectId || new URLSearchParams(location.search).get("id");
   const projects = data.projects || [];
   const pr = projects.find((x) => x.id === id);
 
@@ -19,7 +19,7 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, aud
         <h1>That project doesn't exist</h1>
         <p class="lede">Pick one from the list below.</p>
         <ul class="plain-list">${projects.map((x) =>
-          `<li><a href="project.html?id=${encodeURIComponent(x.id)}">${esc(x.name)}</a></li>`).join("")}</ul>
+          `<li><a href="${projectHref(x.id)}">${esc(x.name)}</a></li>`).join("")}</ul>
       </div>`;
     return;
   }
@@ -57,8 +57,8 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, aud
       <div class="tag-row" data-reveal>${tags(pr.tags || [])}</div>
 
       <nav class="pager" aria-label="More projects">
-        ${prev ? `<a class="pager-prev" href="project.html?id=${encodeURIComponent(prev.id)}"><span>← Previous</span><strong>${esc(prev.name)}</strong></a>` : "<span></span>"}
-        ${next ? `<a class="pager-next" href="project.html?id=${encodeURIComponent(next.id)}"><span>Next →</span><strong>${esc(next.name)}</strong></a>` : "<span></span>"}
+        ${prev ? `<a class="pager-prev" href="${projectHref(prev.id)}"><span>← Previous</span><strong>${esc(prev.name)}</strong></a>` : "<span></span>"}
+        ${next ? `<a class="pager-next" href="${projectHref(next.id)}"><span>Next →</span><strong>${esc(next.name)}</strong></a>` : "<span></span>"}
       </nav>
     </div>`;
 

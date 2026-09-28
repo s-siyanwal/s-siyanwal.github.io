@@ -67,11 +67,13 @@ Repeat the same process for `scripts/ingest.py` if that's missing too.
 ### Step 1.4 — Switch the website on
 1. In your repository click **Settings** (top row)
 2. In the left sidebar click **Pages**
-3. Under **Build and deployment → Source**, choose **Deploy from a branch**
-4. Branch: **main**, folder: **/ (root)**
-5. Click **Save**
+3. Under **Build and deployment → Source**, choose **GitHub Actions**
+   (nothing else to pick — the workflow `.github/workflows/pages.yml` builds and
+   publishes the site every time `main` changes)
+4. Open the **Actions** tab and wait for **Build and deploy site** to finish
+   (about 2 minutes). If it hasn't run yet, click it → **Run workflow**.
 
-Wait about a minute, then refresh. A green banner shows your live address:
+Then refresh the Pages settings page. A green banner shows your live address:
 
 **https://s-siyanwal.github.io/shivanshu-siyanwal.github.io/**
 

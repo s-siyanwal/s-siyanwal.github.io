@@ -1,4 +1,4 @@
-import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, audLabel } from "./site.js";
+import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, audLabel, projectHref } from "./site.js";
 import { mountCircuit } from "./circuit.js";
 
 (async function () {
@@ -19,7 +19,7 @@ import { mountCircuit } from "./circuit.js";
   $("hero-tagline").textContent = p.tagline || "";
   $("hero-summary").textContent = p.summary || "";
   if (p.availability) $("hero-avail").textContent = p.availability;
-  else $("hero-avail").remove();
+  else $("hero-avail")?.remove();
 
   const cta = [];
   if (links.cv_pdf) cta.push(`<a class="btn btn--primary" href="${esc(links.cv_pdf)}" target="_blank" rel="noopener">Download CV</a>`);
@@ -51,7 +51,7 @@ import { mountCircuit } from "./circuit.js";
   // Projects
   const projects = data.projects || [];
   $("projects-list").innerHTML = projects.map((pr, i) => `
-    <a class="card" href="project.html?id=${encodeURIComponent(pr.id)}"
+    <a class="card" href="${projectHref(pr.id)}"
        data-aud="${esc(pr.audience || "both")}" data-reveal style="--i:${i % 3}">
       <span class="card-aud">${esc(audLabel[pr.audience] || "Project")}</span>
       <h3>${esc(pr.name)}</h3>
