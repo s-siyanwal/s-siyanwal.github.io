@@ -24,14 +24,14 @@
         "label": "Google Scholar",
         "handle": "Citations & papers",
         "url": "https://scholar.google.com/citations?user=REPLACE_ME",
-        "primary": true,
+        "primary": false,
         "audience": "academic"
       },
       {
         "id": "orcid",
         "label": "ORCID",
-        "handle": "0000-0000-0000-0000",
-        "url": "https://orcid.org/0000-0000-0000-0000",
+        "handle": "0009-0001-1023-1094",
+        "url": "https://orcid.org/0009-0001-1023-1094",
         "primary": true,
         "audience": "academic"
       },
@@ -40,22 +40,22 @@
         "label": "ResearchGate",
         "handle": "Shivanshu-Siyanwal",
         "url": "https://www.researchgate.net/profile/REPLACE_ME",
-        "primary": true,
+        "primary": false,
         "audience": "academic"
       },
       {
         "id": "github",
         "label": "GitHub",
-        "handle": "shivanshu-siyanwal",
-        "url": "https://github.com/shivanshu-siyanwal",
+        "handle": "s-siyanwal",
+        "url": "https://github.com/s-siyanwal",
         "primary": true,
         "audience": "industry"
       },
       {
         "id": "linkedin",
         "label": "LinkedIn",
-        "handle": "shivanshu-siyanwal",
-        "url": "https://www.linkedin.com/in/shivanshu-siyanwal",
+        "handle": "shivanshu-s-796b69210",
+        "url": "https://www.linkedin.com/in/shivanshu-s-796b69210/",
         "primary": true,
         "audience": "industry"
       },
