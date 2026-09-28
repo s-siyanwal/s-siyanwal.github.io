@@ -148,12 +148,13 @@ Empty URLs degrade gracefully — they show "links coming soon" rather than brea
 2. Upload everything here (including the hidden `.github` folder — if drag-and-drop
    skips it, use the git commands below).
 3. **Settings → Pages → Deploy from branch → `main` / root.**
-4. Live at `https://shivanshu-siyanwal.github.io`.
+4. Live at `https://s-siyanwal.github.io/shivanshu-siyanwal.github.io/`
+   (a repo named `s-siyanwal.github.io` would get `https://s-siyanwal.github.io`).
 
 ```bash
 git init && git add -A && git commit -m "Portfolio"
 git branch -M main
-git remote add origin https://github.com/shivanshu-siyanwal/shivanshu-siyanwal.github.io.git
+git remote add origin https://github.com/s-siyanwal/shivanshu-siyanwal.github.io.git
 git push -u origin main
 ```
 
