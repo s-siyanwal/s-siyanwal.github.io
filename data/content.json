@@ -2,130 +2,311 @@
   "profile": {
     "name": "Shivanshu Siyanwal",
     "title": "Quantum Software Engineer",
-    "tagline": "I build hybrid quantum-classical software \u2014 from variational algorithms and quantum ML to FPGA-accelerated inference and photonic network simulation.",
-    "summary": "Quantum Software Engineer with 4+ years spanning quantum algorithm research and production software. I work across the full stack of quantum computing: variational algorithms (VQE/VQC/VQLS), quantum machine learning, quantum error correction, and photonic quantum networks \u2014 and I ship them as tested, deployable software on GPUs, FPGAs, and cloud quantum backends. Published in quantum ML, quantum cryptography, and NMR quantum simulation.",
+    "tagline": "I build hybrid quantum-classical software — from variational algorithms and quantum ML to FPGA-accelerated inference and photonic network simulation.",
+    "summary": "Quantum Software Engineer with 4+ years spanning quantum algorithm research and production software. I work across the full stack of quantum computing: variational algorithms (VQE/VQC/VQLS), quantum machine learning, quantum error correction, and photonic quantum networks — and I ship them as tested, deployable software on GPUs, FPGAs, and cloud quantum backends. Published in quantum ML, quantum cryptography, and NMR quantum simulation.",
     "location": "Uttar Pradesh, India",
     "email": "shivanshu.siyanwal@gmail.com",
     "phone": "+91 9149309848",
     "availability": "Open to PhD / research-Master's positions and industry Quantum R&D roles.",
-    "focus_areas": ["Quantum algorithms", "Quantum machine learning", "Hybrid quantum-classical systems", "Photonic quantum networks", "Quantum error correction"],
+    "focus_areas": [
+      "Quantum algorithms",
+      "Quantum machine learning",
+      "Hybrid quantum-classical systems",
+      "Photonic quantum networks",
+      "Quantum error correction"
+    ],
     "links": {
       "cv_pdf": "assets/Shivanshu_Siyanwal_CV.pdf"
     },
     "profiles": [
-      { "id": "scholar",     "label": "Google Scholar", "handle": "Citations & papers", "url": "https://scholar.google.com/citations?user=REPLACE_ME", "primary": true,  "audience": "academic" },
-      { "id": "orcid",       "label": "ORCID",          "handle": "0000-0000-0000-0000", "url": "https://orcid.org/0000-0000-0000-0000", "primary": true,  "audience": "academic" },
-      { "id": "researchgate","label": "ResearchGate",   "handle": "Shivanshu-Siyanwal", "url": "https://www.researchgate.net/profile/REPLACE_ME", "primary": true,  "audience": "academic" },
-      { "id": "github",      "label": "GitHub",         "handle": "shivanshu-siyanwal", "url": "https://github.com/shivanshu-siyanwal", "primary": true,  "audience": "industry" },
-      { "id": "linkedin",    "label": "LinkedIn",       "handle": "shivanshu-siyanwal", "url": "https://www.linkedin.com/in/shivanshu-siyanwal", "primary": true,  "audience": "industry" },
-      { "id": "email",       "label": "Email",          "handle": "shivanshu.siyanwal@gmail.com", "url": "mailto:shivanshu.siyanwal@gmail.com", "primary": true, "audience": "both" }
+      {
+        "id": "scholar",
+        "label": "Google Scholar",
+        "handle": "Citations & papers",
+        "url": "https://scholar.google.com/citations?user=REPLACE_ME",
+        "primary": true,
+        "audience": "academic"
+      },
+      {
+        "id": "orcid",
+        "label": "ORCID",
+        "handle": "0000-0000-0000-0000",
+        "url": "https://orcid.org/0000-0000-0000-0000",
+        "primary": true,
+        "audience": "academic"
+      },
+      {
+        "id": "researchgate",
+        "label": "ResearchGate",
+        "handle": "Shivanshu-Siyanwal",
+        "url": "https://www.researchgate.net/profile/REPLACE_ME",
+        "primary": true,
+        "audience": "academic"
+      },
+      {
+        "id": "github",
+        "label": "GitHub",
+        "handle": "shivanshu-siyanwal",
+        "url": "https://github.com/shivanshu-siyanwal",
+        "primary": true,
+        "audience": "industry"
+      },
+      {
+        "id": "linkedin",
+        "label": "LinkedIn",
+        "handle": "shivanshu-siyanwal",
+        "url": "https://www.linkedin.com/in/shivanshu-siyanwal",
+        "primary": true,
+        "audience": "industry"
+      },
+      {
+        "id": "email",
+        "label": "Email",
+        "handle": "shivanshu.siyanwal@gmail.com",
+        "url": "mailto:shivanshu.siyanwal@gmail.com",
+        "primary": true,
+        "audience": "both"
+      }
     ]
   },
-
   "metrics": [
-    { "value": "4+",     "label": "Years in quantum", "note": "research + production" },
-    { "value": "6.7\u00d7", "label": "FPGA speedup", "note": "vs GPU, 291.8 \u00b5s inference" },
-    { "value": "56.5%",  "label": "Forecast gain", "note": "VQC vs statistical baseline" },
-    { "value": "5+",     "label": "Publications", "note": "QML, QKD, NMR QC" }
+    {
+      "value": "4+",
+      "label": "Years in quantum",
+      "note": "research + production"
+    },
+    {
+      "value": "6.7×",
+      "label": "FPGA speedup",
+      "note": "vs GPU, 291.8 µs inference"
+    },
+    {
+      "value": "56.5%",
+      "label": "Forecast gain",
+      "note": "VQC vs statistical baseline"
+    },
+    {
+      "value": "5+",
+      "label": "Publications",
+      "note": "QML, QKD, NMR QC"
+    }
   ],
-
   "skills": [
-    { "category": "Quantum frameworks", "items": ["Qiskit", "Cirq", "PennyLane", "Perceval", "Amazon Braket", "CUDA-Q", "QTensorFlow"] },
-    { "category": "Quantum domains", "items": ["Quantum error correction", "Variational algorithms", "Linear-optical QC", "Quantum network simulation", "Tensor networks", "ZX calculus", "Circuit compilation"] },
-    { "category": "Software engineering", "items": ["Python (production)", "C++", "Git", "CI/CD pipelines", "Linux"] },
-    { "category": "Machine learning", "items": ["PyTorch", "TensorFlow", "NumPy", "SciPy", "Scikit-learn"] },
-    { "category": "Hardware & cloud", "items": ["AWS Braket", "AMD Alveo FPGA", "HLS", "HBM", "REST APIs"] },
-    { "category": "Simulation", "items": ["OptiSystem", "ANSYS", "QuTiP", "QETLAB"] }
+    {
+      "category": "Quantum frameworks",
+      "items": [
+        "Qiskit",
+        "Cirq",
+        "PennyLane",
+        "Perceval",
+        "Amazon Braket",
+        "CUDA-Q",
+        "QTensorFlow"
+      ]
+    },
+    {
+      "category": "Quantum domains",
+      "items": [
+        "Quantum error correction",
+        "Variational algorithms",
+        "Linear-optical QC",
+        "Quantum network simulation",
+        "Tensor networks",
+        "ZX calculus",
+        "Circuit compilation"
+      ]
+    },
+    {
+      "category": "Software engineering",
+      "items": [
+        "Python (production)",
+        "C++",
+        "Git",
+        "CI/CD pipelines",
+        "Linux"
+      ]
+    },
+    {
+      "category": "Machine learning",
+      "items": [
+        "PyTorch",
+        "TensorFlow",
+        "NumPy",
+        "SciPy",
+        "Scikit-learn"
+      ]
+    },
+    {
+      "category": "Hardware & cloud",
+      "items": [
+        "AWS Braket",
+        "AMD Alveo FPGA",
+        "HLS",
+        "HBM",
+        "REST APIs"
+      ]
+    },
+    {
+      "category": "Simulation",
+      "items": [
+        "OptiSystem",
+        "ANSYS",
+        "QuTiP",
+        "QETLAB"
+      ]
+    }
   ],
-
   "experience": [
     {
       "org": "CDAC (Centre for Development of Advanced Computing)",
       "role": "Quantum Applications Engineer",
       "location": "Noida, India",
-      "period": "Oct 2024 \u2013 Present",
+      "period": "Oct 2024 – Present",
       "current": true,
       "summary": "Hybrid quantum-classical pipelines and FPGA-accelerated quantum inference on cloud simulation infrastructure.",
       "points": [
         "Built hybrid quantum-classical pipelines for weather forecasting using a 7-qubit VQC (50 parameters), achieving 56.5% improvement over statistical baselines, deployed on cloud simulation infrastructure.",
         "Implemented and optimised VQE, QCNN, and fidelity-based kernels in Qiskit and PennyLane; built scalable modules for quantum image encoding (FRQI, QPIE, NEQR).",
-        "Deployed a custom VQC kernel on an AMD Alveo U55C FPGA via HLS and HBM \u2014 6.7\u00d7 speedup over GPUs at 291.8 \u00b5s inference \u2014 integrated into CI/CD pipelines.",
+        "Deployed a custom VQC kernel on an AMD Alveo U55C FPGA via HLS and HBM — 6.7× speedup over GPUs at 291.8 µs inference — integrated into CI/CD pipelines.",
         "Collaborated across hardware, research, and engineering teams to optimise hybrid workflows and support cloud quantum platforms."
       ],
-      "tags": ["Qiskit", "PennyLane", "FPGA", "CI/CD"]
+      "tags": [
+        "Qiskit",
+        "PennyLane",
+        "FPGA",
+        "CI/CD"
+      ]
     },
     {
       "org": "Dr. Arpita Maitra, IAI, TCG CREST",
-      "role": "Project Junior Research Fellow \u2014 Quantum Networks & Linear Optics",
+      "role": "Project Junior Research Fellow — Quantum Networks & Linear Optics",
       "location": "Kolkata, India",
-      "period": "Mar 2024 \u2013 Sep 2024",
+      "period": "Mar 2024 – Sep 2024",
       "summary": "Simulated linear-optical QKD testbeds with realistic photonic impairments and security analysis.",
       "points": [
         "Designed and simulated linear-optical QKD testbeds (DPS, COW, Twin-Field) in OptiSystem and ANSYS, modelling realistic photonic loss and noise.",
         "Performed error modelling and security analysis against intercept-resend and PNS attacks; benchmarked resource-state and entanglement generation.",
-        "Built Python post-processing tools for optical simulation data \u2014 reusable, maintainable quantum-network simulation software."
+        "Built Python post-processing tools for optical simulation data — reusable, maintainable quantum-network simulation software."
       ],
-      "tags": ["QKD", "Photonics", "OptiSystem"]
+      "tags": [
+        "QKD",
+        "Photonics",
+        "OptiSystem"
+      ]
     },
     {
       "org": "Dr. Arpita Maitra, IAI, TCG CREST",
-      "role": "Research Intern \u2014 Quantum Cryptography & Circuit Design",
+      "role": "Research Intern — Quantum Cryptography & Circuit Design",
       "location": "Kolkata, India",
-      "period": "Aug 2023 \u2013 Mar 2024",
+      "period": "Aug 2023 – Mar 2024",
       "summary": "Quantum circuits for block ciphers and a Grover-based chosen-ciphertext attack.",
       "points": [
         "Designed quantum circuits for block ciphers (Mini-AES, S-AES) and Galois-field arithmetic; validated on Qiskit simulators and IBM Quantum hardware.",
         "Demonstrated a chosen-ciphertext attack using Grover's search and amplitude amplification; contributed to error correction and circuit optimisation."
       ],
-      "tags": ["Quantum cryptography", "Grover", "Qiskit"]
+      "tags": [
+        "Quantum cryptography",
+        "Grover",
+        "Qiskit"
+      ]
     },
     {
       "org": "Arqanum Technologies Pvt. Ltd.",
       "role": "Junior Quantum Computing Developer",
       "location": "Pune, India",
-      "period": "Sep 2022 \u2013 Jul 2023",
+      "period": "Sep 2022 – Jul 2023",
       "summary": "Variational algorithms for finance and time-series on AWS Braket and Rigetti hardware.",
       "points": [
         "Implemented and optimised VQC, QBM, and VQLS for time-series forecasting and financial analysis on AWS Braket and Rigetti hardware.",
         "Developed quantum data-encoding techniques (amplitude, phase, angle) and Ising-Hamiltonian circuits; contributed to the MeitY-QCAL Dicke-state simulation project."
       ],
-      "tags": ["VQLS", "AWS Braket", "Finance"]
+      "tags": [
+        "VQLS",
+        "AWS Braket",
+        "Finance"
+      ]
     }
   ],
-
   "research": [
     {
-      "org": "NMR QC Group, Prof. Kavita Dorai \u2014 IISER Mohali",
-      "role": "MS Research \u2014 NMR Entanglement Detection & Quantum Simulation",
+      "org": "NMR QC Group, Prof. Kavita Dorai — IISER Mohali",
+      "role": "MS Research — NMR Entanglement Detection & Quantum Simulation",
       "location": "Punjab, India",
-      "period": "Aug 2021 \u2013 Aug 2022",
+      "period": "Aug 2021 – Aug 2022",
       "summary": "Neural networks for multipartite entanglement detection in NMR systems.",
       "points": [
         "Designed neural-network models for genuine multipartite entanglement detection and SLOCC classification in 2- and 3-qubit NMR systems (published in Quantum Information Processing).",
         "Performed experimental density-matrix reconstruction and quantum error modelling; applied PCA, MCA, and LDA to quantum datasets."
       ],
-      "tags": ["QML", "NMR", "Entanglement"]
+      "tags": [
+        "QML",
+        "NMR",
+        "Entanglement"
+      ]
     }
   ],
-
   "projects": [
     {
       "id": "vqc-fpga",
       "name": "Hybrid VQC Weather Forecasting with FPGA Inference",
       "blurb": "7-qubit variational circuit for temperature forecasting, with a custom kernel on an AMD Alveo FPGA for low-latency inference.",
-      "abstract": "A hybrid quantum-classical pipeline that forecasts temperature using a 7-qubit variational quantum circuit (50 parameters). The trained inference kernel is compiled to an AMD Alveo U55C FPGA using HLS with HBM memory, reaching 291.8 \u00b5s inference \u2014 a 6.7\u00d7 speedup over GPU execution \u2014 and is wired into CI/CD for continuous testing.",
+      "abstract": "A hybrid quantum-classical pipeline that forecasts temperature using a 7-qubit variational quantum circuit (50 parameters). The trained inference kernel is compiled to an AMD Alveo U55C FPGA using HLS with HBM memory, reaching 291.8 µs inference — a 6.7× speedup over GPU execution — and is wired into CI/CD for continuous testing.",
       "metrics": [
-        { "value": "6.7\u00d7", "label": "vs GPU" },
-        { "value": "291.8 \u00b5s", "label": "inference" },
-        { "value": "7", "label": "qubits" }
+        {
+          "value": "6.7×",
+          "label": "vs GPU"
+        },
+        {
+          "value": "291.8 µs",
+          "label": "inference"
+        },
+        {
+          "value": "7",
+          "label": "qubits"
+        }
       ],
-      "tags": ["Qiskit", "PennyLane", "FPGA", "HLS", "VQC"],
+      "tags": [
+        "Qiskit",
+        "PennyLane",
+        "FPGA",
+        "HLS",
+        "VQC"
+      ],
       "audience": "industry",
       "links": [
-        { "label": "Paper (IEEE)", "url": "" },
-        { "label": "Code", "url": "" }
+        {
+          "label": "Paper (IEEE)",
+          "url": ""
+        },
+        {
+          "label": "Code",
+          "url": ""
+        }
       ],
-      "featured": true
+      "featured": true,
+      "role": "Lead developer — algorithm design, training pipeline, and FPGA deployment.",
+      "sections": [
+        {
+          "h": "Problem",
+          "p": "Classical statistical baselines for short-horizon temperature forecasting plateau quickly on limited sensor data. The open question was whether a variational quantum circuit could extract more signal — and, if so, whether it could run fast enough to matter operationally."
+        },
+        {
+          "h": "Approach",
+          "p": "I designed a 7-qubit variational quantum circuit with 50 trainable parameters, using angle encoding to map meteorological features into the circuit and a hardware-efficient ansatz to keep depth tractable. The classical optimiser and the quantum layer were wired into a single hybrid training loop, implemented in Qiskit and PennyLane."
+        },
+        {
+          "h": "Acceleration",
+          "p": "Inference latency, not training, is the operational bottleneck. I compiled the trained kernel to an AMD Alveo U55C FPGA using HLS, placing circuit parameters in HBM to keep memory access off the critical path. The result was 291.8 µs per inference — 6.7× faster than GPU execution of the same kernel."
+        },
+        {
+          "h": "Engineering",
+          "p": "The whole pipeline runs under CI/CD: circuit changes trigger retraining, regression tests on forecast accuracy, and a rebuild of the FPGA bitstream. This is what makes the result reproducible rather than a one-off benchmark."
+        },
+        {
+          "h": "Result",
+          "p": "56.5% improvement over statistical baselines, with inference fast enough for operational deployment. Accepted at IEEE TQCEBT 2026."
+        }
+      ]
     },
     {
       "id": "qir-qnn",
@@ -133,15 +314,47 @@
       "blurb": "Quantum neural networks for binary image classification using FRQI, QPIE, and NEQR encodings.",
       "abstract": "Quantum neural networks that classify binary images by encoding pixel data through several quantum image representations (FRQI, QPIE, NEQR) and comparing their expressivity and trainability. Currently under review at Springer Nature.",
       "metrics": [
-        { "value": "3", "label": "encodings compared" }
+        {
+          "value": "3",
+          "label": "encodings compared"
+        }
       ],
-      "tags": ["QML", "Quantum image encoding", "Qiskit"],
+      "tags": [
+        "QML",
+        "Quantum image encoding",
+        "Qiskit"
+      ],
       "audience": "both",
       "links": [
-        { "label": "Preprint", "url": "" },
-        { "label": "Code", "url": "" }
+        {
+          "label": "Preprint",
+          "url": ""
+        },
+        {
+          "label": "Code",
+          "url": ""
+        }
       ],
-      "featured": true
+      "featured": true,
+      "role": "Lead author — encoding comparison, model design, and experiments.",
+      "sections": [
+        {
+          "h": "Problem",
+          "p": "Quantum image classification depends heavily on how classical pixel data is encoded into quantum states, but encodings are often chosen by convention rather than by measured trade-off."
+        },
+        {
+          "h": "Approach",
+          "p": "I implemented three quantum image representations — FRQI, QPIE, and NEQR — and built quantum neural networks on top of each, holding the downstream architecture fixed so the encoding itself was the variable under test."
+        },
+        {
+          "h": "Findings",
+          "p": "The encodings differ sharply in qubit cost, circuit depth, and trainability, and the cheapest encoding is not uniformly the best classifier. The comparison gives a practical basis for choosing an encoding under a given qubit budget."
+        },
+        {
+          "h": "Status",
+          "p": "Under review at Springer Nature."
+        }
+      ]
     },
     {
       "id": "qkd-testbeds",
@@ -149,14 +362,44 @@
       "blurb": "DPS, COW, and Twin-Field QKD simulated over realistic photonic channels with security analysis.",
       "abstract": "Simulation testbeds for differential-phase-shift (DPS), coherent-one-way (COW), and Twin-Field QKD protocols over lossy, noisy photonic channels. Includes security analysis against intercept-resend and photon-number-splitting attacks, plus Python tooling for optical simulation post-processing.",
       "metrics": [
-        { "value": "3", "label": "QKD protocols" }
+        {
+          "value": "3",
+          "label": "QKD protocols"
+        }
       ],
-      "tags": ["QKD", "OptiSystem", "ANSYS", "Photonics"],
+      "tags": [
+        "QKD",
+        "OptiSystem",
+        "ANSYS",
+        "Photonics"
+      ],
       "audience": "academic",
       "links": [
-        { "label": "Code", "url": "" }
+        {
+          "label": "Code",
+          "url": ""
+        }
       ],
-      "featured": true
+      "featured": true,
+      "role": "Research fellow — simulation design, security analysis, and tooling.",
+      "sections": [
+        {
+          "h": "Problem",
+          "p": "QKD protocols are usually analysed under idealised channel assumptions. Deployment behaviour depends on loss, detector noise, and attacker models that idealised analysis omits."
+        },
+        {
+          "h": "Approach",
+          "p": "I built simulation testbeds for three protocols — differential-phase-shift (DPS), coherent-one-way (COW), and Twin-Field QKD — in OptiSystem and ANSYS, modelling realistic photonic loss and noise across the channel."
+        },
+        {
+          "h": "Security analysis",
+          "p": "Each protocol was evaluated against intercept-resend and photon-number-splitting attacks, with key-rate degradation quantified as a function of channel loss. I also benchmarked resource-state and entanglement generation."
+        },
+        {
+          "h": "Tooling",
+          "p": "Optical simulators produce large, awkward output. I wrote Python post-processing tooling to make the analysis reusable and maintainable rather than a manual per-run effort."
+        }
+      ]
     },
     {
       "id": "qcrypto-circuits",
@@ -164,12 +407,38 @@
       "blurb": "Mini-AES / S-AES circuits with a Grover-based chosen-ciphertext attack demonstration.",
       "abstract": "Quantum circuit designs for Mini-AES and S-AES block ciphers with Galois-field arithmetic, validated on Qiskit simulators and IBM Quantum hardware. Demonstrates a chosen-ciphertext attack via Grover's search and amplitude amplification.",
       "metrics": [],
-      "tags": ["Quantum cryptography", "Grover", "Qiskit"],
+      "tags": [
+        "Quantum cryptography",
+        "Grover",
+        "Qiskit"
+      ],
       "audience": "academic",
       "links": [
-        { "label": "Code", "url": "" }
+        {
+          "label": "Code",
+          "url": ""
+        }
       ],
-      "featured": false
+      "featured": false,
+      "role": "Research intern — circuit design and attack demonstration.",
+      "sections": [
+        {
+          "h": "Problem",
+          "p": "Understanding how symmetric ciphers degrade under quantum attack requires explicit, runnable circuit constructions, not just asymptotic arguments."
+        },
+        {
+          "h": "Approach",
+          "p": "I designed quantum circuits for Mini-AES and S-AES, including the Galois-field arithmetic that the S-box depends on, and validated them on Qiskit simulators and IBM Quantum hardware."
+        },
+        {
+          "h": "Attack",
+          "p": "I demonstrated a chosen-ciphertext attack using Grover's search with amplitude amplification, making the quadratic speedup concrete on a scaled-down cipher."
+        },
+        {
+          "h": "Notes",
+          "p": "Work also covered circuit optimisation and error-correction considerations for running these constructions on noisy devices."
+        }
+      ]
     },
     {
       "id": "nmr-entanglement",
@@ -177,35 +446,169 @@
       "blurb": "ANN models for multipartite entanglement detection and SLOCC classification in NMR qubits.",
       "abstract": "Neural-network models that detect genuine multipartite entanglement and classify SLOCC classes in 2- and 3-qubit NMR systems, trained on reconstructed density matrices. Published in Quantum Information Processing (Springer).",
       "metrics": [],
-      "tags": ["QML", "NMR", "Entanglement"],
+      "tags": [
+        "QML",
+        "NMR",
+        "Entanglement"
+      ],
       "audience": "academic",
       "links": [
-        { "label": "Published paper", "url": "" }
+        {
+          "label": "Published paper",
+          "url": ""
+        }
       ],
-      "featured": false
+      "featured": false,
+      "role": "MS research student — model design and experimental analysis.",
+      "sections": [
+        {
+          "h": "Problem",
+          "p": "Detecting genuine multipartite entanglement in experimental NMR systems is hard: witnesses are state-specific and reconstructed density matrices are noisy."
+        },
+        {
+          "h": "Approach",
+          "p": "I trained neural-network models to detect genuine multipartite entanglement and classify SLOCC classes in 2- and 3-qubit NMR systems, using experimentally reconstructed density matrices as input."
+        },
+        {
+          "h": "Analysis",
+          "p": "Alongside the models I performed density-matrix reconstruction and quantum error modelling, applying PCA, MCA, and LDA to characterise the structure of the quantum datasets."
+        },
+        {
+          "h": "Result",
+          "p": "Published in Quantum Information Processing (Springer)."
+        }
+      ]
     }
   ],
-
   "publications": [
-    { "venue": "IEEE TQCEBT", "year": "2026", "title": "Hybrid Variational Quantum Circuits based Temperature Forecasting with Low-Latency FPGA Inference", "type": "Conference paper", "status": "accepted", "authors": "S. Siyanwal et al.", "doi": "", "abstract": "" },
-    { "venue": "IEEE AI-ML, Bangalore", "year": "2025", "title": "Quantum Machine Learning Models for Enhanced Weather Prediction", "type": "Conference paper", "status": "", "authors": "S. Siyanwal et al.", "doi": "", "abstract": "" },
-    { "venue": "Springer Nature", "year": "2025", "title": "Quantum Image Representations based Quantum Neural Networks for Binary Classification", "type": "Journal article", "status": "under review", "authors": "S. Siyanwal et al.", "doi": "", "abstract": "" },
-    { "venue": "Quantum Information Processing (Springer)", "year": "2023", "title": "Entanglement Detection in 3-Qubit NMR States via Artificial Neural Networks", "type": "Journal article", "status": "published", "authors": "S. Siyanwal et al.", "doi": "", "abstract": "" },
-    { "venue": "QTML, Univ. of Melbourne", "year": "2024", "title": "Quantum Techniques in Machine Learning", "type": "Poster", "status": "", "authors": "S. Siyanwal", "doi": "", "abstract": "" },
-    { "venue": "QCC, IAI TCG CREST", "year": "2025", "title": "R&D on Quantum Communication & Computation", "type": "Poster", "status": "", "authors": "S. Siyanwal", "doi": "", "abstract": "" }
+    {
+      "venue": "IEEE TQCEBT",
+      "year": "2026",
+      "title": "Hybrid Variational Quantum Circuits based Temperature Forecasting with Low-Latency FPGA Inference",
+      "type": "Conference paper",
+      "status": "accepted",
+      "authors": "S. Siyanwal et al.",
+      "doi": "",
+      "abstract": "We present a hybrid quantum-classical pipeline for short-horizon temperature forecasting built on a 7-qubit variational quantum circuit, and demonstrate low-latency inference by compiling the trained kernel to an AMD Alveo U55C FPGA using HLS with HBM. The deployment achieves 291.8 µs inference, a 6.7× speedup over GPU execution, while improving forecast accuracy by 56.5% over statistical baselines."
+    },
+    {
+      "venue": "IEEE AI-ML, Bangalore",
+      "year": "2025",
+      "title": "Quantum Machine Learning Models for Enhanced Weather Prediction",
+      "type": "Conference paper",
+      "status": "",
+      "authors": "S. Siyanwal et al.",
+      "doi": "",
+      "abstract": "We evaluate a family of quantum machine learning models for weather prediction tasks, comparing variational quantum classifiers and quantum kernel methods against classical baselines on meteorological time-series data."
+    },
+    {
+      "venue": "Springer Nature",
+      "year": "2025",
+      "title": "Quantum Image Representations based Quantum Neural Networks for Binary Classification",
+      "type": "Journal article",
+      "status": "under review",
+      "authors": "S. Siyanwal et al.",
+      "doi": "",
+      "abstract": "We compare three quantum image representations — FRQI, QPIE, and NEQR — as front-ends to quantum neural networks for binary image classification, holding downstream architecture fixed to isolate the effect of encoding on qubit cost, circuit depth, and trainability."
+    },
+    {
+      "venue": "Quantum Information Processing (Springer)",
+      "year": "2023",
+      "title": "Entanglement Detection in 3-Qubit NMR States via Artificial Neural Networks",
+      "type": "Journal article",
+      "status": "published",
+      "authors": "S. Siyanwal et al.",
+      "doi": "",
+      "abstract": "We train artificial neural networks to detect genuine multipartite entanglement and perform SLOCC classification in 2- and 3-qubit NMR systems, using experimentally reconstructed density matrices, and analyse dataset structure with PCA, MCA, and LDA."
+    },
+    {
+      "venue": "QTML, Univ. of Melbourne",
+      "year": "2024",
+      "title": "Quantum Techniques in Machine Learning",
+      "type": "Poster",
+      "status": "",
+      "authors": "S. Siyanwal",
+      "doi": "",
+      "abstract": ""
+    },
+    {
+      "venue": "QCC, IAI TCG CREST",
+      "year": "2025",
+      "title": "R&D on Quantum Communication & Computation",
+      "type": "Poster",
+      "status": "",
+      "authors": "S. Siyanwal",
+      "doi": "",
+      "abstract": ""
+    }
   ],
-
   "education": [
-    { "school": "IISER Mohali", "degree": "Dual BS-MS (Postgraduate) \u2014 Major: Physics; Minor: Data Sciences", "location": "Punjab, India", "period": "2017 \u2013 2022", "note": "Five-year integrated programme; MS research in NMR quantum computing." },
-    { "school": "Dayawati Modi Academy (DMA-I)", "degree": "High School Diploma (CBSE) \u2014 95.8%", "location": "Uttar Pradesh, India", "period": "2014 \u2013 2017", "note": "" }
+    {
+      "school": "IISER Mohali",
+      "degree": "Dual BS-MS (Postgraduate) — Major: Physics; Minor: Data Sciences",
+      "location": "Punjab, India",
+      "period": "2017 – 2022",
+      "note": "Five-year integrated programme; MS research in NMR quantum computing."
+    },
+    {
+      "school": "Dayawati Modi Academy (DMA-I)",
+      "degree": "High School Diploma (CBSE) — 95.8%",
+      "location": "Uttar Pradesh, India",
+      "period": "2014 – 2017",
+      "note": ""
+    }
   ],
-
   "awards": [
-    { "title": "IBM Certified Associate Developer \u2014 Quantum Computation using Qiskit v0.2X", "year": "2026" },
-    { "title": "Qiskit Global Summer School \u2014 Quantum Simulations (Advanced)", "year": "2022" },
-    { "title": "Qiskit Global Summer School \u2014 Quantum Machine Learning (Certificate of Excellence)", "year": "2021" },
-    { "title": "IBM Quantum Challenge Africa \u2014 Advanced Achievement", "year": "2021" },
-    { "title": "INSPIRE Fellow (SHE) \u2014 DST, Government of India", "year": "2017\u201322" },
-    { "title": "TOEFL iBT \u2014 96", "year": "2022" }
-  ]
+    {
+      "title": "IBM Certified Associate Developer — Quantum Computation using Qiskit v0.2X",
+      "year": "2026"
+    },
+    {
+      "title": "Qiskit Global Summer School — Quantum Simulations (Advanced)",
+      "year": "2022"
+    },
+    {
+      "title": "Qiskit Global Summer School — Quantum Machine Learning (Certificate of Excellence)",
+      "year": "2021"
+    },
+    {
+      "title": "IBM Quantum Challenge Africa — Advanced Achievement",
+      "year": "2021"
+    },
+    {
+      "title": "INSPIRE Fellow (SHE) — DST, Government of India",
+      "year": "2017–22"
+    },
+    {
+      "title": "TOEFL iBT — 96",
+      "year": "2022"
+    }
+  ],
+  "about": {
+    "headline": "Bridging quantum theory and shipped software.",
+    "statement": [
+      "My work sits at the seam between quantum information research and production engineering. I am interested in the question of what it actually takes to move a quantum algorithm off a whiteboard and onto hardware that runs under real constraints — noise, latency, memory bandwidth, and the unglamorous requirement that it keep working next week.",
+      "That has led me across three connected areas. In variational quantum algorithms and quantum machine learning, I study how circuit structure and data encoding govern trainability and expressivity, and how hybrid pipelines can beat classical baselines on real forecasting tasks. In quantum hardware acceleration, I compile trained quantum kernels down to FPGA fabric, where a 6.7× speedup over GPUs is a systems-engineering result as much as a quantum one. In photonic quantum networks, I simulate QKD protocols over lossy channels and analyse their security against realistic attacks.",
+      "What connects them is a conviction that quantum computing progresses fastest when research artefacts are built like software — tested, versioned, reproducible, and deployable. I want to keep working where those two cultures meet."
+    ],
+    "interests": [
+      {
+        "title": "Variational algorithms & QML",
+        "detail": "Trainability, barren plateaus, data encoding, and circuit ansatz design for near-term devices."
+      },
+      {
+        "title": "Quantum hardware acceleration",
+        "detail": "Compiling quantum kernels to FPGA/GPU fabric; latency, throughput, and memory-bandwidth constraints."
+      },
+      {
+        "title": "Photonic quantum networks",
+        "detail": "Linear-optical QKD, resource-state generation, and security analysis under realistic channel loss."
+      },
+      {
+        "title": "Quantum error correction",
+        "detail": "Codes and decoders, and what error structure means for algorithm design on noisy hardware."
+      }
+    ],
+    "looking_for": "I am seeking PhD or research-Master's positions in quantum information science, and remain open to industry Quantum R&D roles where research and engineering are equally weighted."
+  }
 }
