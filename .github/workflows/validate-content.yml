@@ -1,0 +1,35 @@
+name: Validate content
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    paths:
+      - "data/content.json"
+      - "scripts/**"
+      - "tests/**"
+      - ".github/workflows/validate-content.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Install test tools
+        run: python -m pip install --quiet jsonschema pytest
+
+      - name: Unit tests (no network)
+        run: python -m pytest -q
+
+      - name: Check content.json
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          git show "origin/${BASE_REF}:data/content.json" > /tmp/base.json 2>/dev/null || rm -f /tmp/base.json
+          python scripts/check_content.py --base /tmp/base.json

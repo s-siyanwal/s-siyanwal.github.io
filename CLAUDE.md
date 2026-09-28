@@ -18,7 +18,7 @@ negotiable; everything else is guidance.
 - **All content lives in `data/content.json`.** Pages are rendered from it by
   vanilla JS modules. No framework, no build step (yet — see Phase 3).
 - **Self-updating:** Shiv drops a CV or a note into `inbox/`, a GitHub Action
-  extracts items with a **free** LLM (Groq, Llama 3.3 70B by default),
+  extracts items with a **free** LLM (Groq, `openai/gpt-oss-120b` by default),
   deterministic Python merges them into `content.json`, and a **pull request**
   is opened for his review.
 

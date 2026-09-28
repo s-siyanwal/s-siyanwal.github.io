@@ -84,7 +84,7 @@ This lets you drop your CV in and have the site update itself.
 
 ### Step 2.1 — Get a free AI key (Groq)
 
-Groq runs open-source models (Llama) and is free with **no credit card**.
+Groq runs open-weight models (default: `openai/gpt-oss-120b`) and is free with **no credit card**.
 
 1. Go to <https://console.groq.com>
 2. Sign in with Google or GitHub
@@ -224,17 +224,18 @@ and click **Revert**. Your site rolls back within a minute.
 Groq is the default. To switch, add **repository variables** under
 **Settings → Secrets and variables → Actions → Variables tab**:
 
-| Provider | `LLM_PROVIDER` | Free? | Get a key at |
-|---|---|---|---|
-| **Groq** (default) | `groq` | Yes, no card | <https://console.groq.com> |
-| Google Gemini | `gemini` | Yes, free tier | <https://aistudio.google.com> |
-| OpenRouter | `openrouter` | Free models available | <https://openrouter.ai> |
-| Ollama (your own computer) | `ollama` | Yes, fully offline | <https://ollama.com> |
-| Any OpenAI-compatible host | `openai_compat` + `LLM_BASE_URL` | Varies | — |
-| Anthropic | `anthropic` | Paid | <https://console.anthropic.com> |
+| Provider | `LLM_PROVIDER` | Default model | Free? | Get a key at |
+|---|---|---|---|---|
+| **Groq** (default) | `groq` | `openai/gpt-oss-120b` | Yes, no card | <https://console.groq.com> |
+| Google Gemini | `gemini` | `gemini-3.5-flash` | Yes, free tier | <https://aistudio.google.com> |
+| OpenRouter | `openrouter` | `meta-llama/llama-3.3-70b-instruct:free` | Free models available | <https://openrouter.ai> |
+| Ollama (your own computer) | `ollama` | `llama3.1:8b` | Yes, fully offline | <https://ollama.com> |
+| Any OpenAI-compatible host | `openai_compat` + `LLM_BASE_URL` | set `LLM_MODEL` | Varies | — |
+| Anthropic | `anthropic` | `claude-sonnet-4-6` | Paid | <https://console.anthropic.com> |
 
 To pick a specific model, add a variable `LLM_MODEL`, e.g.
-`llama-3.1-8b-instant` (faster, smaller) or `openai/gpt-oss-120b`.
+`qwen/qwen3.6-27b` (smaller) on Groq. Groq retired its free Llama 3.x models
+in August 2026, so older model names will fail.
 
 > **Privacy note:** free tiers generally may train on what you send them.
 > Your CV is a public document, so this is normally fine — but if you'd rather

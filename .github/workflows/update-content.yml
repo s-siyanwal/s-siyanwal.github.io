@@ -19,13 +19,16 @@ jobs:
   ingest:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Look for input files
         id: gate
         run: |
           shopt -s nullglob
-          files=(inbox/*.pdf inbox/*.tex inbox/*.txt inbox/*.md inbox/*.markdown inbox/*.json inbox/*.docx inbox/*.bib)
+          files=()
+          for f in inbox/*.pdf inbox/*.tex inbox/*.txt inbox/*.md inbox/*.markdown inbox/*.json inbox/*.docx inbox/*.bib; do
+            case "$(basename "$f")" in README.md|.gitkeep) ;; *) files+=("$f") ;; esac
+          done
           if [ ${#files[@]} -eq 0 ]; then
             echo "Nothing to process."
             echo "go=false" >> $GITHUB_OUTPUT
@@ -54,7 +57,7 @@ jobs:
 
       - name: Open pull request
         if: steps.gate.outputs.go == 'true' && steps.ingest.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "content: update from ${{ steps.ingest.outputs.files }}"
           branch: content-update

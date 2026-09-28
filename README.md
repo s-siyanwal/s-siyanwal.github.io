@@ -37,7 +37,7 @@ Processed files are moved to `inbox/archive/` automatically.
 **→ Full click-by-click walkthrough: [SETUP-GUIDE.md](SETUP-GUIDE.md)**
 
 Short version:
-1. Free API key at <https://console.groq.com> (open-weight Llama models, no credit card).
+1. Free API key at <https://console.groq.com> (open-weight models, default `openai/gpt-oss-120b`, no credit card).
 2. Repo → **Settings → Secrets and variables → Actions → New repository secret**
    - Name: `LLM_API_KEY` · Value: your key
 3. Repo → **Settings → Actions → General → Workflow permissions** →

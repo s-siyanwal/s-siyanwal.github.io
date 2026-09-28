@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Portfolio content (data/content.json)",
+  "type": "object",
+  "required": ["profile", "metrics", "skills", "experience", "research",
+               "projects", "publications", "education", "awards", "about"],
+  "$defs": {
+    "str": {"type": "string"},
+    "strs": {"type": "array", "items": {"type": "string"}},
+    "role": {
+      "type": "object",
+      "required": ["org", "role", "period"],
+      "properties": {
+        "org": {"type": "string", "minLength": 1},
+        "role": {"type": "string", "minLength": 1},
+        "location": {"$ref": "#/$defs/str"},
+        "period": {"type": "string", "minLength": 1},
+        "current": {"type": "boolean"},
+        "summary": {"$ref": "#/$defs/str"},
+        "points": {"$ref": "#/$defs/strs"},
+        "tags": {"$ref": "#/$defs/strs"}
+      }
+    },
+    "link": {
+      "type": "object",
+      "required": ["label", "url"],
+      "properties": {"label": {"type": "string"}, "url": {"type": "string"}}
+    }
+  },
+  "properties": {
+    "profile": {
+      "type": "object",
+      "required": ["name", "title", "email", "profiles"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "title": {"type": "string", "minLength": 1},
+        "email": {"type": "string", "minLength": 1},
+        "profiles": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "url"],
+            "properties": {"id": {"type": "string"}, "label": {"type": "string"},
+                           "url": {"type": "string"}, "primary": {"type": "boolean"}}
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "array",
+      "items": {"type": "object", "required": ["value", "label"]}
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["category", "items"],
+        "properties": {"category": {"type": "string"}, "items": {"$ref": "#/$defs/strs"}}
+      }
+    },
+    "experience": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/role"}},
+    "research": {"type": "array", "items": {"$ref": "#/$defs/role"}},
+    "projects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+          "name": {"type": "string", "minLength": 1},
+          "blurb": {"$ref": "#/$defs/str"},
+          "abstract": {"$ref": "#/$defs/str"},
+          "tags": {"$ref": "#/$defs/strs"},
+          "audience": {"enum": ["academic", "industry", "both"]},
+          "featured": {"type": "boolean"},
+          "links": {"type": "array", "items": {"$ref": "#/$defs/link"}},
+          "metrics": {"type": "array", "items": {"type": "object", "required": ["value", "label"]}},
+          "sections": {"type": "array", "items": {"type": "object", "required": ["h", "p"]}}
+        }
+      }
+    },
+    "publications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "year"],
+        "properties": {
+          "title": {"type": "string", "minLength": 1},
+          "year": {"type": "string"},
+          "venue": {"$ref": "#/$defs/str"},
+          "type": {"$ref": "#/$defs/str"},
+          "status": {"$ref": "#/$defs/str"},
+          "authors": {"$ref": "#/$defs/str"},
+          "doi": {"$ref": "#/$defs/str"},
+          "abstract": {"$ref": "#/$defs/str"}
+        }
+      }
+    },
+    "education": {
+      "type": "array",
+      "items": {"type": "object", "required": ["school", "degree"]}
+    },
+    "awards": {
+      "type": "array",
+      "items": {"type": "object", "required": ["title"]}
+    },
+    "about": {"type": "object"}
+  }
+}

@@ -41,7 +41,7 @@ TOP_LEVEL = ["profile", "metrics", "skills", "experience", "research",
 DEFAULTS = {
     "groq": {
         "url": "https://api.groq.com/openai/v1/chat/completions",
-        "model": "llama-3.3-70b-versatile",
+        "model": "openai/gpt-oss-120b",
         "kind": "openai",
     },
     "openrouter": {
@@ -51,7 +51,7 @@ DEFAULTS = {
     },
     "gemini": {
         "url": "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
-        "model": "gemini-2.0-flash",
+        "model": "gemini-3.5-flash",
         "kind": "gemini",
     },
     "ollama": {
@@ -267,6 +267,18 @@ def slug(s):
     return out[:48] or "project"
 
 
+PRESENT = 9999
+
+
+def latest_year(item):
+    """Latest 4-digit year in an item's period/year; 'Present'/'Current' ranks highest."""
+    text = str(item.get("period") or item.get("year") or "") if isinstance(item, dict) else ""
+    if re.search(r"\b(present|current|now)\b", text, re.I):
+        return PRESENT
+    years = [int(y) for y in re.findall(r"\b(?:19|20)\d{2}\b", text)]
+    return max(years, default=0)
+
+
 def merge_list(existing, incoming, keyfn, allow_update=True):
     """Add new items; fill blank fields on matched items. Never deletes."""
     added = updated = 0
@@ -371,17 +383,10 @@ def merge(current, new):
             pu += 1
     stats["profile"] = (0, pu)
 
-    # Newest first
-    def yr(x):
-        m = re.findall(r"(19|20)\d{2}", str(x.get("period") or x.get("year") or ""))
-        return max(m and [int(str(x.get("period") or x.get("year"))[s.start():s.start()+4])
-                          for s in re.finditer(r"(19|20)\d{2}",
-                          str(x.get("period") or x.get("year") or ""))] or [0])
-    try:
-        current["experience"].sort(key=yr, reverse=True)
-        current["publications"].sort(key=lambda p: str(p.get("year", "")), reverse=True)
-    except Exception:
-        pass
+    # Newest first (sort is stable, so ties keep their existing order)
+    for key in ("experience", "research", "publications"):
+        if isinstance(current.get(key), list):
+            current[key].sort(key=latest_year, reverse=True)
 
     return stats
 
