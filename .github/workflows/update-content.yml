@@ -1,0 +1,73 @@
+name: Update site content
+
+# Runs when you drop a file into inbox/, or manually from the Actions tab.
+on:
+  push:
+    paths: [ "inbox/**" ]
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: content-update
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Look for input files
+        id: gate
+        run: |
+          shopt -s nullglob
+          files=(inbox/*.pdf inbox/*.tex inbox/*.txt inbox/*.md inbox/*.markdown inbox/*.json inbox/*.docx inbox/*.bib)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "Nothing to process."
+            echo "go=false" >> $GITHUB_OUTPUT
+          else
+            echo "Found: ${files[*]}"
+            echo "go=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install tools
+        if: steps.gate.outputs.go == 'true'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+          python -m pip install --quiet python-docx
+
+      - name: Extract and merge
+        if: steps.gate.outputs.go == 'true'
+        id: ingest
+        env:
+          # Free by default. Change these two in Settings → Secrets and variables → Actions.
+          LLM_PROVIDER: ${{ vars.LLM_PROVIDER || 'groq' }}
+          LLM_MODEL:    ${{ vars.LLM_MODEL }}
+          LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
+          LLM_API_KEY:  ${{ secrets.LLM_API_KEY }}
+        run: python scripts/ingest.py
+
+      - name: Open pull request
+        if: steps.gate.outputs.go == 'true' && steps.ingest.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "content: update from ${{ steps.ingest.outputs.files }}"
+          branch: content-update
+          delete-branch: true
+          title: "Content update from ${{ steps.ingest.outputs.files }}"
+          body-path: pr_body.md
+          labels: content
+          add-paths: |
+            data/content.json
+            inbox/
+
+      - name: Explain failure
+        if: failure()
+        run: |
+          echo "::warning::Ingest failed. data/content.json was NOT modified and your live site is untouched."
+          echo "Common causes: LLM_API_KEY secret missing, free-tier rate limit (wait a minute and re-run), or an unreadable file."

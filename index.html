@@ -1,143 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shivanshu Siyanwal — Quantum Software Engineer</title>
-  <meta name="description" content="Shivanshu Siyanwal — Quantum Software Engineer. Hybrid quantum-classical software, quantum machine learning, FPGA-accelerated inference, and photonic quantum networks. Research + production." />
-
-  <meta property="og:title" content="Shivanshu Siyanwal — Quantum Software Engineer" />
-  <meta property="og:description" content="Hybrid quantum-classical software, quantum ML, FPGA inference, and photonic quantum networks." />
-  <meta property="og:type" content="website" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shivanshu Siyanwal — Quantum Software Engineer</title>
+<meta name="description" content="Shivanshu Siyanwal — Quantum Software Engineer. Hybrid quantum-classical software, quantum machine learning, FPGA-accelerated inference, and photonic quantum networks."/>
+<meta property="og:title" content="Shivanshu Siyanwal — Quantum Software Engineer"/>
+<meta property="og:description" content="Hybrid quantum-classical software, quantum ML, FPGA inference, photonic quantum networks."/>
+<meta property="og:type" content="website"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="topbar"><div class="wrap topbar-inner"></div></div>
 
-  <!-- Sticky top bar: always visible, including mobile -->
-  <div class="topbar" id="topbar">
-    <div class="wrap topbar-inner">
-      <a class="topbar-name" href="#top"><span id="bar-name"></span></a>
-      <nav class="topbar-nav" aria-label="Sections">
-        <a href="#work">Work</a>
-        <a href="#projects">Projects</a>
-        <a href="#publications">Publications</a>
-        <a href="#about">About</a>
-        <a class="topbar-cv" id="bar-cv" href="#">CV ↓</a>
-      </nav>
+<main id="main">
+  <header class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div class="hero-lead">
+        <p class="eyebrow" id="hero-title"></p>
+        <h1 id="hero-name"></h1>
+        <p class="lede" id="hero-tagline"></p>
+        <p class="hero-summary" id="hero-summary"></p>
+        <p class="hero-avail" id="hero-avail"></p>
+        <div class="hero-cta" id="hero-cta"></div>
+      </div>
+      <aside class="hero-side" aria-label="At a glance">
+        <div class="hero-circuit" id="hero-circuit" aria-hidden="true"></div>
+        <div class="glance" id="glance"></div>
+        <div class="profiles" id="profiles" aria-label="Profiles and links"></div>
+      </aside>
     </div>
-  </div>
+  </header>
 
-  <main id="main">
-
-    <!-- ===================== HERO ===================== -->
-    <header class="hero" id="top">
-      <div class="wrap hero-grid">
-        <div class="hero-lead">
-          <p class="eyebrow" id="hero-title"></p>
-          <h1 id="hero-name"></h1>
-          <p class="lede" id="hero-tagline"></p>
-          <p class="hero-summary" id="hero-summary"></p>
-          <p class="hero-avail" id="hero-avail"></p>
-          <div class="hero-cta" id="hero-cta"></div>
-        </div>
-
-        <aside class="hero-side" aria-label="At a glance">
-          <div class="glance" id="glance"></div>
-          <div class="profiles" id="profiles" aria-label="Profiles and links"></div>
-        </aside>
+  <section id="work" class="section" aria-labelledby="work-h">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <h2 id="work-h">Experience</h2>
+        <p class="section-note">Roles across quantum research labs and production R&amp;D. Select an entry to expand.</p>
       </div>
-    </header>
-
-    <!-- ===================== WORK ===================== -->
-    <section id="work" class="section" aria-labelledby="work-h">
-      <div class="wrap">
-        <div class="section-head">
-          <h2 id="work-h">Experience</h2>
-          <p class="section-note">Roles across quantum research labs and production R&amp;D. Select an entry to expand.</p>
-        </div>
-        <div class="stack" id="work-list"></div>
-      </div>
-    </section>
-
-    <!-- ===================== PROJECTS ===================== -->
-    <section id="projects" class="section section--tint" aria-labelledby="proj-h">
-      <div class="wrap">
-        <div class="section-head section-head--row">
-          <div>
-            <h2 id="proj-h">Selected Projects</h2>
-            <p class="section-note">Research and engineering work with measurable results.</p>
-          </div>
-          <div class="filter" role="group" aria-label="Filter projects by audience">
-            <button class="filter-btn is-active" data-filter="all" aria-pressed="true">All</button>
-            <button class="filter-btn" data-filter="academic" aria-pressed="false">Research</button>
-            <button class="filter-btn" data-filter="industry" aria-pressed="false">Engineering</button>
-          </div>
-        </div>
-        <div class="cards" id="projects-list"></div>
-      </div>
-    </section>
-
-    <!-- ===================== PUBLICATIONS ===================== -->
-    <section id="publications" class="section" aria-labelledby="pub-h">
-      <div class="wrap">
-        <div class="section-head">
-          <h2 id="pub-h">Publications &amp; Talks</h2>
-          <p class="section-note" id="pub-note"></p>
-        </div>
-        <ol class="pubs" id="publications-list"></ol>
-      </div>
-    </section>
-
-    <!-- ===================== ABOUT: skills + education + awards ===================== -->
-    <section id="about" class="section section--tint" aria-labelledby="about-h">
-      <div class="wrap">
-        <div class="section-head"><h2 id="about-h">About</h2></div>
-
-        <div class="about-grid">
-          <div class="about-col about-col--wide">
-            <h3 class="subhead">Technical skills</h3>
-            <dl class="skills" id="skills-list"></dl>
-
-            <h3 class="subhead">Research training</h3>
-            <div class="stack stack--tight" id="research-list"></div>
-          </div>
-
-          <div class="about-col">
-            <h3 class="subhead">Education</h3>
-            <div class="mini-list" id="education-list"></div>
-
-            <h3 class="subhead">Certifications &amp; awards</h3>
-            <ul class="awards" id="awards-list"></ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="footer">
-    <div class="wrap footer-grid">
-      <div>
-        <p class="footer-name" id="footer-name"></p>
-        <p class="footer-loc" id="footer-loc"></p>
-      </div>
-      <div class="footer-links" id="footer-links"></div>
+      <div class="stack" id="work-list"></div>
     </div>
-  </footer>
+  </section>
 
-  <!-- Detail dialog for progressive disclosure (projects/experience) -->
-  <dialog class="detail" id="detail" aria-labelledby="detail-title">
-    <div class="detail-inner">
-      <button class="detail-close" id="detail-close" aria-label="Close">✕</button>
-      <div id="detail-body"></div>
+  <section id="projects" class="section section--tint" aria-labelledby="proj-h">
+    <div class="wrap">
+      <div class="section-head section-head--row" data-reveal>
+        <div>
+          <h2 id="proj-h">Selected Projects</h2>
+          <p class="section-note">Research and engineering work with measurable results. Each opens a full write-up.</p>
+        </div>
+        <div class="filter" role="group" aria-label="Filter projects by audience">
+          <button class="filter-btn is-active" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter-btn" data-filter="academic" aria-pressed="false">Research</button>
+          <button class="filter-btn" data-filter="industry" aria-pressed="false">Engineering</button>
+        </div>
+      </div>
+      <div class="cards" id="projects-list"></div>
     </div>
-  </dialog>
+  </section>
 
-  <script src="app.js"></script>
+  <section id="publications" class="section" aria-labelledby="pub-h">
+    <div class="wrap">
+      <div class="section-head section-head--row" data-reveal>
+        <div>
+          <h2 id="pub-h">Recent Publications</h2>
+          <p class="section-note">Most recent of <span id="pub-count"></span> entries.</p>
+        </div>
+        <a class="btn" href="publications.html">All publications →</a>
+      </div>
+      <ol class="pubs" id="pub-preview"></ol>
+    </div>
+  </section>
+
+  <section class="section section--tint cta-band" aria-labelledby="cta-h">
+    <div class="wrap narrow center" data-reveal>
+      <h2 id="cta-h">Read the research statement</h2>
+      <p class="section-note center-note">A fuller account of what I work on, why, and where I want to take it next.</p>
+      <p><a class="btn btn--primary" href="about.html">About &amp; research interests →</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="footer" id="footer-slot"></footer>
+<script type="module" src="js/index.js"></script>
 </body>
 </html>
