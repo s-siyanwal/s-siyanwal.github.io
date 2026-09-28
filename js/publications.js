@@ -23,6 +23,7 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal } from "./
 
   $("pub-list").innerHTML = pubs.map((p, i) => {
     const doi = p.doi ? `<a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">DOI ↗</a>` : "";
+    const bib = `<button type="button" class="bib-btn" data-i="${i}" aria-label="Copy BibTeX for ${esc(p.title)}">Copy BibTeX</button>`;
     return `
     <li class="pubcard" data-t="${esc(p.type || "")}" data-reveal style="--i:${i % 3}">
       <div class="pubcard-top">
@@ -36,7 +37,7 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal } from "./
         ${p.status ? ` · <span class="pub-status">${esc(p.status)}</span>` : ""}
       </p>
       ${p.abstract ? `<p class="pubcard-abstract">${esc(p.abstract)}</p>` : ""}
-      ${doi ? `<div class="pubcard-links">${doi}</div>` : ""}
+      <div class="pubcard-links">${doi}${bib}<span class="bib-status" role="status"></span></div>
     </li>`;
   }).join("");
 
@@ -52,5 +53,36 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal } from "./
     });
   });
 
+  $("pub-list").addEventListener("click", async (e) => {
+    const btn = e.target.closest(".bib-btn");
+    if (!btn) return;
+    const status = btn.parentElement.querySelector(".bib-status");
+    const text = bibtex(pubs[+btn.dataset.i]);
+    try { await navigator.clipboard.writeText(text); status.textContent = "Copied"; }
+    catch { window.prompt("Copy BibTeX:", text); }
+    setTimeout(() => { status.textContent = ""; }, 2000);
+  });
+
   initReveal();
 })();
+
+/* BibTeX built only from stored fields; nothing is guessed. */
+function bibtex(p) {
+  const kind = { "Journal article": "article", "Conference paper": "inproceedings" }[p.type] || "misc";
+  const venueField = { article: "journal", inproceedings: "booktitle", misc: "howpublished" }[kind];
+  const clean = (s) => String(s || "").replace(/[{}]/g, "");
+  const names = clean(p.authors).replace(/\s*et al\.?/i, "").split(/,|\band\b/)
+    .map((s) => s.trim()).filter(Boolean);
+  const author = names.join(" and ") + (/et al/i.test(p.authors || "") ? " and others" : "");
+  const surname = (names[0] || "anon").split(/[\s.]+/).filter(Boolean).pop().toLowerCase().replace(/[^a-z]/g, "");
+  const word = ((p.title || "").toLowerCase().match(/[a-z]{4,}/) || ["paper"])[0];
+  const fields = [
+    ["title", p.title && `{${clean(p.title)}}`],
+    ["author", author],
+    [venueField, clean(p.venue)],
+    ["year", clean(p.year)],
+    ["doi", clean(p.doi)],
+    ["note", clean(p.status)],
+  ].filter(([, v]) => v).map(([k, v]) => `  ${k} = {${v}}`);
+  return `@${kind}{${surname}${p.year || ""}${word},\n${fields.join(",\n")}\n}`;
+}

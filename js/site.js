@@ -78,4 +78,9 @@ export function initReveal() {
 
 /* ---------- Tag / chip helpers ---------- */
 export const tags = (arr = []) => arr.map((t) => `<span class="tag">${esc(t)}</span>`).join("");
+/* Built site (scripts/build.py) has one static file per project; raw repo uses ?id=. */
+export const projectHref = (id) => document.documentElement.hasAttribute("data-built")
+  ? `project-${encodeURIComponent(id)}.html`
+  : `project.html?id=${encodeURIComponent(id)}`;
+
 export const audLabel = { academic: "Research", industry: "Engineering", both: "Research + Engineering" };

@@ -20,7 +20,7 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags } fr
       <p>${esc(it.detail)}</p>
     </div>`).join("");
 
-  if (a.looking_for) $("looking").textContent = a.looking_for; else $("looking").remove();
+  if (a.looking_for) $("looking").textContent = a.looking_for; else $("looking")?.remove();
 
   // Research training
   $("research-list").innerHTML = (data.research || []).map((e) => `

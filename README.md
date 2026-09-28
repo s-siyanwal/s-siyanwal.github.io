@@ -66,7 +66,7 @@ already have.
 
 ```
 index.html            Home: hero, experience, projects, recent papers
-project.html          Project deep-dive  (project.html?id=vqc-fpga)
+project.html          Project deep-dive template (built into project-<id>.html)
 publications.html     Full bibliography with abstracts + type filter
 about.html            Research statement, interests, skills, education
 style.css             All styling
@@ -78,12 +78,21 @@ data/content.json     ★ ALL CONTENT
 assets/               CV PDF
 inbox/                ← drop files here to update
 scripts/ingest.py     Parser/merger (provider-agnostic)
+scripts/build.py      Prerenders the site into _site/ (run by pages.yml)
 SETUP-GUIDE.md        ★ Step-by-step setup walkthrough
 .github/workflows/    The automation
 ```
 
 **Adding a project automatically creates its page** at
-`project.html?id=<its-id>` — no new files, no HTML to write.
+`project-<its-id>.html` on the next deploy — no new files, no HTML to write.
+Old `project.html?id=<its-id>` links redirect there.
+
+**How the live site is built:** on every push to `main`, `pages.yml` runs
+`scripts/build.py`. It renders each page with the site's own JS in headless
+Chromium and saves the resulting HTML, so search engines and link previews
+(LinkedIn, Slack, X) see real content, titles and a preview image. It also writes
+`sitemap.xml`, `robots.txt`, `404.html`, `favicon.svg`, `og.png` and JSON-LD
+structured data. The JS still runs in the browser for filters and motion.
 
 ---
 
@@ -147,7 +156,7 @@ Empty URLs degrade gracefully — they show "links coming soon" rather than brea
 1. Create a **public** repo `shivanshu-siyanwal.github.io`.
 2. Upload everything here (including the hidden `.github` folder — if drag-and-drop
    skips it, use the git commands below).
-3. **Settings → Pages → Deploy from branch → `main` / root.**
+3. **Settings → Pages → Source: GitHub Actions.** `pages.yml` builds and deploys.
 4. Live at `https://s-siyanwal.github.io/shivanshu-siyanwal.github.io/`
    (a repo named `s-siyanwal.github.io` would get `https://s-siyanwal.github.io`).
 
@@ -160,7 +169,10 @@ git push -u origin main
 
 ### Local preview
 ```bash
-python3 -m http.server 8000     # → http://localhost:8000
+python3 -m http.server 8000     # → http://localhost:8000  (raw, JS-rendered)
+
+pip install playwright && python -m playwright install chromium
+python3 scripts/build.py && python3 -m http.server -d _site 8000   # built site
 ```
 Opening the HTML directly won't work — browsers block `fetch` on `file://`.
 
