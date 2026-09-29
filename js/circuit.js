@@ -36,10 +36,25 @@ export function mountCircuit(host, labels, tiles) {
   live();
   motionQ.addEventListener("change", live);
 
-  // Nothing animates off-screen.
+  // WCAG 2.2.2: a loop longer than 5 s needs a user pause; nothing animates off-screen either.
+  let offscreen = false, held = false;
+  const sync = () => hero.classList.toggle("is-paused", offscreen || held);
+  // Reuse the prerendered button so the build output and live page don't both add one.
+  let btn = host.parentNode.querySelector(".qc-pause");
+  if (!btn) {
+    btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "qc-pause";
+    host.after(btn);
+  }
+  const label = () => {
+    btn.setAttribute("aria-pressed", String(held));
+    btn.textContent = held ? "Play motion" : "Pause motion";
+  };
+  btn.addEventListener("click", () => { held = !held; label(); sync(); });
+  label();
   if ("IntersectionObserver" in window) {
-    new IntersectionObserver(([en]) => hero.classList.toggle("is-paused", !en.isIntersecting))
-      .observe(host);
+    new IntersectionObserver(([en]) => { offscreen = !en.isIntersecting; sync(); }).observe(host);
   }
 
   host.addEventListener("pointermove", (e) => {
