@@ -50,9 +50,11 @@ COPY = ["index.html", "project.html", "publications.html", "about.html",
         "style.css", ".nojekyll", "js", "data", "assets"]
 PAGES = ["index.html", "publications.html", "about.html"]
 
-ACCENT = "#1f5c54"
-PAPER = "#fbfaf6"
-INK = "#1b1a17"
+# Light-theme tokens from style.css (Interference); keep in sync.
+ACCENT = "#0b6a5a"
+PAPER = "#faf8f2"
+INK = "#16181d"
+INK_SOFT = "#434852"
 
 
 # ------------------------------------------------------------------ helpers
@@ -169,13 +171,15 @@ FAVICON = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 def og_card(data):
     p = data.get("profile", {})
     return f"""<!DOCTYPE html><html><head><meta charset="utf-8"/>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500&family=Spectral:wght@400&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet"/>
 <style>
+@font-face{{font-family:Fraunces;src:url(assets/fonts/fraunces.woff2) format("woff2");font-weight:400 700}}
+@font-face{{font-family:Geist;src:url(assets/fonts/geist.woff2) format("woff2");font-weight:400 600}}
+@font-face{{font-family:"Geist Mono";src:url(assets/fonts/geist-mono.woff2) format("woff2");font-weight:400 500}}
 html,body{{margin:0;width:1200px;height:630px;background:{PAPER};color:{INK}}}
 .c{{box-sizing:border-box;height:100%;padding:88px 96px;display:flex;flex-direction:column;justify-content:center;border-left:18px solid {ACCENT}}}
-.e{{font:500 26px 'IBM Plex Mono',monospace;color:{ACCENT};letter-spacing:.06em;text-transform:uppercase;margin:0 0 24px}}
-h1{{font:500 92px/1.05 Newsreader,Georgia,serif;margin:0 0 28px}}
-p{{font:400 34px/1.4 Spectral,Georgia,serif;margin:0;max-width:900px;color:#3b372f}}
+.e{{font:500 26px 'Geist Mono',monospace;color:{ACCENT};letter-spacing:.06em;text-transform:uppercase;margin:0 0 24px}}
+h1{{font:500 92px/1.05 Fraunces,Georgia,serif;margin:0 0 28px}}
+p{{font:400 34px/1.4 Geist,system-ui,sans-serif;margin:0;max-width:900px;color:{INK_SOFT}}}
 </style></head><body><div class="c">
 <p class="e">{esc(p.get("title"))}</p>
 <h1>{esc(p.get("name"))}</h1>
@@ -333,11 +337,13 @@ def prerender(pages, og_html):
                 sys.exit("JS errors while prerendering:\n" + "\n".join(errors))
 
             pg = browser.new_page(viewport={"width": 1200, "height": 630})
+            # Load from the local server first so the card's relative font URLs resolve.
+            pg.goto(base + "robots.txt")
             pg.set_content(og_html, wait_until="load")
-            try:
-                pg.wait_for_function("document.fonts.status === 'loaded'", timeout=8000)
-            except Exception:
-                pass  # fonts unreachable (offline): fall back to system serif
+            failed = pg.evaluate("document.fonts.ready.then(() => "
+                                 "[...document.fonts].filter(f => f.status !== 'loaded').map(f => f.family))")
+            if failed:
+                sys.exit(f"og.png: self-hosted fonts failed to load: {failed}")
             pg.screenshot(path=str(OUT / "og.png"))
             browser.close()
     finally:
