@@ -336,7 +336,8 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { html.js [data-reveal] { opacity: 1; transform: none; } }
 
 /* ---------- Hero entrance ---------- */
-@keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+/* transform only: fading above-the-fold text makes mid-animation contrast fail audits */
+@keyframes rise { from { transform: translateY(12px); } to { transform: none; } }
 .hero-lead > * { animation: rise .7s cubic-bezier(.2,.7,.3,1) backwards; }
 .hero-lead > .eyebrow      { animation-delay: .05s; }
 .hero-lead > h1            { animation-delay: .13s; }
