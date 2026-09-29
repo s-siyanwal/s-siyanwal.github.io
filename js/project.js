@@ -37,7 +37,11 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, aud
         <p class="eyebrow">${esc(audLabel[pr.audience] || "Project")}</p>
         <h1>${esc(pr.name)}</h1>
         <p class="lede">${esc(pr.blurb || "")}</p>
-        ${pr.role ? `<p class="role-note">${esc(pr.role)}</p>` : ""}
+        <dl class="meta-block">
+          ${pr.role ? `<div><dt>Role</dt><dd>${esc(pr.role)}</dd></div>` : ""}
+          <div><dt>Track</dt><dd>${esc(audLabel[pr.audience] || "Project")}</dd></div>
+          ${(pr.tags || []).length ? `<div><dt>Topics</dt><dd>${esc(pr.tags.slice(0, 4).join(" · "))}</dd></div>` : ""}
+        </dl>
         ${(pr.metrics || []).length ? `<div class="detail-metrics">${(pr.metrics || []).map((m) =>
           `<div class="detail-metric"><div class="m-val">${esc(m.value)}</div><div class="m-lab">${esc(m.label)}</div></div>`).join("")}</div>` : ""}
         ${liveLinks.length ? `<div class="hero-cta">${liveLinks.map((l) =>

@@ -180,9 +180,11 @@ Opening the HTML directly won't work — browsers block `fetch` on `file://`.
 
 ## 6. Design notes
 
-Academic-paper aesthetic: warm paper ground, ink text, one verdigris accent,
-Newsreader/Spectral/IBM Plex Mono. The hero's animated quantum circuit is the
-signature element — gates brighten as a pulse sweeps the wires.
+Direction A, "Interference": warm paper ground, ink text, a verdigris accent with
+vermilion for live state, self-hosted Fraunces/Geist/Geist Mono, light and dark
+themes (Auto/Light/Dark toggle). The hero circuit is the signature element: one
+wire per focus area, a wave packet sweeps the wires and feeds the metric tiles.
+Tokens and motion rules are in `DESIGN.md`.
 
 Accessibility: keyboard-operable throughout, visible focus rings, correct heading
 order, `prefers-reduced-motion` freezes all animation, and reveal animations are

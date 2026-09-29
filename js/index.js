@@ -27,7 +27,7 @@ import { mountCircuit } from "./circuit.js";
   if (p.email) cta.push(`<a class="btn" href="mailto:${esc(p.email)}">Email</a>`);
   $("hero-cta").innerHTML = cta.join("");
 
-  mountCircuit($("hero-circuit"));
+  mountCircuit($("hero-circuit"), p.focus_areas, $("glance"));
 
   // Metrics
   $("glance").innerHTML = (data.metrics || []).map((m, i) => `
@@ -87,6 +87,7 @@ import { mountCircuit } from "./circuit.js";
           <div class="pub-title">${esc(pb.title)}</div>
           <div class="pub-meta">
             <span class="pub-venue">${esc(pb.venue)}</span>
+            ${pb.authors ? `<span class="pub-authors">${esc(pb.authors)}</span>` : ""}
             ${pb.status ? `<span class="pub-status">${esc(pb.status)}</span>` : ""}
           </div>
         </div>

@@ -36,7 +36,8 @@ js/site.js            Shared: data loading, nav, footer, fail-safe scroll reveal
 js/circuit.js         Signature element: animated SVG quantum circuit
 js/index.js, project.js, publications.js, about.js   Page renderers
 data/content.json     ★ Single source of truth for ALL content
-assets/               CV PDF
+assets/               CV PDF; fonts/ holds self-hosted woff2 + OFL licences
+DESIGN.md             Design tokens, type scale, motion rules (Direction A)
 inbox/                Drop zone for updates; processed files → inbox/archive/
 scripts/ingest.py     Text extraction + LLM extraction + deterministic merge + validation
 scripts/build.py      Prerender into _site/ (headless Chromium runs the JS renderers)
@@ -74,10 +75,15 @@ README.md             Technical overview
 8. **Accessibility is WCAG 2.2 AA minimum.** Keyboard operable, visible focus,
    correct heading order, AA contrast, meaningful link text, screen-reader-sane
    disclosure widgets.
-9. **Keep the aesthetic.** Academic-paper look: warm paper ground (`--paper`),
-   ink text, single verdigris accent (`--accent #1f5c54`), Newsreader / Spectral /
-   IBM Plex Mono. Minimal and humble, but not bland. No dark "dev portfolio"
-   theme, no startup-landing gloss, no stock imagery.
+9. **Keep the aesthetic (Direction A, "Interference").** Academic-paper look:
+   warm paper ground (`--bg #FAF8F2`), ink text, verdigris accent
+   (`--accent #0B6A5A`) with vermilion (`--accent-2 #B93A0E`) reserved for
+   live/phase state only. Fraunces / Geist / Geist Mono, self-hosted from
+   `assets/fonts/` (OFL). Light and dark themes via tokens in `style.css`,
+   with an Auto/Light/Dark toggle that must not flash; every text pair stays
+   ≥ 4.5:1 and UI pairs ≥ 3:1 in both themes. `DESIGN.md` is the token spec.
+   Minimal and humble, but not bland. No "hacker" dev-portfolio theme, no
+   startup-landing gloss, no stock imagery.
 10. **Keep `SETUP-GUIDE.md` true.** If you change any setup step, secret name,
     variable name, or folder, update the guide in the same PR.
 
@@ -177,7 +183,7 @@ Present these as a short menu with effort estimates before building.
    SEO, ≥ 90 performance. Fix findings. Use `font-display: swap` or self-host
    fonts if they hurt LCP.
 6. **Hero motion refinement (optional).** The circuit is the signature element;
-   keep it. Changes must respect Hard rule 7 and stay under ~5 KB of JS.
+   keep it. Changes must respect Hard rule 7 and stay under ~25 KB of added JS.
 
 ### Phase 4 — Content (Shiv supplies, you format)
 

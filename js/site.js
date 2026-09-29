@@ -14,7 +14,7 @@ export async function loadData() {
 
 export function fail(msg) {
   const m = document.querySelector("main") || document.body;
-  m.innerHTML = `<div class="wrap" style="padding:3rem 0;color:#a33">${msg}</div>`;
+  m.innerHTML = `<div class="wrap" style="padding:3rem 0;color:var(--accent-2)">${msg}</div>`;
 }
 
 /* ---------- Sticky bar + shared chrome ---------- */
@@ -33,7 +33,30 @@ export function mountChrome(data, active) {
       ${item("publications.html", "Publications", "pubs")}
       ${item("about.html", "About", "about")}
       ${cv ? `<a class="topbar-cv" href="${esc(cv)}" target="_blank" rel="noopener">CV ↓</a>` : ""}
-    </nav>`;
+    </nav>
+    <button type="button" class="theme-toggle"></button>`;
+  mountThemeToggle(bar.querySelector(".theme-toggle"));
+}
+
+/* ---------- Theme: Auto (follows the OS) → Light → Dark ----------
+   The inline <head> script applies a saved choice before first paint. */
+const THEMES = ["auto", "light", "dark"];
+function mountThemeToggle(btn) {
+  let cur = "auto";
+  try { cur = localStorage.getItem("theme") || "auto"; } catch (e) { /* storage blocked */ }
+  if (!THEMES.includes(cur)) cur = "auto";
+  const paint = () => {
+    btn.textContent = cur[0].toUpperCase() + cur.slice(1);
+    btn.setAttribute("aria-label", `Colour theme: ${cur}. Switch theme`);
+  };
+  paint();
+  btn.addEventListener("click", () => {
+    cur = THEMES[(THEMES.indexOf(cur) + 1) % 3];
+    const root = document.documentElement;
+    if (cur === "auto") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", cur);
+    try { cur === "auto" ? localStorage.removeItem("theme") : localStorage.setItem("theme", cur); } catch (e) { /* storage blocked */ }
+    paint();
+  });
 }
 
 export function mountFooter(data) {
@@ -54,6 +77,7 @@ export function mountFooter(data) {
 
 /* ---------- Scroll reveal (respects reduced motion) ---------- */
 export function initReveal() {
+  initPrint();
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const els = document.querySelectorAll("[data-reveal]");
   const showAll = () => els.forEach((e) => e.classList.add("is-in"));
@@ -74,6 +98,16 @@ export function initReveal() {
 
   // Print / find-in-page must never hit invisible text.
   window.addEventListener("beforeprint", () => { clearTimeout(failsafe); showAll(); });
+}
+
+/* Printed pages show collapsed details; restore what the reader had open afterwards. */
+function initPrint() {
+  let opened = [];
+  window.addEventListener("beforeprint", () => {
+    opened = [...document.querySelectorAll("details:not([open])")];
+    opened.forEach((d) => { d.open = true; });
+  });
+  window.addEventListener("afterprint", () => { opened.forEach((d) => { d.open = false; }); });
 }
 
 /* ---------- Tag / chip helpers ---------- */
