@@ -170,4 +170,6 @@ export const THREADS = {
   "qir-qnn": ["image", "Quantum image classification"],
   "qkd-testbeds": ["qkd", "QKD protocols"],
   "qcrypto-circuits": ["qkd", "Quantum cryptography"],
+  "vqls-forecasting": ["vqls", "VQLS forecasting"],
+  "tensnet": ["tensor", "Tensor networks"],
 };

@@ -35,7 +35,7 @@
   --chip-preprint: #465a1f; --chip-preprint-bg: #e6ecd6;
   --chip-poster: #574f42; --chip-poster-bg: #ece8df;
   --chip-thesis: #584669; --chip-thesis-bg: #ebe5f0;
-  --th-nmr: #6b5b95; --th-weather: #2f7598; --th-image: #3a7f66; --th-qkd: #4c6a85; --th-fpga: #94641c;
+  --th-nmr: #6b5b95; --th-weather: #2f7598; --th-image: #3a7f66; --th-qkd: #4c6a85; --th-fpga: #94641c; --th-vqls: #66691f; --th-tensor: #9a4a6c;
 
   --panel-blur: blur(14px) saturate(1.2);
   --gap: clamp(1rem, 3vw, 1.75rem);
@@ -79,7 +79,7 @@
   --chip-preprint: #c2d68f; --chip-preprint-bg: #243016;
   --chip-poster: #d8ccb4; --chip-poster-bg: #2d2a22;
   --chip-thesis: #cdb8e6; --chip-thesis-bg: #2c2338;
-  --th-nmr: #a894d6; --th-weather: #6fb4d8; --th-image: #6fc4a2; --th-qkd: #8fb0cf; --th-fpga: #d9a35a;
+  --th-nmr: #a894d6; --th-weather: #6fb4d8; --th-image: #6fc4a2; --th-qkd: #8fb0cf; --th-fpga: #d9a35a; --th-vqls: #c4c76a; --th-tensor: #e394b6;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -105,7 +105,7 @@
     --chip-preprint: #c2d68f; --chip-preprint-bg: #243016;
     --chip-poster: #d8ccb4; --chip-poster-bg: #2d2a22;
     --chip-thesis: #cdb8e6; --chip-thesis-bg: #2c2338;
-    --th-nmr: #a894d6; --th-weather: #6fb4d8; --th-image: #6fc4a2; --th-qkd: #8fb0cf; --th-fpga: #d9a35a;
+    --th-nmr: #a894d6; --th-weather: #6fb4d8; --th-image: #6fc4a2; --th-qkd: #8fb0cf; --th-fpga: #d9a35a; --th-vqls: #c4c76a; --th-tensor: #e394b6;
   }
 }
 /* Without backdrop-filter the glass would be see-through, so panels go solid. */
@@ -646,6 +646,8 @@ a.card:hover h3 { color: var(--accent); }
 .th-image { --th: var(--th-image); }
 .th-qkd { --th: var(--th-qkd); }
 .th-fpga { --th: var(--th-fpga); }
+.th-vqls { --th: var(--th-vqls); }
+.th-tensor { --th: var(--th-tensor); }
 
 /* ---------- Figures ---------- */
 .fig { margin: var(--gap) 0 0; }
@@ -681,7 +683,7 @@ a.card:hover h3 { color: var(--accent); }
     --rule: #bbb; --rule-strong: #666;
     --accent: #000; --accent-soft: #fff; --accent-2: #000; --on-accent: #fff;
     --ground-tone: #fff;
-    --th-nmr: #000; --th-weather: #000; --th-image: #000; --th-qkd: #000; --th-fpga: #000;
+    --th-nmr: #000; --th-weather: #000; --th-image: #000; --th-qkd: #000; --th-fpga: #000; --th-vqls: #000; --th-tensor: #000;
   }
   html, body { background: #fff; }
   body::before { display: none; }
