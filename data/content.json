@@ -3,7 +3,7 @@
     "name": "Shivanshu Siyanwal",
     "title": "Quantum information and quantum machine learning",
     "tagline": "I build hybrid quantum-classical software — from variational algorithms and quantum ML to FPGA-accelerated inference and photonic network simulation.",
-    "summary": "Quantum Software Engineer with 4+ years spanning quantum algorithm research and production software. I work across the full stack of quantum computing: variational algorithms (VQE/VQC/VQLS), quantum machine learning, and photonic quantum networks. Published in quantum ML and NMR entanglement detection.",
+    "summary": "Quantum Software Engineer with 4+ years spanning quantum algorithm research and production software. I work across the full stack of quantum computing: variational algorithms (VQE/VQC/VQLS), quantum machine learning, and photonic quantum networks, implemented on FPGAs and cloud quantum backends. Published in quantum ML and NMR entanglement detection.",
     "location": "Uttar Pradesh, India",
     "email": "shivanshu.siyanwal@gmail.com",
     "phone": "",
@@ -170,7 +170,7 @@
       "summary": "Hybrid quantum-classical pipelines and FPGA-accelerated quantum inference.",
       "points": [
         "Co-developed quantum-assisted weather models (QGRU, QLSTM, QNN, VQC, QSVM) on ERA5 single-level data for Safdarjung, Delhi; equal-contribution preprint arXiv:2503.23408 and a related IEEE AIMLSystems 2025 paper.",
-        "Compared quantum image encodings (NASS, QBIR, FTQR, FRQCI, and FRQI/QPIE/NEQR) in QNNs for binary classification; equal-contribution paper in The Journal of Supercomputing (2026).",
+        "Compared quantum image encodings (NASS, QBIR, FTQR, FRQCI) in QNNs for binary classification; equal-contribution paper in The Journal of Supercomputing (2026).",
         "Co-authored the FPGA deployment of a hybrid variational circuit for temperature forecasting on an AMD Alveo U55C (HLS, HBM); IEEE TQCEBT 2026."
       ],
       "tags": [
