@@ -429,12 +429,12 @@
     {
       "id": "nmr-entanglement",
       "name": "Entanglement Detection via Neural Networks (NMR)",
-      "blurb": "An ANN that detects genuine multipartite entanglement and assigns SLOCC classes on a three-qubit NMR processor from 18 of 128 density-matrix elements.",
+      "blurb": "An ANN that detects genuine multipartite entanglement and assigns SLOCC classes on a three-qubit NMR processor, with the canonical form reducing 128 real features to 18.",
       "abstract": "An artificial neural network that detects genuine multipartite entanglement and assigns one of six SLOCC classes to three-qubit states. Each density matrix gives 128 real features (Re and Im of the 64 elements of ρ); the canonical form reduces them to 18 (14 Re, 4 Im), which are then ranked by ANOVA. Validated on 30 experimental pseudopure states from an NMR quantum processor. Published in Quantum Information Processing 24(3), 74 (2025).",
       "metrics": [
         {
           "value": "128 → 18",
-          "label": "density-matrix elements"
+          "label": "real features"
         },
         {
           "value": "30",
@@ -566,7 +566,7 @@
       "title": "TensNet: Memory-Efficient Tensor Network Methods for 2D Incompressible Flow Simulation",
       "type": "Manuscript",
       "status": "manuscript in preparation",
-      "authors": "S. Siyanwal",
+      "authors": "S. Siyanwal, N. Khan, S. S. Pandey, K. Y. Islur, K. Dave, S. Chhipa",
       "doi": "",
       "abstract": "TensNet is a library implementing tensor network methods, using Matrix Product States (MPS) and Matrix Product Operators (MPO), for memory-efficient simulation of the 2D incompressible Navier–Stokes equations. It keeps solution accuracy through adaptive bond-dimension truncation, uses the DMRG algorithm to solve the implicit pressure-correction equations, and uses cross-approximation to handle complex immersed boundaries, reducing the memory footprint relative to traditional methods.",
       "category": "manuscript"
@@ -738,7 +738,7 @@
   "about": {
     "statement": [
       "My work connects quantum information research with production engineering: what it takes to run a quantum algorithm on hardware under real constraints (noise, latency, memory bandwidth) and keep it working reliably.",
-      "That has led me across three connected areas. In variational quantum algorithms and quantum machine learning, I study how data encoding and circuit structure affect resource cost (circuit depth, gate count, qubits) and how hybrid pipelines perform on real forecasting tasks. In quantum hardware acceleration, I compile trained variational circuits into state-vector simulation kernels on FPGA fabric for low-latency inference. In photonic quantum networks, I simulate QKD protocols over lossy channels and model intercept-resend and photon-number-splitting attacks.",
+      "That has led me across three connected areas. In variational quantum algorithms and quantum machine learning, I study how data encoding and circuit structure affect resource cost (circuit depth, gate count, qubits) and how hybrid pipelines perform on real forecasting tasks. In quantum hardware acceleration, I co-authored work (first author N. Khan) that compiles trained variational circuits into state-vector simulation kernels on FPGA fabric for low-latency inference. In photonic quantum networks, I simulate QKD protocols over lossy channels and model intercept-resend and photon-number-splitting attacks.",
       "My MS research at IISER Mohali used neural networks to detect genuine multipartite entanglement and classify SLOCC classes on a three-qubit NMR processor (co-first author, Quantum Information Processing, 2025).",
       "I think quantum research moves faster when its artefacts are built like software: tested, versioned, reproducible and deployable."
     ],

@@ -51,11 +51,11 @@ function weather() {
 
 /* Data figure from Tables 1–2 of the J. Supercomputing paper (art/assets/figure-image-encodings.svg, DESIGN.md §6). */
 const image = () => `<line x1="80" y1="300.0" x2="600" y2="300.0" stroke="var(--rule,#c9d3cf)" stroke-width="1"/>
-<text x="70" y="305.0" text-anchor="end" font-size="15" fill="var(--ink-faint,#4d5b57)">10<tspan dy="-7" font-size="11">3</tspan></text>
+<text x="70" y="305.0" text-anchor="end" font-size="15" fill="var(--ink-faint,#4d5b57)">10<tspan dy="-7" font-size="14">3</tspan></text>
 <line x1="80" y1="196.0" x2="600" y2="196.0" stroke="var(--rule,#c9d3cf)" stroke-width="1"/>
-<text x="70" y="201.0" text-anchor="end" font-size="15" fill="var(--ink-faint,#4d5b57)">10<tspan dy="-7" font-size="11">4</tspan></text>
+<text x="70" y="201.0" text-anchor="end" font-size="15" fill="var(--ink-faint,#4d5b57)">10<tspan dy="-7" font-size="14">4</tspan></text>
 <line x1="80" y1="92.0" x2="600" y2="92.0" stroke="var(--rule,#c9d3cf)" stroke-width="1"/>
-<text x="70" y="97.0" text-anchor="end" font-size="15" fill="var(--ink-faint,#4d5b57)">10<tspan dy="-7" font-size="11">5</tspan></text>
+<text x="70" y="97.0" text-anchor="end" font-size="15" fill="var(--ink-faint,#4d5b57)">10<tspan dy="-7" font-size="14">5</tspan></text>
 <text x="80.0" y="322" text-anchor="middle" font-size="15" fill="var(--ink-faint,#4d5b57)">8</text>
 <text x="184.0" y="322" text-anchor="middle" font-size="15" fill="var(--ink-faint,#4d5b57)">10</text>
 <text x="288.0" y="322" text-anchor="middle" font-size="15" fill="var(--ink-faint,#4d5b57)">12</text>
@@ -162,9 +162,9 @@ export function figuresFor(projectId) {
   return (BY_PROJECT[projectId] || []).map((k) => {
     const [draw, caption, extra = ""] = FIGS[k], id = `fig-${k}`;
     const svg = `<svg viewBox="0 0 640 360" style="font-family:var(--text)" role="img" aria-labelledby="${id}-cap" xmlns="http://www.w3.org/2000/svg">${draw(id)}</svg>`;
-    // The data figure keeps a minimum width on phones so its labels stay readable; it scrolls sideways instead.
+    // Figures keep a minimum width on phones so labels stay readable (at least 12px); they scroll sideways instead.
     return `<figure class="fig th-${k}">
-      ${k === "image" ? `<div class="fig-scroll" tabindex="0" role="group" aria-label="Figure, scrolls sideways on small screens">${svg}</div>` : svg}
+      <div class="fig-scroll" tabindex="0" role="group" aria-label="Figure, scrolls sideways on small screens">${svg}</div>
       <figcaption id="${id}-cap">${caption}</figcaption>${extra}
     </figure>`;
   }).join("");
