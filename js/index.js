@@ -83,7 +83,7 @@ import { mountCircuit } from "./circuit.js";
 
   // Selected papers: the four most recent with an abstract; the result is its first sentence.
   const pubs = data.publications || [];
-  const byYear = pubs.filter((x) => x.category !== "poster" && x.abstract)
+  const byYear = pubs.filter((x) => x.abstract)
     .sort((a, b) => (b.year || "").localeCompare(a.year || "")).slice(0, 4);
   $("paper-list").innerHTML = byYear.map((pb) => `
     <li class="cite" data-reveal>

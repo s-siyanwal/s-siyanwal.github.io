@@ -14,6 +14,7 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags } fr
   $("about-statement").innerHTML = (a.statement || []).map((par, i) =>
     `<p data-reveal style="--i:${i}">${esc(par)}</p>`).join("");
 
+  if (a.research_interests) $("interests-lede").textContent = a.research_interests; else $("interests-lede").remove();
   $("interests").innerHTML = (a.interests || []).map((it, i) => `
     <div class="interest" data-reveal style="--i:${i % 2}">
       <h3>${esc(it.title)}</h3>

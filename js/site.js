@@ -125,8 +125,11 @@ export const CATEGORIES = [
   ["conference", "Conference papers", "Conference"],
   ["preprint", "Preprints", "Preprint"],
   ["thesis", "Theses", "Thesis"],
-  ["poster", "Posters", "Poster"],
+  ["presentation", "Presentations", "Presentation"],
+  ["poster", null, "Poster"],
 ];
+/* Posters list under Presentations, as in the CV. */
+export const groupOf = (p) => (p.category === "poster" ? "presentation" : p.category);
 const catLabel = Object.fromEntries(CATEGORIES.map(([k, , one]) => [k, one]));
 export const chip = (cat) => cat && catLabel[cat]
   ? `<span class="chip-cat chip-cat--${cat}">${catLabel[cat]}</span>` : "";
@@ -142,7 +145,7 @@ export function authorsHtml(authors = "") {
 }
 
 export function venueHtml(p) {
-  const bits = [`<em>${esc(p.venue)}</em>`];
+  const bits = [p.venue && `<em>${esc(p.venue)}</em>`];
   if (p.volume) bits.push(`${esc(p.volume)}${p.issue ? `(${esc(p.issue)})` : ""}${p.article ? `, ${esc(p.article)}` : ""}`);
   if (p.pages) bits.push(`pp. ${esc(p.pages)}`);
   bits.push(esc(p.year || ""));

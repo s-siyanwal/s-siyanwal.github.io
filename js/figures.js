@@ -25,9 +25,10 @@ function nmr() {
     box(W[0] - 40, W[1], 80, 34, "W", "fg-hbox") + box(G[0] - 40, G[1], 80, 34, "GHZ", "fg-hbox") +
     B.map(([x, y], i) => box(x - 38, y - 17, 76, 34, `BS${i + 1}`)).join("") +
     box(S[0] - 40, S[1], 80, 34, "SEP") +
-    box(440, 50, 180, 62, ["NMR measurement", "data"]) + arrow(530, 112, 530, 158) +
-    box(440, 158, 180, 44, "ANN", "fg-hbox") + arrow(530, 202, 530, 248) +
-    box(440, 248, 180, 44, "class label");
+    box(440, 16, 180, 56, ["density matrix", "128 elements"]) + arrow(530, 72, 530, 104) +
+    box(440, 104, 180, 56, ["18 elements", "ANOVA-ranked"]) + arrow(530, 160, 530, 192) +
+    box(440, 192, 180, 44, "ANN", "fg-hbox") + arrow(530, 236, 530, 268) +
+    box(440, 268, 180, 56, ["GME test", "SLOCC class"]);
 }
 
 function weather() {
@@ -50,15 +51,19 @@ function weather() {
 
 function image() {
   const px = [[1, 0], [0, 1]].flatMap((row, r) => row.map((on, c) =>
-    `<rect x="${30 + c * 40}" y="${140 + r * 40}" width="40" height="40" style="fill:${on ? "var(--ink)" : "var(--panel-solid)"}" stroke="var(--ink-faint)" stroke-width="1.4"/>`)).join("");
-  const enc = ["NASS", "QBIR", "FTQR", "FRQCI"];
-  return px + `<text class="fg-s" x="70" y="246" text-anchor="middle">pixels</text>` +
-    enc.map((e, i) => {
-      const y = 40 + i * 75;
-      return arrow(114, 180, 176, y + 22) + box(178, y, 130, 44, e, "fg-hbox") + arrow(308, y + 22, 376, 180);
-    }).join("") +
-    box(378, 158, 100, 44, "QNN", "fg-hbox") + arrow(478, 180, 526, 180) +
-    box(528, 158, 90, 44, "0 / 1") + `<text class="fg-s" x="573" y="226" text-anchor="middle">binary MNIST</text>`;
+    `<rect x="${20 + c * 40}" y="${140 + r * 40}" width="40" height="40" style="fill:${on ? "var(--ink)" : "var(--panel-solid)"}" stroke="var(--ink-faint)" stroke-width="1.4"/>`)).join("");
+  /* Two groups of encodings as listed in the CV; the gap separates them, no ordering implied. */
+  const enc = [["NASS", 0], ["QBIR", 0], ["FTQR", 0], ["FRQCI", 0], ["FRQI", 1], ["QPIE", 1], ["NEQR", 1]];
+  const ys = enc.map(([, g], i) => 18 + i * 44 + g * 18), mid = (y) => y + 17;
+  const bus = (x, y1, y2) => `<line class="fg-faint" x1="${x}" y1="${y1}" x2="${x}" y2="${y2}"/>`;
+  return px + `<text class="fg-s" x="60" y="246" text-anchor="middle">pixels</text>` +
+    `<line class="fg-faint" x1="104" y1="180" x2="134" y2="180"/>` + bus(134, mid(ys[0]), mid(ys[6])) +
+    enc.map(([e], i) => arrow(134, mid(ys[i]), 170, mid(ys[i])) + box(172, ys[i], 112, 34, e, "fg-hbox") +
+      `<line class="fg-faint" x1="284" y1="${mid(ys[i])}" x2="318" y2="${mid(ys[i])}"/>`).join("") +
+    `<line class="fg-faint" stroke-dasharray="3 4" x1="172" y1="${ys[4] - 9}" x2="284" y2="${ys[4] - 9}"/>` +
+    bus(318, mid(ys[0]), mid(ys[6])) + arrow(318, 180, 352, 180) +
+    box(354, 150, 150, 60, ["circularly", "entangled QNN"], "fg-hbox") + arrow(504, 180, 534, 180) +
+    box(536, 158, 84, 44, "0 / 1") + `<text class="fg-s" x="578" y="226" text-anchor="middle">binary MNIST</text>`;
 }
 
 function fpga() {
@@ -100,9 +105,9 @@ function qkd(uid) {
 }
 
 const FIGS = {
-  nmr: [nmr, "Schematic. The six SLOCC classes of three-qubit pure states that the ANN distinguishes."],
+  nmr: [nmr, "Schematic. The six SLOCC classes of three-qubit pure states that the ANN distinguishes, and the reduction from 128 density-matrix elements to 18 ANOVA-ranked inputs."],
   weather: [weather, "Schematic. Illustrative temperature series with a classical baseline and a variational-circuit forecast; not data from the paper."],
-  image: [image, "Schematic. Four quantum image encodings feeding a QNN for binary MNIST (0 vs 1) at 2×2, 4×4 and 8×8."],
+  image: [image, "Schematic. Quantum image encodings compared: NASS, QBIR, FTQR and FRQCI, and FRQI, QPIE and NEQR, each feeding a circularly entangled QNN for binary MNIST (0 vs 1) at 2×2, 4×4 and 8×8."],
   fpga: [fpga, "Schematic. Relative inference latency, FPGA vs GPU, as reported in the project."],
   qkd: [qkd, "Schematic. Protocol layouts for DPS, COW and twin-field QKD studied at TCG CREST."],
 };

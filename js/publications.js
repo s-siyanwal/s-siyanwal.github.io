@@ -1,4 +1,4 @@
-import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, CATEGORIES, chip, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE } from "./site.js";
+import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, CATEGORIES, groupOf, chip, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE } from "./site.js";
 
 (async function () {
   let data;
@@ -12,7 +12,8 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, CATEGORIE
   const pubs = (data.publications || []).slice()
     .sort((a, b) => (b.year || "").localeCompare(a.year || ""));
 
-  const groups = CATEGORIES.map(([k, heading]) => [k, heading, pubs.filter((p) => p.category === k)])
+  const groups = CATEGORIES.filter(([, heading]) => heading)
+    .map(([k, heading]) => [k, heading, pubs.filter((p) => groupOf(p) === k)])
     .filter(([, , list]) => list.length);
   $("pub-lede").textContent =
     `${pubs.length} entries in quantum machine learning, quantum cryptography and NMR quantum computing, grouped by type.`;
@@ -30,7 +31,7 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, CATEGORIE
           <p class="cite-venue">${venueHtml(p)}</p>
           ${p.abstract ? `<p class="cite-result">${esc(p.abstract)}</p>` : ""}
           ${p.note ? `<p class="cite-note">${esc(p.note)}</p>` : ""}
-          <div class="ids">${idLinks(p)}${p.category === "poster" ? "" : `<button type="button" class="bib-btn" data-i="${i}" aria-label="Copy BibTeX for ${esc(p.title)}">Copy BibTeX</button><span class="bib-status" role="status"></span>`}</div>
+          <div class="ids">${idLinks(p)}${groupOf(p) === "presentation" ? "" : `<button type="button" class="bib-btn" data-i="${i}" aria-label="Copy BibTeX for ${esc(p.title)}">Copy BibTeX</button><span class="bib-status" role="status"></span>`}</div>
         </li>`;
       }).join("")}</ol>
     </section>`).join("") + (pubs.some((p) => p.equal_contribution) ? EQ_FOOTNOTE : "");
@@ -50,8 +51,8 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, CATEGORIE
 
 /* BibTeX built only from stored fields; nothing is guessed. */
 function bibtex(p) {
-  const kind = { journal: "article", conference: "inproceedings" }[p.category] || "misc";
-  const venueField = { article: "journal", inproceedings: "booktitle", misc: "howpublished" }[kind];
+  const kind = { journal: "article", conference: "inproceedings", thesis: "mastersthesis" }[p.category] || "misc";
+  const venueField = { article: "journal", inproceedings: "booktitle", mastersthesis: "school", misc: "howpublished" }[kind];
   const clean = (s) => String(s || "").replace(/[{}]/g, "");
   const names = clean(p.authors).replace(/\*/g, "").replace(/\s*et al\.?/i, "").split(/,|\band\b/)
     .map((s) => s.trim()).filter(Boolean);
@@ -62,6 +63,7 @@ function bibtex(p) {
     ["title", p.title && `{${clean(p.title)}}`],
     ["author", author],
     [venueField, clean(p.venue)],
+    ["type", kind === "mastersthesis" && clean(p.type)],
     ["year", clean(p.year)],
     ["volume", clean(p.volume)],
     ["number", clean(p.issue)],

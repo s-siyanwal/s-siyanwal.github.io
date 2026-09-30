@@ -580,6 +580,7 @@ a.card:hover h3 { color: var(--accent); }
 #pub-filter { margin-top: 1.2rem; flex-wrap: wrap; }
 
 /* ---------- About page ---------- */
+.interests-lede { margin: 0 0 1.25rem; max-width: 65ch; }
 .interests { display: grid; gap: 1rem; }
 @media (min-width: 700px) { .interests { grid-template-columns: 1fr 1fr; } }
 .interest { border: 1px solid var(--rule); background: var(--panel-solid); border-radius: 4px; padding: 1.15rem; }
@@ -632,6 +633,7 @@ a.card:hover h3 { color: var(--accent); }
 .chip-cat--preprint { --c: var(--chip-preprint); --cb: var(--chip-preprint-bg); }
 .chip-cat--poster { --c: var(--chip-poster); --cb: var(--chip-poster-bg); }
 .chip-cat--thesis { --c: var(--chip-thesis); --cb: var(--chip-thesis-bg); }
+.chip-cat--presentation { --c: var(--chip-poster); --cb: var(--chip-poster-bg); }
 
 .pub-group + .pub-group { margin-top: var(--gap); }
 .pub-group h2 { font-size: clamp(1.45rem, 3.2vw, 1.9rem); line-height: 1.15; margin: 0 0 1rem; }
