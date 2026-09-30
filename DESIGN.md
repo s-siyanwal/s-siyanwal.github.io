@@ -10,6 +10,8 @@ Still forbidden: invented facts or metrics, terminal cosplay, neon, text gradien
 |---|---|
 | `assets/landscape-light.svg` | day valley (2.3 KB) |
 | `assets/landscape-dark.svg` | dusk valley, same geometry (2.3 KB) |
+| `art/assets/figure-image-encodings.svg` | quantum-image data figure, reference for inlining (§6) |
+| `art/assets/figure-fpga.svg` | FPGA schematic, reference for inlining (§6) |
 | `assets/portrait.jpg` | front-end-bot's crop, approved (§8) |
 | `art/contrast-v2.py` | contrast check for every pair below. Rerun after any token change. |
 
@@ -75,6 +77,8 @@ A 3px left rail, each ≥ 3:1 on glass and on solid. The card's thread label is 
 | Quantum image | `#3a7f66` | `#6fc4a2` |
 | QKD | `#4c6a85` | `#8fb0cf` |
 | FPGA inference | `#94641c` | `#d9a35a` |
+| Tensor networks (TensNet) | `#9a4a6c` | `#e394b6` |
+| VQLS forecasting | `#66691f` | `#c4c76a` |
 
 The figure for each thread (§6) uses that thread's hue as its one colour.
 
@@ -121,17 +125,23 @@ Home order (brief §2):
 6. Education.
 7. Awards.
 
-## 6. Figures (5 schematics)
+## 6. Figures (4 schematics, 1 data figure)
 
 Shared rules:
 - Original inline SVG in a `<figure>` with a `<figcaption>` that starts **"Schematic."** and is present in the HTML, so JS-off shows it.
 - The SVG has `role="img"` and `aria-labelledby` pointing at the caption.
 - viewBox 640×360, `max-width: 100%`, and a reserved aspect ratio.
 - The colours are ink, ink-faint and the thread hue. Nothing else.
-- No numbers unless the number is in `content.json`. No axis tick values.
+- No numbers unless the number is in `content.json`, and no axis tick values. The one exception is the quantum-image figure (Tables 1–2 of the J. Supercomputing paper).
 - Static by default. Any motion goes behind reduced-motion `no-preference` and settles to the static frame.
 
-**NMR (thread hue plum).** The six three-qubit SLOCC classes as a three-tier Hasse diagram: SEP at the bottom; BS1, BS2 and BS3 in the middle; W and GHZ on top, side by side and **not** connected to each other. Thin lines link each upper class to the classes below it. On the right, a small pipeline reads "NMR measurement data → ANN → class label". Leave out any "128 → 18" claim, because it isn't in content.json. Caption: "Schematic. The six SLOCC classes of three-qubit pure states that the ANN distinguishes."
+**NMR (thread hue plum).** The three-qubit SLOCC classes as a four-tier hierarchy drawn with thin arrows pointing down:
+- GHZ at the top.
+- W below it, with a GHZ → W arrow, because W lies in the SLOCC closure of GHZ.
+- BS1, BS2 and BS3 below W, each with an arrow from W.
+- SEP at the bottom, with an arrow from each BS class.
+
+On the right, a small pipeline: "ρ: 64 elements → 128 real features (Re + Im)" → "canonical form: 18 (14 Re, 4 Im)" → "ANOVA ranking" → "ANN" → "class label". The canonical form does the 128 → 18 reduction. ANOVA only ranks the 18, so never draw it as the step that reduces them. Caption: "Schematic. The SLOCC classes of three-qubit pure states that the ANN distinguishes, and the reduction from 128 real features to 18 canonical-form inputs, ranked by ANOVA."
 
 **Weather QML (river blue).** Three traces on unlabelled axes (arrows marked "time" and "temperature"):
 - observed, in ink
@@ -140,18 +150,23 @@ Shared rules:
 
 The traces are drawn from a fixed deterministic function and are clearly illustrative. Don't show accuracy, error or skill numbers. Caption: "Schematic. Illustrative temperature series with a classical baseline and a variational-circuit forecast; not data from the paper."
 
-**Quantum image (moss).** A pipeline figure: a 2×2 pixel grid, then four encoding boxes (NASS, QBIR, FTQR, FRQCI), then a QNN, then "0 / 1". The brief asked for a qualitative qubit-count vs depth plot, but where each encoding sits on those axes is a factual claim nobody has supplied. **Blocked until Shivanshu confirms the relative ordering**, so ship the pipeline figure until then. Caption: "Schematic. Four quantum image encodings feeding a QNN for binary MNIST (0 vs 1) at 2×2, 4×4 and 8×8."
+**Quantum image (moss). Data figure, not a schematic.** Qubit count vs circuit depth at 16×16 for the four encodings the paper benchmarks, using only the numbers from Tables 1–2 of Tiwari et al., J. Supercomputing 82:495 (2026), doi 10.1007/s11227-026-08621-3. Reference file: `art/assets/figure-image-encodings.svg` (3 KB). Inline it and keep its `var(--ink)`, `var(--ink-faint)`, `var(--rule)` and `var(--thread-image)` references (map `--thread-image` to the Quantum image rail hue) so it follows the theme.
+- x axis: "Qubit count", linear, 8–18. y axis: "Circuit depth (log scale)", ticks 10³, 10⁴, 10⁵. Corner label "16×16 images".
+- Points (qubits, depth): QBIR (16, 5,612), FTQR (12, 43,273), NASS (9, 50,436), FRQCI (11, 125,299). Every point carries its name and both values as text, so nothing depends on colour.
+- Under the SVG, a `<details>` with the summary "Data (Tables 1–2)" holds a real `<table>`: encoding, qubits, depth and total gates at 16×16 (FTQR 59,683; NASS 72,713; QBIR 9,701; FRQCI 164,353). This keeps the figure readable at 360px, where the SVG labels shrink.
+- No other numbers, no trend lines, no fitted curves. The only encodings are these four; FRQI, NEQR and QPIE don't appear.
+- Caption (replaces the "Schematic." prefix for this figure only): "Circuit resources of four quantum image encodings for 16×16 images: qubit count against circuit depth on a log scale. Data from Tables 1–2 of the J. Supercomputing paper."
+- Optional sentence for the project text, only if front-end-bot needs one, stated exactly as the tables show: "At 16×16, QBIR gives the shallowest circuit but uses the most qubits, NASS uses the fewest qubits, and FRQCI is the deepest with the most gates." Don't reuse the paper's line that amplitude-based encodings like FRQCI minimise qubit usage, because in Table 2 NASS uses fewer qubits than FRQCI.
 
-**FPGA (ochre).** Latency bars, because both figures are in content.json:
-- The FPGA bar is labelled "291.8 µs".
-- The GPU bar is 6.7× as long and labelled "GPU (6.7× slower)". Don't print a derived GPU µs value.
-- A small strip above reads "host → VQC kernel (HLS) → Alveo U55C".
+**FPGA (ochre). Numberless schematic.** Reference file: `art/assets/figure-fpga.svg` (1.8 KB). Inline it; it uses `var(--th)` for the thread hue plus `--ink`, `--ink-faint` and `--rule-strong`.
+- Left to right: a "VQC" box holding a 3-wire glyph of one StronglyEntanglingLayers block (a rotation box on each wire, then a CNOT ring between neighbours: 0→1, 1→2, 2→0, drawn as a control dot and ⊕ target, no multi-controlled boxes), then an "FPGA kernel (HLS)" box outlined in the thread hue, then an "edge inference" box. An "HBM" block sits under the kernel with a two-way arrow.
+- No timings, speedups, batch sizes, bars, board names or CPU/GPU comparison.
 
-Caption: "Schematic. Relative inference latency, FPGA vs GPU, as reported in the project."
+Caption: "Schematic. A variational quantum circuit (VQC) run as an FPGA kernel with HBM, for edge inference."
 
 **QKD (slate).** Three small rows:
 - DPS: Alice → lossy fibre → Bob, with a pulse train that has phase marks.
-- COW: Alice → lossy fibre → Bob, with pulses and empty time slots.
+- COW: Alice → lossy fibre → Bob, with the pulses in time-slot **pairs** marked by a faint bracket: (μ, 0) for one bit value, (0, μ) for the other, and (μ, μ) for a decoy. Use four pairs (for example bit, bit, decoy, bit), which gives 8 slots, never an odd count. An empty slot is a dashed outline.
 - Twin-field: Alice → Charlie ← Bob, a central measurement station.
 
 Loss is a fading gradient on the fibre. There's no Eve and no attack detail. Caption: "Schematic. Protocol layouts for DPS, COW and twin-field QKD studied at TCG CREST."
@@ -180,5 +195,5 @@ Print drops the landscape (`body::before` is hidden), makes the panels plain whi
 
 ## 10. Open items (for JARVIS and Shivanshu)
 
-1. The quantum-image figure axes (§6) need the relative qubit-count and depth ordering of NASS, QBIR, FTQR and FRQCI. Until then it ships as the pipeline figure.
+1. Resolved: the quantum-image figure is now the Tables 1–2 plot (§6).
 2. There's no thesis entry in content.json, so the thesis chip is defined but unused.

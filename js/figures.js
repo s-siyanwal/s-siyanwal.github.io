@@ -16,19 +16,19 @@ function arrow(x1, y1, x2, y2, cls = "fg-faint") {
 }
 
 function nmr() {
-  const W = [110, 40], G = [290, 40], B = [[80, 150], [200, 150], [320, 150]], S = [200, 260];
-  const edges = B.flatMap(([x, y]) => [
-    `<line class="fg-faint" x1="${x}" y1="${y}" x2="${S[0]}" y2="${S[1] + 2}"/>`,
-    `<line class="fg-faint" x1="${x}" y1="${y}" x2="${W[0]}" y2="${W[1] + 32}"/>`,
-    `<line class="fg-faint" x1="${x}" y1="${y}" x2="${G[0]}" y2="${G[1] + 32}"/>`]).join("");
-  return edges +
-    box(W[0] - 40, W[1], 80, 34, "W", "fg-hbox") + box(G[0] - 40, G[1], 80, 34, "GHZ", "fg-hbox") +
-    B.map(([x, y], i) => box(x - 38, y - 17, 76, 34, `BS${i + 1}`)).join("") +
-    box(S[0] - 40, S[1], 80, 34, "SEP") +
-    box(440, 16, 180, 56, ["density matrix", "128 elements"]) + arrow(530, 72, 530, 104) +
-    box(440, 104, 180, 56, ["18 elements", "ANOVA-ranked"]) + arrow(530, 160, 530, 192) +
-    box(440, 192, 180, 44, "ANN", "fg-hbox") + arrow(530, 236, 530, 268) +
-    box(440, 268, 180, 56, ["GME test", "SLOCC class"]);
+  // SLOCC hierarchy, arrows point down (GHZ → W → BS1–3 → SEP); pipeline on the right (canonical form reduces, ANOVA only ranks).
+  const G = [210, 10], W = [210, 92], B = [90, 210, 330], BY = 176, S = [210, 262], H = 34;
+  const hier = arrow(G[0], G[1] + H, W[0], W[1]) +
+    B.map((x) => arrow(W[0], W[1] + H, x, BY)).join("") +
+    B.map((x) => arrow(x, BY + H, S[0], S[1])).join("");
+  const steps = [[8, 72, ["ρ: 64 elements", "128 real features", "(Re + Im)"]], [104, 56, ["canonical form", "18 (14 Re, 4 Im)"]],
+    [184, 40, "ANOVA ranking"], [248, 40, "ANN", "fg-hbox"], [312, 40, "class label"]];
+  const pipe = steps.map(([y, h, t, cls], i) => box(430, y, 200, h, t, cls) +
+    (i < steps.length - 1 ? arrow(530, y + h, 530, steps[i + 1][0]) : "")).join("");
+  return hier +
+    box(G[0] - 40, G[1], 80, H, "GHZ", "fg-hbox") + box(W[0] - 40, W[1], 80, H, "W", "fg-hbox") +
+    B.map((x, i) => box(x - 38, BY, 76, H, `BS${i + 1}`)).join("") +
+    box(S[0] - 40, S[1], 80, H, "SEP") + pipe;
 }
 
 function weather() {
@@ -97,11 +97,13 @@ const fpga = (uid) => `<g font-size="16"><defs><marker id="${uid}-ah" viewBox="0
 <rect x="274" y="254" width="116" height="52" rx="4" stroke="var(--rule-strong,#6f7f7a)"/>
 </g>
 <g fill="var(--th,#94641c)">
-<rect x="66" y="118" width="20" height="20" rx="2"/><rect x="66" y="146" width="20" height="20" rx="2"/><rect x="66" y="174" width="20" height="20" rx="2"/>
-<rect x="116" y="146" width="20" height="20" rx="2"/>
+<rect x="52" y="119" width="18" height="18" rx="2"/>
+<rect x="52" y="147" width="18" height="18" rx="2"/>
+<rect x="52" y="175" width="18" height="18" rx="2"/>
+<path d="M92 128V156" stroke="var(--th,#94641c)" stroke-width="2"/><circle cx="92" cy="128" r="4"/><circle cx="92" cy="156" r="8" fill="none" stroke="var(--th,#94641c)" stroke-width="2"/><path d="M84 156H100M92 148V164" stroke="var(--th,#94641c)" stroke-width="2"/>
+<path d="M118 156V184" stroke="var(--th,#94641c)" stroke-width="2"/><circle cx="118" cy="156" r="4"/><circle cx="118" cy="184" r="8" fill="none" stroke="var(--th,#94641c)" stroke-width="2"/><path d="M110 184H126M118 176V192" stroke="var(--th,#94641c)" stroke-width="2"/>
+<path d="M144 184V128" stroke="var(--th,#94641c)" stroke-width="2"/><circle cx="144" cy="184" r="4"/><circle cx="144" cy="128" r="8" fill="none" stroke="var(--th,#94641c)" stroke-width="2"/><path d="M136 128H152M144 120V136" stroke="var(--th,#94641c)" stroke-width="2"/>
 </g>
-<path d="M126 128V146M126 166V184" stroke="var(--th,#94641c)" stroke-width="2"/>
-<circle cx="126" cy="128" r="4" fill="var(--th,#94641c)"/><circle cx="126" cy="184" r="4" fill="var(--th,#94641c)"/>
 <rect x="244" y="116" width="176" height="80" rx="4" fill="none" stroke="var(--th,#94641c)" stroke-width="2.5"/>
 <g fill="var(--ink,#12201f)" text-anchor="middle">
 <text x="102" y="240">VQC</text>
@@ -121,10 +123,15 @@ function qkd(uid) {
     const x = 222 + i * 44;
     return `<circle class="fg-fill" cx="${x}" cy="60" r="6" opacity="${fade(x, 200, 500)}"/><text class="fg-s" x="${x}" y="40" text-anchor="middle">${ph ? "π" : "0"}</text>`;
   }).join("");
-  const cow = [1, 1, 0, 1, 0, 1, 1].map((on, i) => {
-    const x = 222 + i * 44;
-    return on ? `<circle class="fg-fill" cx="${x}" cy="180" r="6" opacity="${fade(x, 200, 500)}"/>`
-      : `<circle cx="${x}" cy="180" r="6" fill="none" stroke="var(--ink-faint)" stroke-dasharray="2 2"/>`;
+  // Four time-slot pairs: (μ,0) and (0,μ) are bit values, (μ,μ) is a decoy; an empty slot is a dashed outline.
+  const cow = [[1, 0], [0, 1], [1, 1], [1, 0]].map((pair, p) => {
+    const c = 236 + p * 76;
+    return `<path d="M${c - 24} 196v5h48v-5" fill="none" stroke="var(--ink-faint)" stroke-width="1" opacity=".6"/>` +
+      pair.map((on, k) => {
+        const x = c + (k ? 13 : -13);
+        return on ? `<circle class="fg-fill" cx="${x}" cy="180" r="6" opacity="${fade(x, 200, 500)}"/>`
+          : `<circle cx="${x}" cy="180" r="6" fill="none" stroke="var(--ink-faint)" stroke-dasharray="2 2"/>`;
+      }).join("");
   }).join("");
   const tf = [230, 270].map((x) => `<circle class="fg-fill" cx="${x}" cy="300" r="6" opacity="${fade(x, 180, 330)}"/>`).join("") +
     [490, 450].map((x) => `<circle class="fg-fill" cx="${x}" cy="300" r="6" opacity="${fade(700 - x, 180, 330)}"/>`).join("");
@@ -137,7 +144,7 @@ function qkd(uid) {
 }
 
 const FIGS = {
-  nmr: [nmr, "Schematic. The six SLOCC classes of three-qubit pure states that the ANN distinguishes, and the reduction from 128 density-matrix elements to 18 ANOVA-ranked inputs."],
+  nmr: [nmr, "Schematic. The SLOCC classes of three-qubit pure states that the ANN distinguishes, and the reduction from 128 real features to 18 canonical-form inputs, ranked by ANOVA."],
   weather: [weather, "Schematic. Illustrative temperature series with a classical baseline and a variational-circuit forecast; not data from the paper."],
   image: [image, "Circuit resources of four quantum image encodings for 16×16 images: qubit count against circuit depth on a log scale. Data from Tables 1–2 of the J. Supercomputing paper.", IMAGE_TABLE],
   fpga: [fpga, "Schematic. A variational quantum circuit (VQC) run as an FPGA kernel with HBM, for edge inference."],
