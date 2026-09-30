@@ -18,6 +18,9 @@ import { mountCircuit } from "./circuit.js";
   $("hero-name").textContent = p.name;
   $("hero-tagline").textContent = p.tagline || "";
   $("hero-summary").textContent = p.summary || "";
+  const now = (data.experience || []).find((e) => e.current);
+  if (now) $("hero-now").innerHTML = `<span class="hero-now-k">Now</span> ${esc(now.role)} · ${esc(now.org)}`;
+  else $("hero-now")?.remove();
   if (p.availability) $("hero-avail").textContent = p.availability;
   else $("hero-avail")?.remove();
 
@@ -27,7 +30,7 @@ import { mountCircuit } from "./circuit.js";
   if (p.email) cta.push(`<a class="btn" href="mailto:${esc(p.email)}">Email</a>`);
   $("hero-cta").innerHTML = cta.join("");
 
-  mountCircuit($("hero-circuit"));
+  mountCircuit($("hero-circuit"), p.focus_areas, $("glance"));
 
   // Metrics
   $("glance").innerHTML = (data.metrics || []).map((m, i) => `
@@ -41,7 +44,7 @@ import { mountCircuit } from "./circuit.js";
   $("profiles").innerHTML = (p.profiles || []).filter((x) => x.primary).map((x) => `
     <a class="profile-link" href="${esc(x.url)}"${x.id === "email" ? "" : ' target="_blank" rel="noopener"'}>
       <span class="profile-label">${esc(x.label)}</span>
-      <span class="profile-handle">${esc(x.handle)}</span>
+      <span class="profile-handle">${esc(x.handle).replace("@", "@<wbr>")}</span>
       <span class="profile-go" aria-hidden="true">↗</span>
     </a>`).join("");
 
@@ -87,6 +90,7 @@ import { mountCircuit } from "./circuit.js";
           <div class="pub-title">${esc(pb.title)}</div>
           <div class="pub-meta">
             <span class="pub-venue">${esc(pb.venue)}</span>
+            ${pb.authors ? `<span class="pub-authors">${esc(pb.authors)}</span>` : ""}
             ${pb.status ? `<span class="pub-status">${esc(pb.status)}</span>` : ""}
           </div>
         </div>
