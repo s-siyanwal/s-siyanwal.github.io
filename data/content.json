@@ -3,7 +3,7 @@
     "name": "Shivanshu Siyanwal",
     "title": "Quantum information and quantum machine learning",
     "tagline": "I build hybrid quantum-classical software — from variational algorithms and quantum ML to FPGA-accelerated inference and photonic network simulation.",
-    "summary": "Quantum Software Engineer with 4+ years spanning quantum algorithm research and production software. I work across the full stack of quantum computing: variational algorithms (VQE/VQC/VQLS), quantum machine learning, and photonic quantum networks — and I ship them as tested, deployable software on GPUs, FPGAs, and cloud quantum backends. Published in quantum ML and NMR entanglement detection.",
+    "summary": "Quantum Software Engineer with 4+ years spanning quantum algorithm research and production software. I work across the full stack of quantum computing: variational algorithms (VQE/VQC/VQLS), quantum machine learning, and photonic quantum networks. Published in quantum ML and NMR entanglement detection.",
     "location": "Uttar Pradesh, India",
     "email": "shivanshu.siyanwal@gmail.com",
     "phone": "",
@@ -22,7 +22,7 @@
         "id": "scholar",
         "label": "Google Scholar",
         "handle": "Citations & papers",
-        "url": "https://scholar.google.com/citations?user=REPLACE_ME",
+        "url": "",
         "primary": false,
         "audience": "academic"
       },
@@ -38,7 +38,7 @@
         "id": "researchgate",
         "label": "ResearchGate",
         "handle": "Shivanshu-Siyanwal",
-        "url": "https://www.researchgate.net/profile/REPLACE_ME",
+        "url": "",
         "primary": false,
         "audience": "academic"
       },
@@ -169,10 +169,9 @@
       "current": true,
       "summary": "Hybrid quantum-classical pipelines and FPGA-accelerated quantum inference.",
       "points": [
-        "Built a 7-qubit, 50-parameter VQC for 24-day temperature forecasting on NCMRWF reanalysis data, trained on a CPU-based quantum simulator (test RMSE 3.01 K, R² 0.801).",
-        "Implemented and optimised VQE, QCNN, and fidelity-based kernels in Qiskit and PennyLane; built scalable modules for quantum image encoding (FRQI, QPIE, NEQR).",
-        "Deployed the trained VQC as a custom Vitis HLS kernel on an AMD Alveo U55C FPGA for low-latency inference, with the kernel exchanging batches with the host over HBM.",
-        "Collaborated across hardware, research, and engineering teams to optimise hybrid workflows and support cloud quantum platforms."
+        "Co-developed quantum-assisted weather models (QGRU, QLSTM, QNN, VQC, QSVM) on ERA5 single-level data for Safdarjung, Delhi; equal-contribution preprint arXiv:2503.23408 and a related IEEE AIMLSystems 2025 paper.",
+        "Compared quantum image encodings (NASS, QBIR, FTQR, FRQCI, and FRQI/QPIE/NEQR) in QNNs for binary classification; equal-contribution paper in The Journal of Supercomputing (2026).",
+        "Co-authored the FPGA deployment of a hybrid variational circuit for temperature forecasting on an AMD Alveo U55C (HLS, HBM); IEEE TQCEBT 2026."
       ],
       "tags": [
         "Qiskit",
@@ -185,11 +184,10 @@
       "role": "DRDO Junior Research Fellow — Quantum Networks and Linear Optics",
       "location": "Kolkata, India",
       "period": "Mar 2024 – Oct 2024",
-      "summary": "Simulated linear-optical QKD testbeds with realistic photonic impairments and security analysis.",
+      "summary": "Simulated linear-optical QKD testbeds with realistic photonic impairments and attack modelling.",
       "points": [
         "Designed and simulated linear-optical QKD testbeds (DPS, COW, Twin-Field) in OptiSystem and ANSYS, including loss, noise, and photonic channel impairments.",
-        "Performed error modelling and security analysis against intercept-resend and PNS attacks; benchmarked resource-state and entanglement generation.",
-        "Built Python post-processing tools for optical simulation data — reusable, maintainable quantum-network simulation software."
+        "Modelled intercept-resend and photon-number-splitting attacks and benchmarked resource-state and entanglement generation."
       ],
       "tags": [
         "QKD",
@@ -286,7 +284,7 @@
         }
       ],
       "featured": true,
-      "role": "Lead developer — algorithm design, training pipeline, and FPGA deployment.",
+      "role": "Co-author (with first author N. Khan), IEEE TQCEBT 2026.",
       "sections": [
         {
           "h": "Problem",
@@ -294,7 +292,7 @@
         },
         {
           "h": "Approach",
-          "p": "I designed a 7-qubit variational quantum circuit with 50 trainable parameters, using angle encoding to map meteorological variables onto the qubits and two StronglyEntanglingLayers as the ansatz. It was trained, validated and tested in PennyLane on a CPU-based quantum simulator, reaching a test RMSE of 3.01 K and R² of 0.801."
+          "p": "The model is a 7-qubit variational quantum circuit with 50 trainable parameters, using angle encoding to map meteorological variables onto the qubits and two StronglyEntanglingLayers as the ansatz. It was trained, validated and tested in PennyLane on a CPU-based quantum simulator, reaching a test RMSE of 3.01 K and R² of 0.801."
         },
         {
           "h": "Acceleration",
@@ -343,7 +341,7 @@
         },
         {
           "h": "Approach",
-          "p": "I built quantum neural networks on four quantum image representations — NASS, QBIR, FTQR and FRQCI — for binary MNIST classification (0 vs 1) at 2×2 to 16×16, plus a three-class FashionMNIST generalization study. It compares circuit depth, gate count and qubit usage for the four encodings; QBIR gives the shallowest circuits, FRQCI the deepest."
+          "p": "I built quantum neural networks on four quantum image representations — NASS, QBIR, FTQR and FRQCI — for binary MNIST classification (0 vs 1) at 2×2 to 16×16, plus a three-class FashionMNIST generalization study. It compares circuit depth, gate count and qubit usage for the four encodings; QBIR gives the shallowest circuits, FRQCI the deepest. The paper also analyses trainability (gradient variance and norms) and expressivity, not just resource cost."
         },
         {
           "h": "Status",
@@ -355,8 +353,8 @@
     {
       "id": "qkd-testbeds",
       "name": "Linear-Optical QKD Network Testbeds",
-      "blurb": "DPS, COW, and Twin-Field QKD simulated over realistic photonic channels with security analysis.",
-      "abstract": "Simulation testbeds for differential-phase-shift (DPS), coherent-one-way (COW), and Twin-Field QKD protocols over lossy, noisy photonic channels. Includes security analysis against intercept-resend and photon-number-splitting attacks, plus Python tooling for optical simulation post-processing.",
+      "blurb": "DPS, COW, and Twin-Field QKD simulated over realistic photonic channels with attack modelling.",
+      "abstract": "Simulation testbeds for differential-phase-shift (DPS), coherent-one-way (COW), and twin-field QKD protocols on linear-optical setups in OptiSystem and ANSYS, including loss, noise, and photonic channel impairments. Intercept-resend and photon-number-splitting attacks are modelled, and resource-state and entanglement generation benchmarked.",
       "metrics": [
         {
           "value": "3",
@@ -377,7 +375,7 @@
         }
       ],
       "featured": true,
-      "role": "Research fellow — simulation design, security analysis, and tooling.",
+      "role": "DRDO Junior Research Fellow — protocol simulation and attack modelling.",
       "sections": [
         {
           "h": "Problem",
@@ -388,12 +386,8 @@
           "p": "I built simulation testbeds for three protocols — differential-phase-shift (DPS), coherent-one-way (COW), and Twin-Field QKD — in OptiSystem and ANSYS, including loss, noise, and photonic channel impairments."
         },
         {
-          "h": "Security analysis",
-          "p": "Each protocol was evaluated against intercept-resend and photon-number-splitting attacks. I also benchmarked resource-state and entanglement generation."
-        },
-        {
-          "h": "Tooling",
-          "p": "Optical simulators produce large, awkward output. I wrote Python post-processing tooling to make the analysis reusable and maintainable rather than a manual per-run effort."
+          "h": "Attack modelling",
+          "p": "I modelled intercept-resend and photon-number-splitting attacks and benchmarked resource-state and entanglement generation."
         }
       ]
     },
@@ -705,7 +699,7 @@
     },
     {
       "school": "Dayawati Modi Academy (DMA-I)",
-      "degree": "High School Diploma (CBSE) — 95.8%",
+      "degree": "High School Diploma (CBSE)",
       "location": "Uttar Pradesh, India",
       "period": "2014 – 2017",
       "note": ""
@@ -744,7 +738,7 @@
   "about": {
     "statement": [
       "My work connects quantum information research with production engineering: what it takes to run a quantum algorithm on hardware under real constraints (noise, latency, memory bandwidth) and keep it working reliably.",
-      "That has led me across three connected areas. In variational quantum algorithms and quantum machine learning, I study how data encoding and circuit structure affect resource cost (circuit depth, gate count, qubits) and how hybrid pipelines perform on real forecasting tasks. In quantum hardware acceleration, I compile trained variational circuits into state-vector simulation kernels on FPGA fabric for low-latency inference. In photonic quantum networks, I simulate QKD protocols over lossy channels and analyse their security against realistic attacks.",
+      "That has led me across three connected areas. In variational quantum algorithms and quantum machine learning, I study how data encoding and circuit structure affect resource cost (circuit depth, gate count, qubits) and how hybrid pipelines perform on real forecasting tasks. In quantum hardware acceleration, I compile trained variational circuits into state-vector simulation kernels on FPGA fabric for low-latency inference. In photonic quantum networks, I simulate QKD protocols over lossy channels and model intercept-resend and photon-number-splitting attacks.",
       "My MS research at IISER Mohali used neural networks to detect genuine multipartite entanglement and classify SLOCC classes on a three-qubit NMR processor (co-first author, Quantum Information Processing, 2025).",
       "I think quantum research moves faster when its artefacts are built like software: tested, versioned, reproducible and deployable."
     ],
@@ -759,7 +753,7 @@
       },
       {
         "title": "Photonic quantum networks",
-        "detail": "Linear-optical QKD, resource-state generation, and security analysis under realistic channel loss."
+        "detail": "Linear-optical QKD (DPS, COW, twin-field) with loss, noise and photonic channel impairments; attack modelling and resource-state generation."
       }
     ],
     "looking_for": "I am seeking PhD or research-Master's positions in quantum information science, and remain open to industry Quantum R&D roles where research and engineering are equally weighted.",

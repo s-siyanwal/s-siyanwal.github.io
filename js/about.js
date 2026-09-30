@@ -57,7 +57,7 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags } fr
     `<li>${esc(x.title)}${x.year ? ` <span class="yr">${esc(x.year)}</span>` : ""}</li>`).join("");
 
   // Profiles
-  $("about-profiles").innerHTML = (p.profiles || []).filter((x) => x.primary).map((x) => `
+  $("about-profiles").innerHTML = (p.profiles || []).filter((x) => x.primary && x.url).map((x) => `
     <a class="profile-link" href="${esc(x.url)}"${x.url.startsWith("mailto:") ? "" : ' target="_blank" rel="noopener"'}>
       <span class="profile-label">${esc(x.label)}</span>
       <span class="profile-handle">${esc(x.handle)}</span>

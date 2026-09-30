@@ -63,7 +63,7 @@ export function mountFooter(data) {
   const p = data.profile || {};
   const f = $("footer-slot");
   if (!f) return;
-  const links = (p.profiles || []).filter((x) => x.primary).map((x) =>
+  const links = (p.profiles || []).filter((x) => x.primary && x.url).map((x) =>
     `<a href="${esc(x.url)}"${x.url.startsWith("mailto:") ? "" : ' target="_blank" rel="noopener"'}>${esc(x.label)}</a>`).join("");
   f.innerHTML = `
     <div class="wrap"><div class="panel footer-grid">

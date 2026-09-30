@@ -68,16 +68,16 @@ const image = () => `<line x1="80" y1="300.0" x2="600" y2="300.0" stroke="var(--
 <text x="596" y="24" text-anchor="end" font-size="14" fill="var(--ink-faint,#4d5b57)">16×16 images</text>
 <circle cx="496.0" cy="222.1" r="7" fill="var(--th-image)"/>
 <text x="484.0" y="218.1" text-anchor="end" font-size="16" font-weight="600" fill="var(--ink,#12201f)">QBIR</text>
-<text x="484.0" y="236.1" text-anchor="end" font-size="13" fill="var(--ink-faint,#4d5b57)">16 qubits · depth 5,612</text>
+<text x="484.0" y="236.1" text-anchor="end" font-size="14" fill="var(--ink-faint,#4d5b57)">16 qubits · depth 5,612</text>
 <circle cx="288.0" cy="129.8" r="7" fill="var(--th-image)"/>
 <text x="300.0" y="125.8" text-anchor="start" font-size="16" font-weight="600" fill="var(--ink,#12201f)">FTQR</text>
-<text x="300.0" y="143.8" text-anchor="start" font-size="13" fill="var(--ink-faint,#4d5b57)">12 qubits · depth 43,273</text>
+<text x="300.0" y="143.8" text-anchor="start" font-size="14" fill="var(--ink-faint,#4d5b57)">12 qubits · depth 43,273</text>
 <circle cx="132.0" cy="122.9" r="7" fill="var(--th-image)"/>
 <text x="124.0" y="148.9" text-anchor="start" font-size="16" font-weight="600" fill="var(--ink,#12201f)">NASS</text>
-<text x="124.0" y="166.9" text-anchor="start" font-size="13" fill="var(--ink-faint,#4d5b57)">9 qubits · depth 50,436</text>
+<text x="124.0" y="166.9" text-anchor="start" font-size="14" fill="var(--ink-faint,#4d5b57)">9 qubits · depth 50,436</text>
 <circle cx="236.0" cy="81.8" r="7" fill="var(--th-image)"/>
 <text x="248.0" y="77.8" text-anchor="start" font-size="16" font-weight="600" fill="var(--ink,#12201f)">FRQCI</text>
-<text x="248.0" y="95.8" text-anchor="start" font-size="13" fill="var(--ink-faint,#4d5b57)">11 qubits · depth 125,299</text>`;
+<text x="248.0" y="95.8" text-anchor="start" font-size="14" fill="var(--ink-faint,#4d5b57)">11 qubits · depth 125,299</text>`;
 
 const IMAGE_TABLE = `<details class="fig-data"><summary>Data (Tables 1–2)</summary>
   <table><caption>Circuit resources at 16×16</caption>
@@ -154,8 +154,10 @@ const BY_PROJECT = {
 export function figuresFor(projectId) {
   return (BY_PROJECT[projectId] || []).map((k) => {
     const [draw, caption, extra = ""] = FIGS[k], id = `fig-${k}`;
+    const svg = `<svg viewBox="0 0 640 360" style="font-family:var(--text)" role="img" aria-labelledby="${id}-cap" xmlns="http://www.w3.org/2000/svg">${draw(id)}</svg>`;
+    // The data figure keeps a minimum width on phones so its labels stay readable; it scrolls sideways instead.
     return `<figure class="fig th-${k}">
-      <svg viewBox="0 0 640 360" style="font-family:var(--text)" role="img" aria-labelledby="${id}-cap" xmlns="http://www.w3.org/2000/svg">${draw(id)}</svg>
+      ${k === "image" ? `<div class="fig-scroll" tabindex="0" role="group" aria-label="Figure, scrolls sideways on small screens">${svg}</div>` : svg}
       <figcaption id="${id}-cap">${caption}</figcaption>${extra}
     </figure>`;
   }).join("");

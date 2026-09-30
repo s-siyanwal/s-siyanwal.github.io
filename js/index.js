@@ -40,7 +40,7 @@ import { mountCircuit } from "./circuit.js";
     </div>`).join("");
 
   // Profiles
-  $("profiles").innerHTML = (p.profiles || []).filter((x) => x.primary).map((x) => `
+  $("profiles").innerHTML = (p.profiles || []).filter((x) => x.primary && x.url).map((x) => `
     <a class="profile-link" href="${esc(x.url)}"${x.url.startsWith("mailto:") ? "" : ' target="_blank" rel="noopener"'}>
       <span class="profile-label">${esc(x.label)}</span>
       <span class="profile-handle">${esc(x.handle).replace("@", "@<wbr>")}</span>

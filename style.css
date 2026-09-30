@@ -655,6 +655,9 @@ a.card:hover h3 { color: var(--accent); }
 /* ---------- Figures ---------- */
 .fig { margin: var(--gap) 0 0; }
 .fig svg { display: block; width: 100%; height: auto; aspect-ratio: 640 / 360; }
+.fig-scroll { overflow-x: auto; }
+.fig-scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 560px) { .fig-scroll svg { min-width: 560px; } }
 .fig figcaption { margin-top: .6rem; font-size: .88rem; line-height: 1.5; color: var(--ink-soft); }
 .fig-data { margin-top: .6rem; font-size: .88rem; }
 .fig-data summary { cursor: pointer; color: var(--ink-soft); }
