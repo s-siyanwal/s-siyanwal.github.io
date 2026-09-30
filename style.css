@@ -417,7 +417,7 @@ html.js .glance [data-reveal] { transform: none; }
   html.js .hero.is-live.is-done .qc-packet { display: none; }
   html.js .hero.is-live .qc-phase { animation: phase 3.2s cubic-bezier(.45,0,.55,1) .4s 1 both; }
   html.js .hero.is-live .qc-g { animation: gateOn 3.2s linear 1; animation-delay: var(--d, 0s); }
-  html.js .hero.is-live .glance .stat::after { animation: ping 300ms var(--ease-out) var(--ping, 3.3s) both; }
+  html.js .hero.is-live .glance .stat::after { animation: ping 300ms var(--ease-out) var(--ping, 2.9s) both; }
   html.js .hero.is-paused * { animation-play-state: paused !important; }
   html.js .hero.is-live .qc-pause { display: inline-flex; }
   .qc.has-near .qc-row, .qc.has-near .qc-multi { opacity: .6; }

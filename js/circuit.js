@@ -17,7 +17,7 @@ const PATTERN = [ // [column, wire, gate, target] for CNOT; [column, wire, gate,
 ];
 // Band values per digital-artist; the sweep runs once on load, then rests until Play.
 const PACKET = { width: 28, opacity: 0.18 };
-const DUR = 3.2, LEAD = 0.4, PING = 2.9; // seconds; keep in step with the .qc-packet animation (DESIGN.md §5)
+const DUR = 3.2, LEAD = 0.4; // seconds; keep in step with the .qc-packet animation (DESIGN.md §5)
 // Time fraction at which the cubic-bezier(.45,0,.55,1) sweep reaches progress p, so gates dip as the band passes.
 const easeTime = (p) => {
   const bx = (s) => 3 * (1 - s) ** 2 * s * 0.45 + 3 * (1 - s) * s * s * 0.55 + s ** 3;
@@ -89,8 +89,7 @@ export function mountCircuit(host, labels, tiles) {
   const draw = () => {
     host.innerHTML = svg(names, wideQ.matches ? 680 : 360);
     const svgEl = host.firstElementChild;
-    const mx = +svgEl.dataset.mx, w = +svgEl.dataset.w;
-    if (tiles) tiles.style.setProperty("--ping", (LEAD + PING).toFixed(2) + "s");
+    if (tiles) tiles.style.setProperty("--ping", svgEl.dataset.ping + "s");
   };
   draw();
   wideQ.addEventListener("change", draw);
@@ -161,7 +160,8 @@ function svg(names, W) {
   const col = (c) => Math.round(xs + 16 + span * (c / 7.4)); // 0..5 gates, 6 Bloch, 7 M
   const y = (w) => top + w * rowH;
   const esc = (s) => String(s).replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
-  const delay = (x) => `style="--d:${(LEAD + DUR * easeTime((x + PACKET.width / 2) / (W + PACKET.width))).toFixed(2)}s"`;
+  const at = (x) => (LEAD + DUR * easeTime((x + PACKET.width / 2) / (W + PACKET.width))).toFixed(2);
+  const delay = (x) => `style="--d:${at(x)}s"`;
   const box = (x, yy, t) => `<g class="qc-g" ${delay(x)}><rect class="qc-box" x="${x - 13}" y="${yy - 11}" width="26" height="22" rx="3"/><text class="qc-txt" x="${x}" y="${yy + 3.5}" text-anchor="middle">${t}</text></g>`;
   const rot = (x, yy, g, p, q) => `<g class="qc-g" ${delay(x)}><rect class="qc-box" x="${x - 13}" y="${yy - 11}" width="26" height="22" rx="3"/><text class="qc-txt" x="${x - 1}" y="${yy + 3.5}" text-anchor="middle">R<tspan class="qc-sub" dy="2.5">${g[1].toLowerCase()}</tspan></text><text class="qc-ang" x="${x}" y="${yy + 21}" text-anchor="middle">${p === 1 ? "" : p}π/${q}</text></g>`;
   // Bloch projection: z up, view turned 40° so +x points down-left and +y down-right.
@@ -191,7 +191,7 @@ ${PATTERN.filter((g) => g[1] === w && g[2] !== "cnot").map((g) => rot(col(g[0]),
   });
 
   const label = "Quantum circuit with one wire per focus area: " + names.join(", ");
-  return `<svg class="qc" viewBox="0 0 ${W} ${H}" data-w="${W}" data-mx="${col(7)}" style="--qc-w:${W}px;--qc-pw:${PACKET.width}px" role="img" aria-label="${esc(label)}" xmlns="http://www.w3.org/2000/svg">
+  return `<svg class="qc" viewBox="0 0 ${W} ${H}" data-ping="${at(col(7))}" style="--qc-w:${W}px;--qc-pw:${PACKET.width}px" role="img" aria-label="${esc(label)}" xmlns="http://www.w3.org/2000/svg">
 <defs><linearGradient id="qc-packet-g"><stop class="qc-phase" offset="0" stop-opacity="0"/><stop class="qc-phase" offset=".5" stop-opacity="${PACKET.opacity}"/><stop class="qc-phase" offset="1" stop-opacity="0"/></linearGradient></defs>
 ${rows}<g class="qc-multi">${multi}</g><g class="qc-lbls">${lbls}</g>
 <rect class="qc-packet" x="-${PACKET.width}" y="0" width="${PACKET.width}" height="${H}" fill="url(#qc-packet-g)"/>
