@@ -58,7 +58,7 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags } fr
 
   // Profiles
   $("about-profiles").innerHTML = (p.profiles || []).filter((x) => x.primary).map((x) => `
-    <a class="profile-link" href="${esc(x.url)}"${x.id === "email" ? "" : ' target="_blank" rel="noopener"'}>
+    <a class="profile-link" href="${esc(x.url)}"${x.url.startsWith("mailto:") ? "" : ' target="_blank" rel="noopener"'}>
       <span class="profile-label">${esc(x.label)}</span>
       <span class="profile-handle">${esc(x.handle)}</span>
       <span class="profile-go" aria-hidden="true">↗</span>

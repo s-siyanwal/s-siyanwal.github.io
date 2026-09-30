@@ -322,12 +322,12 @@
     {
       "id": "qir-qnn",
       "name": "Quantum Image Representation Neural Networks",
-      "blurb": "Quantum neural networks for binary image classification using FRQI, QPIE, and NEQR encodings.",
-      "abstract": "Quantum neural networks that classify binary images by encoding pixel data through several quantum image representations (FRQI, QPIE, NEQR) and comparing their expressivity and trainability. Currently under review at Springer Nature.",
+      "blurb": "Quantum neural networks for binary image classification built on four quantum image encodings: NASS, QBIR, FTQR and FRQCI.",
+      "abstract": "Quantum neural networks that classify binary MNIST images (0 vs 1) at 2×2, 4×4 and 8×8, with pixel data encoded through four quantum image representations: NASS, QBIR, FTQR and FRQCI. Published in The Journal of Supercomputing 82 (2026).",
       "metrics": [
         {
-          "value": "3",
-          "label": "encodings compared"
+          "value": "4",
+          "label": "encodings"
         }
       ],
       "tags": [
@@ -338,8 +338,8 @@
       "audience": "both",
       "links": [
         {
-          "label": "Preprint",
-          "url": ""
+          "label": "Paper",
+          "url": "https://doi.org/10.1007/s11227-026-08621-3"
         },
         {
           "label": "Code",
@@ -347,7 +347,7 @@
         }
       ],
       "featured": true,
-      "role": "Lead author — encoding comparison, model design, and experiments.",
+      "role": "Co-first author (equal contribution).",
       "sections": [
         {
           "h": "Problem",
@@ -355,15 +355,11 @@
         },
         {
           "h": "Approach",
-          "p": "I implemented three quantum image representations — FRQI, QPIE, and NEQR — and built quantum neural networks on top of each, holding the downstream architecture fixed so the encoding itself was the variable under test."
-        },
-        {
-          "h": "Findings",
-          "p": "The encodings differ sharply in qubit cost, circuit depth, and trainability, and the cheapest encoding is not uniformly the best classifier. The comparison gives a practical basis for choosing an encoding under a given qubit budget."
+          "p": "I built quantum neural networks on four quantum image representations — NASS, QBIR, FTQR and FRQCI — for binary MNIST classification (0 vs 1) at 2×2, 4×4 and 8×8."
         },
         {
           "h": "Status",
-          "p": "Under review at Springer Nature."
+          "p": "Published in The Journal of Supercomputing 82 (2026)."
         }
       ]
     },
@@ -540,7 +536,7 @@
       "status": "published",
       "authors": "A. Tiwari*, S. Siyanwal*, S. Sakhuja, S. Kumar, P. Tyagi",
       "doi": "10.1007/s11227-026-08621-3",
-      "abstract": "We compare three quantum image representations — FRQI, QPIE, and NEQR — as front-ends to quantum neural networks for binary image classification, holding downstream architecture fixed to isolate the effect of encoding on qubit cost, circuit depth, and trainability.",
+      "abstract": "Quantum neural networks for binary MNIST classification (0 vs 1) at 2×2, 4×4 and 8×8, built on four quantum image encodings: NASS, QBIR, FTQR and FRQCI.",
       "volume": "82",
       "equal_contribution": true,
       "note": "NASS, QBIR, FTQR, FRQCI; binary MNIST 0/1 at 2×2, 4×4, 8×8.",

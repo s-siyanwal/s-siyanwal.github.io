@@ -1,4 +1,4 @@
-import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, audLabel, projectHref } from "./site.js";
+import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, projectHref, THREADS, chip, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE } from "./site.js";
 import { mountCircuit } from "./circuit.js";
 
 (async function () {
@@ -16,8 +16,6 @@ import { mountCircuit } from "./circuit.js";
   // Hero
   $("hero-title").textContent = p.title;
   $("hero-name").textContent = p.name;
-  $("hero-tagline").textContent = p.tagline || "";
-  $("hero-summary").textContent = p.summary || "";
   const now = (data.experience || []).find((e) => e.current);
   if (now) $("hero-now").innerHTML = `<span class="hero-now-k">Now</span> ${esc(now.role)} · ${esc(now.org)}`;
   else $("hero-now")?.remove();
@@ -42,7 +40,7 @@ import { mountCircuit } from "./circuit.js";
 
   // Profiles
   $("profiles").innerHTML = (p.profiles || []).filter((x) => x.primary).map((x) => `
-    <a class="profile-link" href="${esc(x.url)}"${x.id === "email" ? "" : ' target="_blank" rel="noopener"'}>
+    <a class="profile-link" href="${esc(x.url)}"${x.url.startsWith("mailto:") ? "" : ' target="_blank" rel="noopener"'}>
       <span class="profile-label">${esc(x.label)}</span>
       <span class="profile-handle">${esc(x.handle).replace("@", "@<wbr>")}</span>
       <span class="profile-go" aria-hidden="true">↗</span>
@@ -53,10 +51,12 @@ import { mountCircuit } from "./circuit.js";
 
   // Projects
   const projects = data.projects || [];
-  $("projects-list").innerHTML = projects.map((pr, i) => `
-    <a class="card" href="${projectHref(pr.id)}"
+  $("projects-list").innerHTML = projects.map((pr, i) => {
+    const [th, label] = THREADS[pr.id] || ["", "Project"];
+    return `
+    <a class="card${th ? ` th-${th}` : ""}" href="${projectHref(pr.id)}"
        data-aud="${esc(pr.audience || "both")}" data-reveal style="--i:${i % 3}">
-      <span class="card-aud">${esc(audLabel[pr.audience] || "Project")}</span>
+      <span class="card-thread">${esc(label)}</span>
       <h3>${esc(pr.name)}</h3>
       <p class="card-blurb">${esc(pr.blurb || "")}</p>
       ${(pr.metrics || []).length ? `<div class="card-metrics">${(pr.metrics || []).slice(0, 3).map((m) =>
@@ -65,7 +65,8 @@ import { mountCircuit } from "./circuit.js";
         <div class="card-tags">${tags((pr.tags || []).slice(0, 3))}</div>
         <span class="card-more">Read →</span>
       </div>
-    </a>`).join("");
+    </a>`;
+  }).join("");
 
   document.querySelectorAll(".filter-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -80,27 +81,39 @@ import { mountCircuit } from "./circuit.js";
     });
   });
 
-  // Publications preview (3 most recent) + link to full page
-  const pubs = (data.publications || []).slice().sort((a, b) => (b.year || "").localeCompare(a.year || ""));
-  $("pub-preview").innerHTML = pubs.slice(0, 3).map((pb) => `
-    <li class="pub" data-reveal>
-      <div class="pub-row">
-        <span class="pub-year">${esc(pb.year || "")}</span>
-        <div class="pub-main">
-          <div class="pub-title">${esc(pb.title)}</div>
-          <div class="pub-meta">
-            <span class="pub-venue">${esc(pb.venue)}</span>
-            ${pb.authors ? `<span class="pub-authors">${esc(pb.authors)}</span>` : ""}
-            ${pb.status ? `<span class="pub-status">${esc(pb.status)}</span>` : ""}
-          </div>
-        </div>
-        <span class="pub-type">${esc(pb.type || "")}</span>
-      </div>
+  // Selected papers: the four most recent with an abstract; the result is its first sentence.
+  const pubs = data.publications || [];
+  const byYear = pubs.filter((x) => x.category !== "poster" && x.abstract)
+    .sort((a, b) => (b.year || "").localeCompare(a.year || "")).slice(0, 4);
+  $("paper-list").innerHTML = byYear.map((pb) => `
+    <li class="cite" data-reveal>
+      <div class="cite-head">${chip(pb.category)}<span class="cite-year">${esc(pb.year || "")}</span></div>
+      <h3 class="cite-title">${esc(pb.title)}</h3>
+      <p class="cite-authors">${authorsHtml(pb.authors)}</p>
+      <p class="cite-venue">${venueHtml(pb)}</p>
+      <p class="cite-result">${esc(firstSentence(pb.abstract))}</p>
+      ${idLinks(pb) ? `<div class="ids">${idLinks(pb)}</div>` : ""}
     </li>`).join("");
+  $("paper-foot").innerHTML = byYear.some((x) => x.equal_contribution) ? EQ_FOOTNOTE : "";
   $("pub-count").textContent = pubs.length;
+
+  $("education-list").innerHTML = (data.education || []).map((ed) => `
+    <div class="mini" data-reveal>
+      <p class="mini-degree">${esc(ed.degree)}</p>
+      <p class="mini-school">${esc(ed.school)}</p>
+      <p class="mini-meta">${esc(ed.period)}${ed.location ? " · " + esc(ed.location) : ""}</p>
+      ${ed.note ? `<p class="mini-note">${esc(ed.note)}</p>` : ""}
+    </div>`).join("");
+  $("awards-list").innerHTML = (data.awards || []).map((x) =>
+    `<li>${esc(x.title)}${x.year ? ` <span class="yr">${esc(x.year)}</span>` : ""}</li>`).join("");
 
   mountFooter(data);
   initReveal();
+
+  function firstSentence(t) {
+    const m = String(t).match(/^.+?[.!?](?=\s+[A-Z]|$)/s);
+    return m ? m[0] : t;
+  }
 
   function xp(e, i) {
     return `

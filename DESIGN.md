@@ -1,116 +1,184 @@
-# DESIGN.md: "Interference"
+# DESIGN.md: "Landscape" (v2)
 
-The design system for shivanshu-siyanwal.github.io. Direction A from `/workspace/site-redesign/research.md` (§2A, §3), picked by Shivanshu. This file documents the tokens **as implemented** in `style.css` on `fe/interference` (`c6c0f40`); where the build deviates from research.md it says so.
+The design system for shivanshu-siyanwal.github.io, from Shivanshu's v2 brief (`inbox/redesign-v2-brief.md`, 30 Sep 2026). It supersedes "Interference": the paper ground is gone. The site should read as a **research record** for PhD committees in quantum information, QML and quantum software, set on glass panels over a quiet valley landscape.
 
-## 1. Idea
+Still forbidden: invented facts or metrics, terminal cosplay, neon, text gradients, rainbow headings, remote images, fonts or scripts, and stock photography of people or things. The single background landscape (§2) and Shivanshu's own portrait (§8) are the only imagery allowed.
 
-A living lab notebook. The paper ground and editorial serif tell admissions readers "researcher"; the clean sans, mono labels and data tiles tell R&D managers "ships systems". The signature is the hero circuit: **the circuit is the CV**. There's one wire per `profile.focus_areas` entry, and each wire ends in a Bloch-sphere readout and a measurement box that feeds the metric tiles.
+## 1. Files
 
-Two accents with strict jobs:
-- **Verdigris (`--accent`)** is structure: links, rules under headings, eyebrows, focus rings, primary button.
-- **Vermilion "phase" (`--accent-2`)** is *live state only*: the wave packet's phase shift, Bloch vectors, the metric-tile ping, the active filter, the "current" role badge. If something isn't live, it isn't vermilion. Scarcity is what makes it memorable.
+| File | What it is |
+|---|---|
+| `assets/landscape-light.svg` | day valley (2.3 KB) |
+| `assets/landscape-dark.svg` | dusk valley, same geometry (2.3 KB) |
+| `assets/portrait.jpg` | front-end-bot's crop, approved (§8) |
+| `art/contrast-v2.py` | contrast check for every pair below. Rerun after any token change. |
 
-Not allowed: hacker/terminal cosplay, neon glows, gradients on text, stock imagery, invented numbers, count-up animations.
+Copy the two SVGs from `art/assets/` into `assets/`.
 
-## 2. Colour tokens
+## 2. Landscape ground
+
+**Choice:** a hand-authored layered SVG (a monsoon valley), not a photo. It was drawn for this site, so it's the site's own work and needs no third-party licence (licence: same as the repo). There's nothing to credit. Why not a photo: a CC0 photo would cost 150–200 KB on mobile and needs a separate dark variant, and a busy photo fights the glass panels. The SVGs are about 2.3 KB each, scale to any width, and swap cleanly between themes.
+
+Layers from back to front: a sky gradient, a low saffron sun (dusk moon in dark), two ragged far ranges in stone blue, a mist band, moss mid-hills, a winding river (river blue, highlight at the source), and a deep-teal foreground ridge on each side.
+
+Implementation:
+- `body::before { content:""; position:fixed; inset:0; z-index:-1; background:url(assets/landscape-light.svg) center bottom / cover no-repeat; }`, with the dark SVG under dark tokens. Use a fixed pseudo-element, never `background-attachment: fixed`, because iOS jank breaks that.
+- The ground is static: no parallax and no animation.
+- Print: `body::before { display:none }` and a white page.
+- Type never sits directly on the landscape. Every text block is inside a panel (§3).
+
+## 3. Colour tokens
+
+Glass panels are checked **composited over the worst-case landscape pixel**: the darkest ridge (`#223b37`) under light panels and the brightest river highlight (`#5f8a99`) under dark panels. The solid fallbacks are checked too.
 
 | Token | Light | Dark | Job |
 |---|---|---|---|
-| `--bg` | `#faf8f2` | `#0e1315` | page ground |
-| `--surface` | `#f0ece1` | `#161e21` | tinted sections, meas boxes |
-| `--surface-2` | `#e7e2d4` | `#1d272b` | chips |
-| `--ink` | `#16181d` | `#eceae3` | headings, body |
-| `--ink-soft` | `#434852` | `#bec3be` | lede, secondary copy |
-| `--ink-faint` | `#5c616b` | `#959d99` | meta, dates, wires |
-| `--rule` | `#dcd6c6` | `#273236` | hairlines (decorative) |
-| `--rule-strong` | `#847d69` | `#5e6e74` | control borders (UI, ≥3:1) |
-| `--accent` | `#0b6a5a` | `#4fd1b5` | verdigris |
-| `--accent-ink` | `#07493e` | `#7fe0ca` | text-weight accent (links, values) |
-| `--accent-soft` | `#ddece6` | `#14302b` | tag / availability fill |
-| `--accent-line` | `#8dbdb1` | `#2f6f62` | circuit feeds, card hover edge (decorative) |
-| `--accent-2` | `#b93a0e` | `#ff8c5a` | phase / live |
-| `--on-accent` | `#ffffff` | `#0e1315` | text on accent or accent-2 fills |
-| `--footer-bg` / `-ink` / `-faint` | `#16181d` / `#eceae3` / `#a9ada8` | `#080b0c` / `#eceae3` / `#a9ada8` | footer band |
+| `--panel` | `rgb(250 251 249 / .88)` | `rgb(12 20 23 / .86)` | glass panel fill |
+| `--panel-solid` | `#f6f8f6` | `#0e171a` | fallback when `backdrop-filter` is unsupported |
+| `--panel-blur` | `blur(14px) saturate(1.2)` | same | used only inside `@supports (backdrop-filter: blur(1px))` |
+| `--bar` | `rgb(250 251 249 / .96)` | `rgb(12 20 23 / .96)` | sticky header, almost opaque, so the landscape never shows through |
+| `--ink` | `#12201f` | `#e9eeec` | headings, body |
+| `--ink-soft` | `#34443f` | `#c3ccc9` | lede, abstracts |
+| `--ink-faint` | `#4d5b57` | `#9eaaa6` | meta, dates, captions |
+| `--rule` | `#c9d3cf` | `#26353a` | hairlines (decorative only) |
+| `--rule-strong` | `#6f7f7a` | `#62757b` | control borders, portrait edge |
+| `--accent` | `#0b5f58` | `#5cc8b8` | teal: links, focus, primary button |
+| `--accent-2` | `#8f4310` | `#f0a35a` | copper/saffron: small emphasis only (see below) |
+| `--on-accent` | `#ffffff` | `#0c1417` | text on accent fills |
 
-Dark applies on `data-theme="dark"`, or under `prefers-color-scheme: dark` unless `data-theme="light"`. An inline head script sets the attribute before first paint (no flash). Print forces light tokens.
+**Copper/saffron (`--accent-2`)** is used sparingly: the equal-contribution `*` and its footnote marker, the active filter segment, the "current" role badge, and the tile ping. It never appears on headings, body text or large fills.
 
-**Deviation from research.md:** it only specified 8 tokens. The build adds `surface-2`, `rule`, `rule-strong`, `accent-ink`, `accent-soft`, `accent-line` and the footer set. All eight research values are used unchanged.
+Panels have a 1px `--rule` border and an 8px radius. The fallback rule is `@supports not (backdrop-filter: blur(1px)) { --panel: var(--panel-solid) }`.
 
-### Contrast (re-run against the final tokens, WCAG 2.x formula)
+### Publication chips (one muted hue per category)
 
-All text pairs ≥ 4.5:1 and all UI pairs ≥ 3:1 in both themes. **0 fails.**
+Text / tint, each ≥ 4.5:1.
 
-| Pair | Light | Dark |
+| Category | Light | Dark |
 |---|---|---|
-| ink / bg | 16.72 | 15.54 |
-| ink-soft / bg | 8.64 | 10.46 |
-| ink-faint / bg | 5.86 | 6.73 |
-| ink-faint / surface | 5.27 | 6.09 |
-| ink-soft / surface-2 (chips) | 7.09 | 8.52 |
-| accent / bg | 6.13 | 9.91 |
-| accent-ink / bg | 9.73 | 11.95 |
-| accent-ink / accent-soft (tags, availability) | 8.47 | 9.02 |
-| accent-2 / bg | 5.38 | 8.15 |
-| on-accent / accent (primary button) | 6.51 | 9.91 |
-| on-accent / accent-2 (active filter, current badge) | 5.72 | 8.15 |
-| footer-faint / footer-bg | 7.81 | 8.68 |
-| UI: rule-strong / bg (filter border) | 3.86 | 3.53 |
-| UI: rule-strong / surface | 3.48 | 3.19 |
-| UI: accent / bg (focus ring) | 6.13 | 9.91 |
+| journal | `#0d5752` / `#d9ebe8` | `#8fd9cd` / `#12302d` |
+| conference | `#1c4f70` / `#dce8f0` | `#9cc8e6` / `#142a3a` |
+| preprint | `#465a1f` / `#e6ecd6` | `#c2d68f` / `#243016` |
+| poster | `#574f42` / `#ece8df` | `#d8ccb4` / `#2d2a22` |
+| thesis | `#584669` / `#ebe5f0` | `#cdb8e6` / `#2c2338` |
 
-`--rule` (1.37 / 1.42) and light `--accent-line` (1.97) are below 3:1, so they may **only** be decorative: never the sole boundary of a control or the only cue for state.
+`content.json` has journal, conference, preprint and poster entries today. There's no thesis entry, so thesis stays defined for later. Chips use Geist Mono `.66rem`, uppercase, a 3px radius, and the category word is always written out, so colour is never the only cue.
 
-## 3. Type
+### Thread rails on project cards
 
-| Role | Family | Use |
+A 3px left rail, each ≥ 3:1 on glass and on solid. The card's thread label is always written as text too.
+
+| Thread | Light | Dark |
 |---|---|---|
-| `--display` | Fraunces (variable, wght 400–700, `font-optical-sizing: auto`) | name, h1–h3, lede, stat values |
-| `--text` | Geist (400–600) | body, UI |
-| `--mono` | Geist Mono (400–500) | eyebrows, nav, labels, dates, gate glyphs, metric labels |
+| NMR entanglement | `#6b5b95` | `#a894d6` |
+| Weather QML | `#2f7598` | `#6fb4d8` |
+| Quantum image | `#3a7f66` | `#6fc4a2` |
+| QKD | `#4c6a85` | `#8fb0cf` |
+| FPGA inference | `#94641c` | `#d9a35a` |
 
-Self-hosted latin-subset woff2 in `assets/fonts/` with OFL licences, `font-display: swap`, and the two first-screen faces preloaded. No Google Fonts request anywhere, including the build (`be/og-tokens`).
+The figure for each thread (§6) uses that thread's hue as its one colour.
 
-Scale (as built): body `16.5px / 1.6`; hero h1 `clamp(2.7rem, 7.2vw, 4.9rem)`, weight 560, line-height 1, tracking −0.025em; lede `clamp(1.15rem, 2.3vw, 1.4rem)` Fraunces 400; section h2 `clamp(1.5rem, 3.4vw, 2rem)` with a 34×2px verdigris rule under it; card h3 `1.12rem`; mono labels `.6–.8rem`, uppercase, tracking `.02–.13em`. Mono labels never go below `.6rem` (≈10px).
+### Contrast results (`python3 art/contrast-v2.py`): **0 fails**
 
-## 4. Space, shape, layout
+| Pair | Light glass / solid | Dark glass / solid |
+|---|---|---|
+| ink | 13.07 / 15.71 | 13.41 / 15.49 |
+| ink-soft | 8.00 / 9.62 | 9.59 / 11.07 |
+| ink-faint | 5.55 / 6.67 | 6.56 / 7.57 |
+| accent | 5.86 / 7.05 | 7.79 / 9.00 |
+| accent-2 | 5.49 / 6.61 | 7.56 / 8.73 |
+| rule-strong (UI) | 3.28 / 3.94 | 3.26 / 3.76 |
+| lowest rail (UI) | 3.71 / 4.46 | 5.89 / 6.81 |
+| on-accent / accent | 7.52 | 9.23 |
+| on-accent / accent-2 | 7.05 | 8.95 |
+| lowest chip | 6.32 | 8.25 |
 
-- `--maxw: 1120px`, `--pad: clamp(1.15rem, 4vw, 2.75rem)`, `--bar-h: 54px` (sticky topbar).
-- Radius is near-zero on purpose (notebook, not app): `2px` on tags, chips and badges; `0` on cards, buttons and tiles.
-- Grids of tiles and profiles use the "1px gap on a `--rule` background" hairline pattern.
-- Breakpoints as built: 560, 620, 640 (circuit wide mode), 820, 860, 960 (circuit + tiles side by side), 980.
+## 4. Type
 
-**Deviation:** research.md suggested the sticky identity column at ≥1024px. front-end-bot dropped it because it fights the full-width circuit band, and the sticky topbar already carries the name. I agree; it's noted in the PR.
+Keep the local Fraunces (display), Geist (text) and Geist Mono (labels, ids, dates) with `font-display: swap`. No Google Fonts.
+- Hero name: `clamp(2.4rem, 6.4vw, 4.2rem)`, weight 560. Research line in Fraunces 400, `clamp(1.1rem, 2.2vw, 1.35rem)`.
+- Section h2: `clamp(1.45rem, 3.2vw, 1.9rem)`. The decorative rule sits **under the heading box** as a block `::after` in normal flow, never absolutely positioned. That fixes rules cutting through wrapped headings.
+- Citations: Geist `.98rem` / 1.55. **His name is bold** (`<strong>`). The equal-contribution `*` is `--accent-2`, and every page with a mark gets a footnote line: "* Equal contribution."
+- DOIs, arXiv ids, Xplore ids and emails get Geist Mono `.78rem` plus `overflow-wrap: anywhere`.
 
-## 5. Motion
+## 5. Layout and overlap rules
 
-Tokens: `--dur-1 150ms`, `--dur-2 220ms`, `--dur-3 380ms`, `--ease-out cubic-bezier(.2,.7,.3,1)`, `--ease-spring cubic-bezier(.34,1.4,.64,1)`.
+Audit widths: 360, 768, 1120 and 1440, plus 390 and 1280 for screenshots.
+1. **One column under 720px**, everywhere.
+2. **No absolutely positioned text over text.** The only absolute elements allowed are decorative (`aria-hidden`) with no text in them.
+3. **Sticky header:** `--bar` background plus blur, a solid fallback, and `z-index` above everything. `scroll-padding-top` equals the bar height. The landscape must not show through it.
+4. **Hero circuit** (`#hero-circuit`) sits in its own panel below the hero identity panel, inside a reserved box: `aspect-ratio` from the SVG viewBox, set in CSS so there's no layout shift. `#glance` sits beside it at ≥1120px and stacks above it below 1120px. The circuit never shares a grid cell with the tiles or the portrait.
+5. **Filter rows** go on their own line under the section heading (`flex-wrap`, a gap of `.5rem`), never inline with the h2.
+6. **Author lists, links and DOIs** get `overflow-wrap: anywhere`. No `white-space: nowrap` on anything longer than a date.
+7. Panels are spaced `clamp(1rem, 3vw, 1.75rem)` apart so the landscape shows between them as gutters.
 
-Rules:
-1. Everything animated sits behind `prefers-reduced-motion: no-preference` **and** `html.js`. Reduced motion, JS off, print, and a never-firing IntersectionObserver all show the final static frame (the 2.5s failsafe and `beforeprint` stay).
-2. **Never animate opacity on text.** Entrances are transform-only (`rise`: translateY 12px → 0). Mid-fade text fails contrast audits and is harder to read.
-3. Nothing flashes more than 3 times a second.
-4. Any loop longer than 5 seconds needs a visible pause control (WCAG 2.2.2).
-5. Numbers are never counted up; the HTML value is the truth.
+Home order (brief §2):
+1. Hero panel: portrait, name, research identity, C-DAC role, links, CV.
+2. Circuit and glance.
+3. Four selected papers: venue, year and a one-sentence result, taken from content.
+4. Research-thread cards linking to `project.html`.
+5. Experience.
+6. Education.
+7. Awards.
 
-The hero live layer (final values, `PACKET` in `js/circuit.js`): the band is **28px wide with a peak opacity of 0.18** in both themes. It sweeps **once, over 3.2s** with `cubic-bezier(.45,0,.55,1)`, starting 400ms after the hero comes on screen. Then it hides (`is-done`), and "Play motion" replays it. Its colour holds `--accent` until 80% of the sweep and snaps to `--accent-2` by 88%. **Never interpolate through the middle**, because the verdigris/vermilion midpoint is the brown smear. The tile ping fires at about 2.5s, when the eased band reaches the M column. All CSS durations stay in step with `DUR = 3.2`.
+## 6. Figures (5 schematics)
 
-Original concept (superseded by the values above): a Gaussian wave packet travels the wires on a 6.4s loop, its gradient shifting verdigris → vermilion as it crosses the gates. Gates dip briefly as it passes, and the metric tiles get a one-time 300ms vermilion underline when it reaches the measurement boxes. On fine pointers the nearest wire lifts to full ink, its gates scale 1.06, and the rest dim to 60%. The loop pauses when the hero is off screen.
+Shared rules:
+- Original inline SVG in a `<figure>` with a `<figcaption>` that starts **"Schematic."** and is present in the HTML, so JS-off shows it.
+- The SVG has `role="img"` and `aria-labelledby` pointing at the caption.
+- viewBox 640×360, `max-width: 100%`, and a reserved aspect ratio.
+- The colours are ink, ink-faint and the thread hue. Nothing else.
+- No numbers unless the number is in `content.json`. No axis tick values.
+- Static by default. Any motion goes behind reduced-motion `no-preference` and settles to the static frame.
 
-## 6. Components
+**NMR (thread hue plum).** The six three-qubit SLOCC classes as a three-tier Hasse diagram: SEP at the bottom; BS1, BS2 and BS3 in the middle; W and GHZ on top, side by side and **not** connected to each other. Thin lines link each upper class to the classes below it. On the right, a small pipeline reads "NMR measurement data → ANN → class label". Leave out any "128 → 18" claim, because it isn't in content.json. Caption: "Schematic. The six SLOCC classes of three-qubit pure states that the ANN distinguishes."
 
-- **Hero circuit (`js/circuit.js`)**: data-driven wire count from `focus_areas`, labels in Geist Mono 11px `--ink-soft`, wires `--ink-faint` 1px, feeds dashed `--accent-line`. Prerendered SVG is the final state.
-- **Bloch glyph**: 10px-radius circle + equator ellipse in `--ink-faint`, vertical axis, state vector and tip in `--accent-2`. One fixed state per wire; it's decorative, so `aria-hidden`. Drawn inline by circuit.js, so there are no separate SVG files to ship.
-- **Metric tiles (`#glance`)**: Fraunces 600 value in `--accent-ink`, mono label, faint note. 2×2 on mobile, one column beside the circuit at ≥960px.
-- **Buttons**: mono `.8rem`, 1px ink border, square. Primary is an `--accent` fill with `--on-accent` text, and hover goes to `--accent-ink`.
-- **Filter**: segmented, `--rule-strong` border; the active segment is an `--accent-2` fill with `aria-pressed="true"`.
-- **Cards**: square, `--rule` border (the text and heading carry identification, so the low-contrast edge is fine); hover lifts −3px with the spring ease, an `--accent-line` edge and a soft verdigris shadow.
-- **Experience**: `details.xp`; the "current" badge is an `--accent-2` fill.
-- **Publications**: dated one-line list, mono year in `--accent-ink`, venue in `--accent`.
-- **Project pages**: Distill-style Role / Track / Topics metadata block.
-- **Theme toggle**: Auto / Light / Dark, hidden without JS.
-- **Focus**: `2px solid var(--accent)`, offset 3px, on everything.
+**Weather QML (river blue).** Three traces on unlabelled axes (arrows marked "time" and "temperature"):
+- observed, in ink
+- classical baseline, `--ink-faint` dashed
+- variational model, thread hue
 
-## 7. Open items for fe/interference
+The traces are drawn from a fixed deterministic function and are clearly illustrative. Don't show accuracy, error or skill numbers. Caption: "Schematic. Illustrative temperature series with a classical baseline and a variational-circuit forecast; not data from the paper."
 
-1. **Blocker (a11y): the hero loop has no pause control.** The packet, phase and gate animations run `infinite` on 6.4s and only pause off screen. That fails WCAG 2.2.2 and the team's own ">5s needs a pause" rule. Fix: add a `button.qc-pause` inside `.hero-instrument`, mono `.7rem`, at least 24×24px, `aria-pressed`, label "Pause motion" / "Play motion", toggling `.is-paused` (the CSS already honours it). Hide it with `html:not(.js)` and under reduced motion. The alternative is to run the packet once and stop, but the pause button keeps the life.
-2. **Token hygiene (non-blocking):** `.btn`, `.profile-link`, `.filter-btn`, `.xp-toggle .chev` and `[data-reveal]` still use raw durations and easings (`.14s`, `.16s`, `.2s`, `.6s cubic-bezier(.2,.7,.3,1)`). Map them to `--dur-1`, `--dur-2`, `--dur-3` and `--ease-out` so the "tokens only" rule holds. `[data-reveal]` also fades opacity; per rule 2 it should go transform-only, which is the same change back-end-bot flagged to get Lighthouse a11y on home from 96 to 100.
+**Quantum image (moss).** A pipeline figure: a 2×2 pixel grid, then four encoding boxes (NASS, QBIR, FTQR, FRQCI), then a QNN, then "0 / 1". The brief asked for a qualitative qubit-count vs depth plot, but where each encoding sits on those axes is a factual claim nobody has supplied. **Blocked until Shivanshu confirms the relative ordering**, so ship the pipeline figure until then. Caption: "Schematic. Four quantum image encodings feeding a QNN for binary MNIST (0 vs 1) at 2×2, 4×4 and 8×8."
+
+**FPGA (ochre).** Latency bars, because both figures are in content.json:
+- The FPGA bar is labelled "291.8 µs".
+- The GPU bar is 6.7× as long and labelled "GPU (6.7× slower)". Don't print a derived GPU µs value.
+- A small strip above reads "host → VQC kernel (HLS) → Alveo U55C".
+
+Caption: "Schematic. Relative inference latency, FPGA vs GPU, as reported in the project."
+
+**QKD (slate).** Three small rows:
+- DPS: Alice → lossy fibre → Bob, with a pulse train that has phase marks.
+- COW: Alice → lossy fibre → Bob, with pulses and empty time slots.
+- Twin-field: Alice → Charlie ← Bob, a central measurement station.
+
+Loss is a fading gradient on the fibre. There's no Eve and no attack detail. Caption: "Schematic. Protocol layouts for DPS, COW and twin-field QKD studied at TCG CREST."
+
+## 7. Motion
+
+The Interference rules carry over:
+1. Everything animated sits behind `prefers-reduced-motion: no-preference` and `html.js`, with the 2.5s failsafe and `beforeprint`.
+2. No opacity animation on text; transforms only.
+3. No flashing.
+4. A pause control for anything over 5s.
+5. No count-ups.
+
+The hero circuit keeps its one-shot 3.2s sweep, the Play/Pause control and the 2.92s tile ping, now inside its panel. The landscape never moves. Durations and easings stay tokens (`--dur-1`, `--dur-2`, `--dur-3`, `--ease-out`, `--ease-spring`).
+
+## 8. Portrait
+
+Source: `inbox/portrait-source.jpg`, supplied by Shivanshu. front-end-bot's crop (`assets/portrait.jpg`, 440×550, 4:5) is **approved as is**. It keeps his full head, and the watermark from the bottom-right corner is cropped out. It isn't retouched. Keep the JPEG under 60 KB. A `.webp` in a `<picture>` element is optional.
+- **Home hero:** inside the hero glass panel, left of the name at ≥720px. It's 148×185 on desktop and 96×120 on mobile, stacked above the name and centred. Use `object-fit: cover` and a 2px `--rule-strong` edge (stone) with a 4px radius, never a circle. Alt: "Portrait of Shivanshu Siyanwal". Explicit width and height, eager loading, `fetchpriority` left at the default.
+- **About page:** at the start of the research statement, same crop, up to 220×275, `loading="lazy"`.
+- Nowhere else. It never goes over the circuit, the tiles or the header. No hover zoom and no grayscale filter. It prints.
+
+## 9. Print
+
+Print drops the landscape (`body::before` is hidden), makes the panels plain white with no border or blur, forces light ink, keeps the portrait and figures, and shows link URLs after DOIs and arXiv ids.
+
+## 10. Open items (for JARVIS and Shivanshu)
+
+1. The quantum-image figure axes (§6) need the relative qubit-count and depth ordering of NASS, QBIR, FTQR and FRQCI. Until then it ships as the pipeline figure.
+2. There's no thesis entry in content.json, so the thesis chip is defined but unused.
