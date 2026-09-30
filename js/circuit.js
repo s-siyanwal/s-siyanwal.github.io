@@ -1,19 +1,73 @@
 /* Signature element: "circuit as CV".
-   One qubit wire per profile.focus_areas entry, labelled with that text. Gates, a
-   Quirk-style Bloch-sphere readout, then measurement; the measurement hairlines lead
-   to the metric tiles. The SVG is complete and static on its own (that frame is what
-   build.py prerenders). Motion is added on top and only when the reader allows it:
-   a Gaussian wave packet sweeps the wires and shifts phase colour, and on fine pointers
-   the wire nearest the cursor lifts. */
+   One qubit wire per profile.focus_areas entry, labelled with that text. Every wire
+   starts in |0⟩, gets H, then the fixed gates below. The Bloch glyph at the end of each
+   wire is the real reduced state of that qubit, simulated from this exact circuit: an
+   entangled qubit is mixed, so its vector is shorter than the sphere's radius. Then
+   measurement, and classical double lines lead to the metric tiles. The SVG is complete
+   and static on its own (that frame is what build.py prerenders). Motion is added on top
+   and only when the reader allows it: a decorative wave packet sweeps the wires, and on
+   fine pointers the wire nearest the cursor lifts. */
 
-const PATTERN = [ // [column, wire, gate, cnot target]
-  [1, 0, "cnot", 1], [1, 2, "RY"],
-  [2, 1, "RZ"], [2, 3, "cnot", 4],
-  [3, 0, "RX"], [3, 2, "cnot", 3],
-  [4, 1, "RY"], [4, 4, "RZ"],
-  [5, 0, "cnot", 2], [5, 3, "RX"],
+const PATTERN = [ // [column, wire, gate, target] for CNOT; [column, wire, gate, p, q] for a p·π/q rotation
+  [1, 1, "RZ", 1, 4], [1, 4, "RZ", 3, 4],
+  [2, 0, "cnot", 1], [2, 3, "RY", 1, 3],
+  [3, 3, "cnot", 4], [3, 2, "RY", 1, 2],
+  [4, 0, "RY", 1, 2], [4, 2, "cnot", 3],
+  [5, 0, "cnot", 2], [5, 4, "RX", 1, 3],
 ];
 const DUR = 6.4; // seconds per sweep; keep in step with the .qc-packet animation
+
+// Statevector simulation of H on every wire then PATTERN; returns each qubit's
+// Bloch vector (Tr ρσx, Tr ρσy, Tr ρσz) from its reduced density matrix.
+export function blochVectors(n) {
+  const N = 1 << n, re = new Float64Array(N), im = new Float64Array(N);
+  re[0] = 1;
+  const apply = (q, m) => { // m = 2×2 complex matrix, row-major [re, im] pairs
+    const b = 1 << q;
+    for (let i = 0; i < N; i++) {
+      if (i & b) continue;
+      const k = i | b, xr = re[i], xi = im[i], yr = re[k], yi = im[k];
+      re[i] = m[0] * xr - m[1] * xi + m[2] * yr - m[3] * yi;
+      im[i] = m[0] * xi + m[1] * xr + m[2] * yi + m[3] * yr;
+      re[k] = m[4] * xr - m[5] * xi + m[6] * yr - m[7] * yi;
+      im[k] = m[4] * xi + m[5] * xr + m[6] * yi + m[7] * yr;
+    }
+  };
+  const h = Math.SQRT1_2;
+  for (let q = 0; q < n; q++) apply(q, [h, 0, h, 0, h, 0, -h, 0]);
+  for (const [, w, g, a, d] of PATTERN) {
+    if (w >= n || (g === "cnot" && a >= n)) continue;
+    if (g === "cnot") {
+      const cb = 1 << w, tb = 1 << a;
+      for (let i = 0; i < N; i++) {
+        if (!(i & cb) || (i & tb)) continue;
+        const k = i | tb;
+        [re[i], re[k]] = [re[k], re[i]];
+        [im[i], im[k]] = [im[k], im[i]];
+      }
+      continue;
+    }
+    const t = Math.PI * a / d / 2, c = Math.cos(t), s = Math.sin(t);
+    apply(w, g === "RX" ? [c, 0, 0, -s, 0, -s, c, 0]
+      : g === "RY" ? [c, 0, -s, 0, s, 0, c, 0]
+      : [c, -s, 0, 0, 0, 0, c, s]);
+  }
+  const out = [];
+  for (let q = 0; q < n; q++) {
+    const b = 1 << q;
+    let x = 0, y = 0, z = 0; // ρ01 = Σ ψ(q=0)·conj ψ(q=1); x = 2 Re ρ01, y = −2 Im ρ01
+    for (let i = 0; i < N; i++) {
+      const p = re[i] * re[i] + im[i] * im[i];
+      if (i & b) { z -= p; continue; }
+      z += p;
+      const k = i | b;
+      x += re[i] * re[k] + im[i] * im[k];
+      y += im[i] * re[k] - re[i] * im[k];
+    }
+    out.push([2 * x, -2 * y, z]);
+  }
+  return out;
+}
 
 const motionQ = window.matchMedia("(prefers-reduced-motion: no-preference)");
 const wideQ = window.matchMedia("(min-width: 640px)");
@@ -78,28 +132,32 @@ export function mountCircuit(host, labels, tiles) {
 }
 
 function svg(names, W) {
-  const n = names.length, rowH = 50, top = 34;
-  const H = top + (n - 1) * rowH + 22;
-  const x0 = 4, span = W - x0 - 28;
-  const col = (c) => Math.round(x0 + 18 + span * (c / 7.4)); // 0..5 gates, 6 Bloch, 7 M
+  const n = names.length, rowH = 50, top = 34, R = 10;
+  const H = top + (n - 1) * rowH + 26;
+  const x0 = 4, xs = x0 + 22, span = W - xs - 28;
+  const col = (c) => Math.round(xs + 16 + span * (c / 7.4)); // 0..5 gates, 6 Bloch, 7 M
   const y = (w) => top + w * rowH;
   const esc = (s) => String(s).replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
   const delay = (x) => `style="--d:${(DUR * x / W).toFixed(2)}s"`;
   const box = (x, yy, t) => `<g class="qc-g" ${delay(x)}><rect class="qc-box" x="${x - 13}" y="${yy - 11}" width="26" height="22" rx="3"/><text class="qc-txt" x="${x}" y="${yy + 3.5}" text-anchor="middle">${t}</text></g>`;
+  const rot = (x, yy, g, p, q) => `<g class="qc-g" ${delay(x)}><rect class="qc-box" x="${x - 13}" y="${yy - 11}" width="26" height="22" rx="3"/><text class="qc-txt" x="${x - 1}" y="${yy + 3.5}" text-anchor="middle">R<tspan class="qc-sub" dy="2.5">${g[1].toLowerCase()}</tspan></text><text class="qc-ang" x="${x}" y="${yy + 21}" text-anchor="middle">${p === 1 ? "" : p}π/${q}</text></g>`;
+  // Bloch projection: z up, view turned 40° so +x points down-left and +y down-right.
+  const ca = Math.cos(-0.7), sa = Math.sin(-0.7);
+  const proj = ([bx, by, bz]) => [R * (bx * sa + by * ca), R * (-bz + 0.35 * (bx * ca - by * sa))].map((v) => +v.toFixed(2));
+  const vecs = blochVectors(n);
 
   let rows = "", multi = "";
   for (let w = 0; w < n; w++) {
     const yy = y(w), xb = col(6), xm = col(7);
-    // A fixed, distinct state per wire for the Bloch readout (decorative).
-    const th = 0.5 + w * 0.42, ph = 0.9 + w * 1.3;
-    const vx = (10 * Math.sin(th) * Math.cos(ph)).toFixed(1), vy = (-10 * Math.cos(th) + 3.5 * Math.sin(th) * Math.sin(ph)).toFixed(1);
+    const [vx, vy] = proj(vecs[w]);
     rows += `<g class="qc-row" data-y="${yy}">
 <text class="qc-lbl" x="${x0}" y="${yy - 15}">${esc(names[w])}</text>
-<line class="qc-wire" x1="${x0}" y1="${yy}" x2="${xm - 12}" y2="${yy}"/>
-<line class="qc-feed" x1="${xm + 12}" y1="${yy}" x2="${W}" y2="${yy}"/>
+<text class="qc-ket" x="${x0}" y="${yy + 3.5}">|0⟩</text>
+<line class="qc-wire" x1="${xs}" y1="${yy}" x2="${xm - 12}" y2="${yy}"/>
+<path class="qc-feed" d="M${xm + 12} ${yy - 1.25}H${W}M${xm + 12} ${yy + 1.25}H${W}"/>
 ${box(col(0), yy, "H")}
-${PATTERN.filter((g) => g[1] === w && g[2] !== "cnot").map((g) => box(col(g[0]), yy, g[2])).join("")}
-<g class="qc-g qc-bloch" ${delay(xb)} transform="translate(${xb} ${yy})"><circle r="10"/><ellipse rx="10" ry="3.5"/><line class="qc-axis" y1="-10" y2="10"/><line class="qc-vec" x2="${vx}" y2="${vy}"/><circle class="qc-tip" cx="${vx}" cy="${vy}" r="1.6"/></g>
+${PATTERN.filter((g) => g[1] === w && g[2] !== "cnot").map((g) => rot(col(g[0]), yy, g[2], g[3], g[4])).join("")}
+<g class="qc-g qc-bloch" ${delay(xb)} transform="translate(${xb} ${yy})"><circle r="${R}"/><ellipse rx="${R}" ry="${R * 0.35}"/><line class="qc-axis" y1="-${R}" y2="${R}"/><line class="qc-vec" x2="${vx}" y2="${vy}"/><circle class="qc-tip" cx="${vx}" cy="${vy}" r="1.6"/></g>
 <g class="qc-g" ${delay(xm)}><rect class="qc-box qc-meas" x="${xm - 12}" y="${yy - 11}" width="24" height="22" rx="3"/><path class="qc-arc" d="M${xm - 7} ${yy + 5}A7 7 0 0 1 ${xm + 7} ${yy + 5}"/><line class="qc-arc" x1="${xm}" y1="${yy + 5}" x2="${xm + 5}" y2="${yy - 5}"/></g>
 </g>`;
   }

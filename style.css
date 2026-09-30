@@ -359,7 +359,10 @@ html.js .glance [data-reveal] { transform: none; }
 .qc { width: 100%; height: auto; display: block; overflow: visible; }
 .qc-lbl   { font-family: var(--mono); font-size: 11px; letter-spacing: .01em; fill: var(--ink-soft); }
 .qc-wire  { stroke: var(--ink-faint); stroke-width: 1; }
-.qc-feed  { stroke: var(--accent-line); stroke-width: 1; stroke-dasharray: 2 3; }
+.qc-feed  { fill: none; stroke: var(--ink-faint); stroke-width: .8; }
+.qc-ket   { font-family: var(--mono); font-size: 10px; fill: var(--ink-soft); }
+.qc-ang   { font-family: var(--mono); font-size: 9px; fill: var(--ink-soft); }
+.qc-sub   { font-size: 7.5px; }
 .qc-box   { fill: var(--bg); stroke: var(--accent); stroke-width: 1.2; }
 .qc-meas  { fill: var(--surface); stroke: var(--ink-faint); }
 .qc-txt   { font-family: var(--mono); font-size: 10px; font-weight: 500; fill: var(--accent-ink); }
