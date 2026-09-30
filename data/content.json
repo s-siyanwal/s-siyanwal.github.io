@@ -323,11 +323,11 @@
     {
       "id": "qir-qnn",
       "name": "Quantum Image Representation Neural Networks",
-      "blurb": "Circularly entangled quantum neural networks for binary image classification, comparing quantum image encodings: NASS, QBIR, FTQR and FRQCI, and FRQI, QPIE and NEQR.",
-      "abstract": "Circularly entangled quantum neural networks that classify binary MNIST images (0 vs 1) at 2×2, 4×4 and 8×8, comparing quantum image encodings: NASS, QBIR, FTQR and FRQCI, and FRQI, QPIE and NEQR. Published in The Journal of Supercomputing 82 (2026).",
+      "blurb": "Quantum neural networks for binary image classification built on four quantum image encodings: NASS, QBIR, FTQR and FRQCI.",
+      "abstract": "Quantum neural networks that classify binary MNIST images (0 vs 1) at 2×2, 4×4 and 8×8, with pixel data encoded through four quantum image representations: NASS, QBIR, FTQR and FRQCI. It compares circuit depth, gate count and qubit usage for the four encodings; QBIR gives the shallowest circuits, FRQCI the deepest. Published in The Journal of Supercomputing 82:495 (2026).",
       "metrics": [
         {
-          "value": "7",
+          "value": "4",
           "label": "encodings"
         }
       ],
@@ -356,11 +356,11 @@
         },
         {
           "h": "Approach",
-          "p": "I compared quantum image encodings — NASS, QBIR, FTQR and FRQCI, and FRQI, QPIE and NEQR — inside circularly entangled quantum neural networks for binary MNIST classification (0 vs 1) at 2×2, 4×4 and 8×8."
+          "p": "I built quantum neural networks on four quantum image representations — NASS, QBIR, FTQR and FRQCI — for binary MNIST classification (0 vs 1) at 2×2, 4×4 and 8×8. It compares circuit depth, gate count and qubit usage for the four encodings; QBIR gives the shallowest circuits, FRQCI the deepest."
         },
         {
           "h": "Status",
-          "p": "Published in The Journal of Supercomputing 82 (2026)."
+          "p": "Published in The Journal of Supercomputing 82:495 (2026)."
         }
       ]
     },
@@ -546,11 +546,12 @@
       "status": "published",
       "authors": "A. Tiwari*, S. Siyanwal*, S. Sakhuja, S. Kumar, P. Tyagi",
       "doi": "10.1007/s11227-026-08621-3",
-      "abstract": "Quantum neural networks with circular entanglement for binary MNIST classification (0 vs 1) at 2×2, 4×4 and 8×8, comparing quantum image encodings: NASS, QBIR, FTQR and FRQCI, and FRQI, QPIE and NEQR.",
+      "abstract": "Quantum neural networks for binary MNIST classification (0 vs 1) at 2×2, 4×4 and 8×8, built on four quantum image encodings: NASS, QBIR, FTQR and FRQCI. It compares circuit depth, gate count and qubit usage for the four encodings; QBIR gives the shallowest circuits, FRQCI the deepest.",
       "volume": "82",
       "equal_contribution": true,
-      "note": "NASS, QBIR, FTQR, FRQCI, and FRQI/QPIE/NEQR; circularly entangled QNNs; binary MNIST 0/1 at 2×2, 4×4, 8×8.",
-      "category": "journal"
+      "note": "NASS, QBIR, FTQR, FRQCI; binary MNIST 0/1 at 2×2, 4×4, 8×8.",
+      "category": "journal",
+      "article": "495"
     },
     {
       "venue": "Quantum Information Processing",
