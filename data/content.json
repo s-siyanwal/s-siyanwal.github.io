@@ -84,14 +84,14 @@
       "note": "research + production"
     },
     {
-      "value": "6.7×",
-      "label": "FPGA speedup",
-      "note": "vs GPU at batch size 1"
+      "value": "4",
+      "label": "Image encodings",
+      "note": "compared in J. Supercomputing"
     },
     {
-      "value": "56.5%",
-      "label": "Forecast gain",
-      "note": "VQC vs the statistical baseline"
+      "value": "7",
+      "label": "Awards",
+      "note": "incl. INSPIRE-SHE, DRDO JRF"
     },
     {
       "value": "5+",
@@ -172,9 +172,9 @@
       "current": true,
       "summary": "Hybrid quantum-classical pipelines and FPGA-accelerated quantum inference.",
       "points": [
-        "Built a 7-qubit, 50-parameter VQC for 24-day temperature forecasting on NCMRWF reanalysis data, trained on a CPU-based quantum simulator (test RMSE 3.01 K, R² 0.801); about 56.5% improvement over the statistical baseline.",
+        "Built a 7-qubit, 50-parameter VQC for 24-day temperature forecasting on NCMRWF reanalysis data, trained on a CPU-based quantum simulator (test RMSE 3.01 K, R² 0.801).",
         "Implemented and optimised VQE, QCNN, and fidelity-based kernels in Qiskit and PennyLane; built scalable modules for quantum image encoding (FRQI, QPIE, NEQR).",
-        "Deployed a custom VQC kernel on an AMD Alveo U55C FPGA via Vitis HLS, with the kernel exchanging batches with the host over HBM; about 6.7× faster than a CUDA-accelerated PyTorch GPU baseline at batch size 1.",
+        "Deployed the trained VQC as a custom Vitis HLS kernel on an AMD Alveo U55C FPGA for low-latency inference, with the kernel exchanging batches with the host over HBM.",
         "Collaborated across hardware, research, and engineering teams to optimise hybrid workflows and support cloud quantum platforms."
       ],
       "tags": [
@@ -260,19 +260,15 @@
       "id": "vqc-fpga",
       "name": "Hybrid VQC Weather Forecasting with FPGA Inference",
       "blurb": "7-qubit variational circuit for 24-day temperature forecasting, with a custom kernel on an AMD Alveo FPGA for low-latency edge inference.",
-      "abstract": "A hybrid quantum-classical model that forecasts temperature 24 days ahead from daily NCMRWF reanalysis data, using a 7-qubit variational quantum circuit (50 parameters) with StronglyEntanglingLayers. It improves on the statistical baseline by about 56.5%. For inference, the frozen model runs on a custom AMD Alveo U55C FPGA kernel built with HLS: about 6.7× faster than the GPU baseline at batch size 1, and 291.8 µs per sample at batch size 8.",
+      "abstract": "A hybrid quantum-classical model that forecasts temperature 24 days ahead from daily NCMRWF reanalysis data, using a 7-qubit variational quantum circuit (50 parameters) with StronglyEntanglingLayers. For low-latency inference, the frozen model runs on a custom AMD Alveo U55C FPGA kernel built with HLS.",
       "metrics": [
-        {
-          "value": "6.7×",
-          "label": "vs GPU, batch 1"
-        },
-        {
-          "value": "291.8 µs",
-          "label": "per sample, batch 8"
-        },
         {
           "value": "7",
           "label": "qubits"
+        },
+        {
+          "value": "50",
+          "label": "parameters"
         }
       ],
       "tags": [
@@ -305,11 +301,11 @@
         },
         {
           "h": "Acceleration",
-          "p": "For edge inference, the frozen model runs on a custom Vitis HLS kernel on an AMD Alveo U55C FPGA; the kernel exchanges batches of input features, pre-trained weights and expectation values with the host over HBM. Against a CUDA-accelerated PyTorch GPU baseline, the FPGA is about 6.7× faster at batch size 1 (499.7 vs 3340.0 µs per sample). At batch size 8 it reaches 291.8 µs per sample, about 1.4× faster than the GPU."
+          "p": "For low-latency edge inference, the frozen model runs on a custom Vitis HLS kernel on an AMD Alveo U55C FPGA; the kernel exchanges batches of input features, pre-trained weights and expectation values with the host over HBM."
         },
         {
           "h": "Result",
-          "p": "About 56.5% improvement over the statistical baseline, with low-latency FPGA inference for edge use. Published at IEEE TQCEBT 2026."
+          "p": "A hybrid VQC forecaster with low-latency FPGA inference for edge use. Published at IEEE TQCEBT 2026."
         }
       ]
     },
@@ -488,9 +484,101 @@
           "p": "Published in Quantum Information Processing 24(3), 74 (2025); preprint arXiv:2409.19739."
         }
       ]
+    },
+    {
+      "id": "vqls-forecasting",
+      "name": "VQLS for Financial Time-Series Forecasting",
+      "blurb": "A variational quantum linear solver applied end to end to next-day stock price forecasting on real market data.",
+      "abstract": "A variational quantum linear solver (VQLS) applied to time series forecasting on real financial market data. Hankel-like trajectory matrices are built from historical Reliance Industries stock prices and the resulting linear system is solved with a quantum-classical hybrid approach: Hadamard test circuits evaluate the cost function, COBYLA optimizes the variational parameters, and a SWAP test extracts the solution to produce next-day price forecasts. Quantum advantage is not realized at this problem scale (2 × 2 system), and classical baselines reach equivalent accuracy; the work establishes a verified pathway for VQLS deployment on NISQ devices and identifies its scalability bottlenecks.",
+      "metrics": [
+        {
+          "value": "2 × 2",
+          "label": "linear system"
+        }
+      ],
+      "tags": [
+        "VQLS",
+        "Qiskit",
+        "NISQ"
+      ],
+      "audience": "academic",
+      "featured": false,
+      "role": "First author.",
+      "sections": [
+        {
+          "h": "Problem",
+          "p": "Existing VQLS demonstrations focus on synthetic test cases; practical deployment on domain-specific data remains sparse. The question was whether the quantum-classical hybrid architecture can be validated on an authentic forecasting workflow before hardware scales."
+        },
+        {
+          "h": "Approach",
+          "p": "A Hankel-like trajectory matrix is built from daily closing prices of Reliance Industries (January to April 2023) and decomposed into a Pauli basis. Hadamard test circuits evaluate the VQLS cost function, COBYLA optimizes the variational parameter with 10,000 shots per circuit, and a SWAP test combines the solution with recent market data to give a next-day forecast. All circuits run in Qiskit on the Aer simulator."
+        },
+        {
+          "h": "Result",
+          "p": "The workflow runs end to end and the solution is verified against AR(1) and linear regression baselines. Quantum advantage is not realized at this 2 × 2 scale, and the classical baselines reach equivalent accuracy in negligible time. The paper identifies the scalability bottlenecks: exponential growth of the Pauli decomposition and COBYLA shot overhead."
+        },
+        {
+          "h": "Status",
+          "p": "Published by IEEE, 2026."
+        }
+      ]
+    },
+    {
+      "id": "tensnet",
+      "name": "TensNet: Tensor Networks for 2D Flow Simulation",
+      "blurb": "A tensor network library using MPS and MPO for memory-efficient simulation of 2D incompressible flow.",
+      "abstract": "TensNet is a library implementing tensor network methods, using Matrix Product States (MPS) and Matrix Product Operators (MPO), for memory-efficient simulation of the 2D incompressible Navier–Stokes equations. It keeps solution accuracy through adaptive bond-dimension truncation, uses the DMRG algorithm to solve the implicit pressure-correction equations, and uses cross-approximation to handle complex immersed boundaries, reducing the memory footprint relative to traditional methods.",
+      "tags": [
+        "Tensor networks",
+        "MPS",
+        "DMRG",
+        "CFD"
+      ],
+      "audience": "academic",
+      "featured": false,
+      "sections": [
+        {
+          "h": "Problem",
+          "p": "Computational fluid dynamics simulations demand enormous memory for storing high-resolution velocity fields, which is a barrier to practical simulations on resource-constrained systems."
+        },
+        {
+          "h": "Approach",
+          "p": "TensNet represents flow fields as Matrix Product States and operators as Matrix Product Operators, compressing them by SVD truncation with adaptive bond dimensions. The two-site DMRG algorithm solves the implicit Poisson equations in the pressure-correction scheme, and cross-approximation represents immersed boundaries and obstacle geometries as MPS."
+        },
+        {
+          "h": "Validation",
+          "p": "Benchmarks include a cylinder in cross-flow and arrays of circular obstacles, with drag coefficients and Strouhal numbers compared against reference values."
+        },
+        {
+          "h": "Status",
+          "p": "Manuscript in preparation."
+        }
+      ]
     }
   ],
   "publications": [
+    {
+      "venue": "IEEE",
+      "year": "2026",
+      "title": "Variational Quantum Linear Solver for Time Series Forecasting: A Practical Implementation on Financial Data",
+      "type": "Conference paper",
+      "status": "published",
+      "authors": "S. Siyanwal, B. Kape, C. Pushkarna, K. Islur, T. Kumar, N. Khan, K. Dave",
+      "doi": "",
+      "abstract": "A variational quantum linear solver (VQLS) applied to time series forecasting on real financial market data. Hankel-like trajectory matrices are built from historical Reliance Industries stock prices and the resulting linear system is solved with a quantum-classical hybrid approach: Hadamard test circuits evaluate the cost function, COBYLA optimizes the variational parameters, and a SWAP test extracts the solution to produce next-day price forecasts. Quantum advantage is not realized at this problem scale (2 × 2 system), and classical baselines reach equivalent accuracy; the work establishes a verified pathway for VQLS deployment on NISQ devices and identifies its scalability bottlenecks.",
+      "category": "conference"
+    },
+    {
+      "venue": "",
+      "year": "",
+      "title": "TensNet: Memory-Efficient Tensor Network Methods for 2D Incompressible Flow Simulation",
+      "type": "Manuscript",
+      "status": "manuscript in preparation",
+      "authors": "S. Siyanwal",
+      "doi": "",
+      "abstract": "TensNet is a library implementing tensor network methods, using Matrix Product States (MPS) and Matrix Product Operators (MPO), for memory-efficient simulation of the 2D incompressible Navier–Stokes equations. It keeps solution accuracy through adaptive bond-dimension truncation, uses the DMRG algorithm to solve the implicit pressure-correction equations, and uses cross-approximation to handle complex immersed boundaries, reducing the memory footprint relative to traditional methods.",
+      "category": "manuscript"
+    },
     {
       "venue": "IEEE TQCEBT 2026",
       "year": "2026",
@@ -499,7 +587,7 @@
       "status": "published",
       "authors": "N. Khan, S. Siyanwal, K. Islur, A. Tiwari, H. Gupta",
       "doi": "",
-      "abstract": "A hybrid quantum machine learning approach for 24-day temperature forecasting from daily NCMRWF reanalysis data, using a 7-qubit variational quantum circuit with Strongly Entangling Layers and 50 trainable parameters, trained on a CPU-based quantum simulator. The model improves on the statistical baseline by about 56.5%. Inference with frozen parameters is benchmarked on CPU, GPU and an AMD Alveo U55C FPGA kernel; at batch size 1 the FPGA is about 6.7× faster than the GPU.",
+      "abstract": "A hybrid quantum machine learning approach for 24-day temperature forecasting from daily NCMRWF reanalysis data, using a 7-qubit variational quantum circuit with Strongly Entangling Layers and 50 trainable parameters, trained on a CPU-based quantum simulator, with low-latency inference on an AMD Alveo U55C FPGA kernel.",
       "pages": "1–6",
       "xplore": "11681266",
       "category": "conference"
@@ -659,7 +747,7 @@
     "headline": "Bridging quantum theory and shipped software.",
     "statement": [
       "My work sits at the seam between quantum information research and production engineering. I am interested in the question of what it actually takes to move a quantum algorithm off a whiteboard and onto hardware that runs under real constraints — noise, latency, memory bandwidth, and the unglamorous requirement that it keep working next week.",
-      "That has led me across three connected areas. In variational quantum algorithms and quantum machine learning, I study how circuit structure and data encoding govern trainability and expressivity, and how hybrid pipelines perform on real forecasting tasks. In quantum hardware acceleration, I compile trained quantum kernels down to FPGA fabric, where running about 6.7× faster than a GPU baseline at batch size 1 is a systems-engineering result as much as a quantum one. In photonic quantum networks, I simulate QKD protocols over lossy channels and analyse their security against realistic attacks.",
+      "That has led me across three connected areas. In variational quantum algorithms and quantum machine learning, I study how circuit structure and data encoding govern trainability and expressivity, and how hybrid pipelines perform on real forecasting tasks. In quantum hardware acceleration, I compile trained quantum kernels down to FPGA fabric for low-latency inference, which is a systems-engineering problem as much as a quantum one. In photonic quantum networks, I simulate QKD protocols over lossy channels and analyse their security against realistic attacks.",
       "What connects them is a conviction that quantum computing progresses fastest when research artefacts are built like software — tested, versioned, reproducible, and deployable. I want to keep working where those two cultures meet."
     ],
     "interests": [

@@ -86,19 +86,15 @@ const IMAGE_TABLE = `<details class="fig-data"><summary>Data (Tables 1–2)</sum
       .map(([e, q, d, g]) => `<tr><th scope="row">${e}</th><td>${q}</td><td>${d}</td><td>${g}</td></tr>`).join("")}</tbody>
   </table></details>`;
 
-/* Batch size 1 only (Table III): 499.7 vs 3340.0 µs per sample. Bars share one scale. */
+/* Schematic only: host sends inputs and trained VQC weights to the FPGA kernel via HBM. No numbers. */
 function fpga() {
-  const x0 = 110, k = 480 / 3340;
-  return `<text class="fg-t" x="${x0 - 14}" y="86" text-anchor="end">FPGA</text>` +
-    `<rect class="fg-fill" x="${x0}" y="64" width="${(499.7 * k).toFixed(1)}" height="34" rx="2"/>` +
-    `<text class="fg-s" x="${(x0 + 499.7 * k + 12).toFixed(1)}" y="86">499.7 µs</text>` +
-    `<text class="fg-t" x="${x0 - 14}" y="172" text-anchor="end">GPU</text>` +
-    `<rect class="fg-box" x="${x0}" y="150" width="480" height="34" rx="2"/>` +
-    `<text class="fg-s" x="${x0 + 12}" y="172">3340.0 µs (about 6.7× slower)</text>` +
-    arrow(x0, 214, x0 + 480, 214) + `<text class="fg-s" x="${x0}" y="236">per-sample inference latency, batch size 1</text>` +
-    box(20, 280, 120, 46, "host") + arrow(140, 303, 196, 303) +
-    box(198, 280, 220, 46, "VQC kernel (HLS)", "fg-hbox") + arrow(418, 303, 474, 303) +
-    box(476, 280, 144, 46, "Alveo U55C");
+  return box(24, 150, 150, 60, "host") +
+    `<text class="fg-s" x="99" y="232" text-anchor="middle">inputs + VQC weights</text>` + arrow(174, 180, 250, 180) +
+    `<text class="fg-s" x="212" y="168" text-anchor="middle">HBM</text>` +
+    `<rect class="fg-box" x="252" y="96" width="364" height="168" rx="4"/>` +
+    `<text class="fg-s" x="268" y="122">AMD Alveo U55C FPGA</text>` +
+    box(300, 150, 268, 60, "VQC kernel (Vitis HLS)", "fg-hbox") +
+    `<text class="fg-s" x="434" y="244" text-anchor="middle">low-latency inference</text>`;
 }
 
 function qkd(uid) {
@@ -129,7 +125,7 @@ const FIGS = {
   nmr: [nmr, "Schematic. The six SLOCC classes of three-qubit pure states that the ANN distinguishes, and the reduction from 128 density-matrix elements to 18 ANOVA-ranked inputs."],
   weather: [weather, "Schematic. Illustrative temperature series with a classical baseline and a variational-circuit forecast; not data from the paper."],
   image: [image, "Circuit resources of four quantum image encodings for 16×16 images: qubit count against circuit depth on a log scale. Data from Tables 1–2 of the J. Supercomputing paper.", IMAGE_TABLE],
-  fpga: [fpga, "Per-sample inference latency at batch size 1, FPGA kernel vs CUDA-accelerated PyTorch on a GPU, from Table III of the TQCEBT 2026 paper."],
+  fpga: [fpga, "Schematic. The trained variational circuit runs as a custom HLS kernel on an AMD Alveo U55C FPGA, exchanging data with the host over HBM."],
   qkd: [qkd, "Schematic. Protocol layouts for DPS, COW and twin-field QKD studied at TCG CREST."],
 };
 

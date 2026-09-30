@@ -110,7 +110,7 @@ a stray comma is the only thing that can break the site.
   "abstract": "Opening paragraph on the project page.",
   "role": "Your role on the work.",
   "sections": [ { "h": "Problem", "p": "..." }, { "h": "Approach", "p": "..." } ],
-  "metrics": [ { "value": "6.7×", "label": "vs GPU" } ],
+  "metrics": [ { "value": "4", "label": "Image encodings" } ],
   "tags": ["Qiskit", "FPGA"],
   "audience": "industry",
   "links": [ { "label": "Code", "url": "https://github.com/..." } ],

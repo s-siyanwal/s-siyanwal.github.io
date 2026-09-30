@@ -633,6 +633,7 @@ a.card:hover h3 { color: var(--accent); }
 .chip-cat--preprint { --c: var(--chip-preprint); --cb: var(--chip-preprint-bg); }
 .chip-cat--poster { --c: var(--chip-poster); --cb: var(--chip-poster-bg); }
 .chip-cat--thesis { --c: var(--chip-thesis); --cb: var(--chip-thesis-bg); }
+.chip-cat--manuscript { --c: var(--chip-preprint); --cb: var(--chip-preprint-bg); }
 .chip-cat--presentation { --c: var(--chip-poster); --cb: var(--chip-poster-bg); }
 
 .pub-group + .pub-group { margin-top: var(--gap); }

@@ -125,6 +125,7 @@ export const CATEGORIES = [
   ["conference", "Conference papers", "Conference"],
   ["preprint", "Preprints", "Preprint"],
   ["thesis", "Theses", "Thesis"],
+  ["manuscript", "Manuscripts in preparation", "Manuscript"],
   ["presentation", "Presentations", "Presentation"],
   ["poster", null, "Poster"],
 ];
