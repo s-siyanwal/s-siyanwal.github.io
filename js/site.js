@@ -63,16 +63,16 @@ export function mountFooter(data) {
   const p = data.profile || {};
   const f = $("footer-slot");
   if (!f) return;
-  const links = (p.profiles || []).filter((x) => x.primary).map((x) =>
-    `<a href="${esc(x.url)}"${x.id === "email" ? "" : ' target="_blank" rel="noopener"'}>${esc(x.label)}</a>`).join("");
+  const links = (p.profiles || []).filter((x) => x.primary && x.url).map((x) =>
+    `<a href="${esc(x.url)}"${x.url.startsWith("mailto:") ? "" : ' target="_blank" rel="noopener"'}>${esc(x.label)}</a>`).join("");
   f.innerHTML = `
-    <div class="wrap footer-grid">
+    <div class="wrap"><div class="panel footer-grid">
       <div>
         <p class="footer-name">${esc(p.name)}</p>
         <p class="footer-loc">${esc(p.location || "")}</p>
       </div>
       <div class="footer-links">${links}</div>
-    </div>`;
+    </div></div>`;
 }
 
 /* ---------- Scroll reveal (respects reduced motion) ---------- */
@@ -118,3 +118,67 @@ export const projectHref = (id) => document.documentElement.hasAttribute("data-b
   : `project.html?id=${encodeURIComponent(id)}`;
 
 export const audLabel = { academic: "Research", industry: "Engineering", both: "Research + Engineering" };
+
+/* ---------- Citations: built only from stored fields ---------- */
+export const CATEGORIES = [
+  ["journal", "Journal articles", "Journal"],
+  ["conference", "Conference papers", "Conference"],
+  ["preprint", "Preprints", "Preprint"],
+  ["thesis", "Theses", "Thesis"],
+  ["manuscript", "Manuscripts in preparation", "Manuscript"],
+  ["presentation", "Presentations", "Presentation"],
+  ["poster", null, "Poster"],
+];
+/* Posters list under Presentations, as in the CV. */
+export const groupOf = (p) => (p.category === "poster" ? "presentation" : p.category);
+const catLabel = Object.fromEntries(CATEGORIES.map(([k, , one]) => [k, one]));
+export const chip = (cat) => cat && catLabel[cat]
+  ? `<span class="chip-cat chip-cat--${cat}">${catLabel[cat]}</span>` : "";
+
+/* His name in <strong>; an equal-contribution star in the accent-2 hue. */
+export function authorsHtml(authors = "") {
+  return authors.split(/,\s*/).map((a) => {
+    const star = a.endsWith("*");
+    const name = esc(star ? a.slice(0, -1) : a);
+    const shown = /Siyanwal/.test(a) ? `<strong>${name}</strong>` : name;
+    return shown + (star ? '<span class="eq">*</span>' : "");
+  }).join(", ");
+}
+
+export function venueHtml(p) {
+  const bits = [p.venue && `<em>${esc(p.venue)}</em>`];
+  if (p.volume) bits.push(`${esc(p.volume)}${p.issue ? `(${esc(p.issue)})` : ""}${p.article ? `, ${esc(p.article)}` : ""}`);
+  if (p.pages) bits.push(`pp. ${esc(p.pages)}`);
+  bits.push(esc(p.year || ""));
+  return bits.filter(Boolean).join(", ");
+}
+
+export function idLinks(p) {
+  const out = [];
+  if (p.doi) out.push(`<a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">doi:${esc(p.doi)}</a>`);
+  if (p.arxiv) out.push(`<a href="https://arxiv.org/abs/${esc(p.arxiv)}" target="_blank" rel="noopener">arXiv:${esc(p.arxiv)}</a>`);
+  if (p.xplore) out.push(`<a href="https://ieeexplore.ieee.org/document/${esc(p.xplore)}" target="_blank" rel="noopener">IEEE Xplore ${esc(p.xplore)}</a>`);
+  return out.join("");
+}
+
+export const EQ_FOOTNOTE = '<p class="footnote"><span class="eq">*</span> Equal contribution.</p>';
+
+/* Research threads are a display grouping of projects, not content. */
+/* Status line for a project: from the publication its `paper` field names. */
+export function projectStatus(pr, pubs) {
+  const pub = pr.paper && (pubs || []).find((x) => x.title === pr.paper);
+  if (!pub) return "Research project (unpublished)";
+  if (pub.category === "manuscript" || /manuscript/i.test(pub.status || "")) return "Manuscript in preparation";
+  const venue = pub.venue || "", year = String(pub.year || "");
+  return `Published · ${venue}${year && !venue.endsWith(year) ? ` ${year}` : ""}`;
+}
+
+export const THREADS = {
+  "nmr-entanglement": ["nmr", "NMR entanglement"],
+  "vqc-fpga": ["weather", "Weather QML · FPGA inference"],
+  "qir-qnn": ["image", "Quantum image classification"],
+  "qkd-testbeds": ["qkd", "QKD protocols"],
+  "qcrypto-circuits": ["qkd", "Quantum cryptography"],
+  "vqls-forecasting": ["vqls", "VQLS forecasting"],
+  "tensnet": ["tensor", "Tensor networks"],
+};

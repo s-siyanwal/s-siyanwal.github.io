@@ -10,10 +10,10 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags } fr
   const p = data.profile || {}, a = data.about || {};
   document.title = `About — ${p.name}`;
 
-  $("about-headline").textContent = a.headline || "About";
   $("about-statement").innerHTML = (a.statement || []).map((par, i) =>
     `<p data-reveal style="--i:${i}">${esc(par)}</p>`).join("");
 
+  if (a.research_interests) $("interests-lede").textContent = a.research_interests; else $("interests-lede").remove();
   $("interests").innerHTML = (a.interests || []).map((it, i) => `
     <div class="interest" data-reveal style="--i:${i % 2}">
       <h3>${esc(it.title)}</h3>
@@ -57,8 +57,8 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags } fr
     `<li>${esc(x.title)}${x.year ? ` <span class="yr">${esc(x.year)}</span>` : ""}</li>`).join("");
 
   // Profiles
-  $("about-profiles").innerHTML = (p.profiles || []).filter((x) => x.primary).map((x) => `
-    <a class="profile-link" href="${esc(x.url)}"${x.id === "email" ? "" : ' target="_blank" rel="noopener"'}>
+  $("about-profiles").innerHTML = (p.profiles || []).filter((x) => x.primary && x.url).map((x) => `
+    <a class="profile-link" href="${esc(x.url)}"${x.url.startsWith("mailto:") ? "" : ' target="_blank" rel="noopener"'}>
       <span class="profile-label">${esc(x.label)}</span>
       <span class="profile-handle">${esc(x.handle)}</span>
       <span class="profile-go" aria-hidden="true">↗</span>

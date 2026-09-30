@@ -1,4 +1,5 @@
-import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, audLabel, projectHref } from "./site.js";
+import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, audLabel, projectHref, THREADS, projectStatus } from "./site.js";
+import { figuresFor } from "./figures.js";
 
 (async function () {
   let data;
@@ -14,31 +15,33 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, aud
 
   if (!pr) {
     $("proj").innerHTML = `
-      <div class="wrap narrow" style="padding:4rem 0">
+      <div class="wrap narrow page-head"><div class="panel">
         <p class="eyebrow">Not found</p>
         <h1>That project doesn't exist</h1>
         <p class="lede">Pick one from the list below.</p>
         <ul class="plain-list">${projects.map((x) =>
           `<li><a href="${projectHref(x.id)}">${esc(x.name)}</a></li>`).join("")}</ul>
-      </div>`;
+      </div></div>`;
     return;
   }
 
   document.title = `${pr.name} — ${data.profile.name}`;
 
+  const [th, thread] = THREADS[pr.id] || ["", audLabel[pr.audience] || "Project"];
   const liveLinks = (pr.links || []).filter((l) => l.url);
   const idx = projects.indexOf(pr);
   const prev = projects[idx - 1], next = projects[idx + 1];
 
   $("proj").innerHTML = `
     <header class="page-head">
-      <div class="wrap narrow">
-        <a class="backlink" href="index.html#projects">← All projects</a>
-        <p class="eyebrow">${esc(audLabel[pr.audience] || "Project")}</p>
+      <div class="wrap narrow"><div class="panel">
+        <a class="backlink" href="index.html#projects">← All threads</a>
+        <p class="eyebrow">${esc(thread)}</p>
         <h1>${esc(pr.name)}</h1>
         <p class="lede">${esc(pr.blurb || "")}</p>
         <dl class="meta-block">
           ${pr.role ? `<div><dt>Role</dt><dd>${esc(pr.role)}</dd></div>` : ""}
+          <div><dt>Status</dt><dd>${esc(projectStatus(pr, data.publications))}</dd></div>
           <div><dt>Track</dt><dd>${esc(audLabel[pr.audience] || "Project")}</dd></div>
           ${(pr.tags || []).length ? `<div><dt>Topics</dt><dd>${esc(pr.tags.slice(0, 4).join(" · "))}</dd></div>` : ""}
         </dl>
@@ -46,12 +49,13 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, aud
           `<div class="detail-metric"><div class="m-val">${esc(m.value)}</div><div class="m-lab">${esc(m.label)}</div></div>`).join("")}</div>` : ""}
         ${liveLinks.length ? `<div class="hero-cta">${liveLinks.map((l) =>
           `<a class="btn" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</div>`
-          : `<p class="mini-note">Repository and paper links coming soon.</p>`}
-      </div>
+          : ""}
+      </div></div>
     </header>
 
-    <div class="wrap narrow prose">
+    <div class="wrap narrow"><div class="panel prose${th ? ` th-${th}` : ""}">
       ${pr.abstract ? `<p class="abstract" data-reveal>${esc(pr.abstract)}</p>` : ""}
+      ${figuresFor(pr.id)}
       ${(pr.sections || []).map((s) => `
         <section class="prose-sec" data-reveal>
           <h2>${esc(s.h)}</h2>
@@ -64,7 +68,7 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, aud
         ${prev ? `<a class="pager-prev" href="${projectHref(prev.id)}"><span>← Previous</span><strong>${esc(prev.name)}</strong></a>` : "<span></span>"}
         ${next ? `<a class="pager-next" href="${projectHref(next.id)}"><span>Next →</span><strong>${esc(next.name)}</strong></a>` : "<span></span>"}
       </nav>
-    </div>`;
+    </div></div>`;
 
   initReveal();
 })();

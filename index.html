@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shivanshu Siyanwal — Quantum Software Engineer</title>
-<meta name="description" content="Shivanshu Siyanwal — Quantum Software Engineer. Hybrid quantum-classical software, quantum machine learning, FPGA-accelerated inference, and photonic quantum networks."/>
-<meta property="og:title" content="Shivanshu Siyanwal — Quantum Software Engineer"/>
-<meta property="og:description" content="Hybrid quantum-classical software, quantum ML, FPGA inference, photonic quantum networks."/>
+<title>Shivanshu Siyanwal — Quantum information and quantum machine learning</title>
+<meta name="description" content="Shivanshu Siyanwal — quantum information and quantum machine learning: NMR entanglement detection, quantum image classification, weather QML, QKD protocols and FPGA inference."/>
+<meta property="og:title" content="Shivanshu Siyanwal — Quantum information and quantum machine learning"/>
+<meta property="og:description" content="Quantum information and quantum machine learning research."/>
 <meta property="og:type" content="website"/>
 <link rel="preload" href="assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href="assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin/>
@@ -19,74 +19,78 @@
 
 <main id="main">
   <header class="hero" id="top">
-    <div class="wrap hero-lead">
-      <p class="eyebrow" id="hero-title"></p>
-      <h1 id="hero-name"></h1>
-      <p class="lede" id="hero-tagline"></p>
-      <p class="hero-now" id="hero-now"></p>
-      <div class="hero-cta" id="hero-cta"></div>
-      <p class="hero-avail" id="hero-avail"></p>
-    </div>
-    <div class="wrap hero-instrument">
-      <div class="hero-circuit" id="hero-circuit"></div>
-      <div class="glance" id="glance"></div>
-    </div>
-    <div class="wrap hero-grid">
-      <div class="hero-more">
-        <p class="hero-summary" id="hero-summary"></p>
+    <div class="wrap">
+      <div class="panel hero-panel">
+        <img class="portrait" src="assets/portrait.jpg" width="148" height="185" alt="Portrait of Shivanshu Siyanwal" loading="eager" decoding="async"/>
+        <div class="hero-lead">
+          <h1 id="hero-name"></h1>
+          <p class="research-line" id="hero-title"></p>
+          <p class="hero-tagline" id="hero-tagline"></p>
+          <p class="hero-now" id="hero-now"></p>
+          <div class="hero-cta" id="hero-cta"></div>
+          <p class="hero-avail" id="hero-avail"></p>
+        </div>
+        <aside class="hero-side" aria-label="Profiles and links">
+          <div class="profiles" id="profiles"></div>
+        </aside>
       </div>
-      <aside class="hero-side" aria-label="Profiles and links">
-        <div class="profiles" id="profiles"></div>
-      </aside>
+    </div>
+    <div class="wrap">
+      <div class="panel hero-instrument">
+        <div class="hero-circuit" id="hero-circuit"></div>
+        <div class="glance" id="glance"></div>
+      </div>
     </div>
   </header>
 
-  <section id="work" class="section" aria-labelledby="work-h">
-    <div class="wrap">
+  <section id="papers" class="section" aria-labelledby="pap-h">
+    <div class="wrap"><div class="panel">
       <div class="section-head" data-reveal>
-        <h2 id="work-h">Experience</h2>
-        <p class="section-note">Roles across quantum research labs and production R&amp;D. Select an entry to expand.</p>
+        <h2 id="pap-h">Selected papers</h2>
       </div>
-      <div class="stack" id="work-list"></div>
-    </div>
+      <ol class="cites" id="paper-list"></ol>
+      <div id="paper-foot"></div>
+      <p class="section-foot"><a href="publications.html">All papers, posters and talks →</a></p>
+    </div></div>
   </section>
 
-  <section id="projects" class="section section--tint" aria-labelledby="proj-h">
-    <div class="wrap">
-      <div class="section-head section-head--row" data-reveal>
-        <div>
-          <h2 id="proj-h">Selected Projects</h2>
-          <p class="section-note">Research and engineering work with measurable results. Each opens a full write-up.</p>
-        </div>
-        <div class="filter" role="group" aria-label="Filter projects by audience">
+  <section id="projects" class="section" aria-labelledby="proj-h">
+    <div class="wrap"><div class="panel">
+      <div class="section-head" data-reveal>
+        <h2 id="proj-h">Research threads</h2>
+        <p class="section-note">Each thread opens a full write-up with a schematic.</p>
+        <div class="filter" role="group" aria-label="Filter threads by track">
           <button class="filter-btn is-active" data-filter="all" aria-pressed="true">All</button>
           <button class="filter-btn" data-filter="academic" aria-pressed="false">Research</button>
           <button class="filter-btn" data-filter="industry" aria-pressed="false">Engineering</button>
         </div>
       </div>
       <div class="cards" id="projects-list"></div>
-    </div>
+    </div></div>
   </section>
 
-  <section id="publications" class="section" aria-labelledby="pub-h">
-    <div class="wrap">
-      <div class="section-head section-head--row" data-reveal>
-        <div>
-          <h2 id="pub-h">Recent Publications</h2>
-          <p class="section-note">Most recent of <span id="pub-count"></span> entries.</p>
-        </div>
-        <a class="btn" href="publications.html">All publications →</a>
+  <section id="work" class="section" aria-labelledby="work-h">
+    <div class="wrap"><div class="panel">
+      <div class="section-head" data-reveal>
+        <h2 id="work-h">Experience</h2>
+        <p class="section-note">Research labs and R&amp;D roles. Select an entry to expand.</p>
       </div>
-      <ol class="pubs" id="pub-preview"></ol>
-    </div>
+      <div class="stack" id="work-list"></div>
+    </div></div>
   </section>
 
-  <section class="section section--tint cta-band" aria-labelledby="cta-h">
-    <div class="wrap narrow center" data-reveal>
-      <h2 id="cta-h">Read the research statement</h2>
-      <p class="section-note center-note">A fuller account of what I work on, why, and where I want to take it next.</p>
-      <p><a class="btn btn--primary" href="about.html">About &amp; research interests →</a></p>
-    </div>
+  <section id="education" class="section" aria-labelledby="edu-h">
+    <div class="wrap"><div class="panel">
+      <div class="section-head" data-reveal><h2 id="edu-h">Education</h2></div>
+      <div class="mini-list" id="education-list"></div>
+    </div></div>
+  </section>
+
+  <section id="awards" class="section" aria-labelledby="aw-h">
+    <div class="wrap"><div class="panel">
+      <div class="section-head" data-reveal><h2 id="aw-h">Awards and certifications</h2></div>
+      <ul class="awards" id="awards-list"></ul>
+    </div></div>
   </section>
 </main>
 

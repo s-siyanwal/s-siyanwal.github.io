@@ -199,7 +199,7 @@ Include ONLY items you can actually find. Omit any array that has nothing new.
   "education":    [{{"school":"","degree":"","location":"","period":"","note":""}}],
   "awards":       [{{"title":"","year":""}}],
   "skills":       [{{"category":"","items":[""]}}],
-  "profile":      {{"name":"","title":"","location":"","email":"","phone":"","summary":""}}
+  "profile":      {{"name":"","title":"","location":"","email":"","summary":""}}
 }}
 
 Rules:
@@ -373,11 +373,12 @@ def merge(current, new):
             added += 1
     stats["skills"] = (added, 0)
 
-    # Profile: only fill genuinely empty fields; never overwrite your wording
+    # Profile: only fill genuinely empty fields; never overwrite your wording.
+    # The phone number is never ingested: the site must not publish it.
     prof = current.setdefault("profile", {})
     np = new.get("profile") or {}
     pu = 0
-    for f in ("name", "title", "location", "email", "phone"):
+    for f in ("name", "title", "location", "email"):
         if np.get(f) and not prof.get(f):
             prof[f] = np[f]
             pu += 1

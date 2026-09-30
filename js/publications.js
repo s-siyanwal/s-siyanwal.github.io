@@ -1,4 +1,4 @@
-import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal } from "./site.js";
+import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, CATEGORIES, groupOf, chip, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE } from "./site.js";
 
 (async function () {
   let data;
@@ -12,46 +12,29 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal } from "./
   const pubs = (data.publications || []).slice()
     .sort((a, b) => (b.year || "").localeCompare(a.year || ""));
 
+  const groups = CATEGORIES.filter(([, heading]) => heading)
+    .map(([k, heading]) => [k, heading, pubs.filter((p) => groupOf(p) === k)])
+    .filter(([, , list]) => list.length);
   $("pub-lede").textContent =
-    `${pubs.length} entries across journals, conferences, and posters in quantum machine learning, quantum cryptography, and NMR quantum computing.`;
+    "Papers, preprints, posters and talks in quantum machine learning, NMR quantum computing and tensor-network simulation, grouped by type.";
 
-  // Type filter buttons, derived from data
-  const types = [...new Set(pubs.map((p) => p.type).filter(Boolean))];
-  $("pub-filter").innerHTML =
-    `<button class="filter-btn is-active" data-t="all" aria-pressed="true">All</button>` +
-    types.map((t) => `<button class="filter-btn" data-t="${esc(t)}" aria-pressed="false">${esc(t)}s</button>`).join("");
-
-  $("pub-list").innerHTML = pubs.map((p, i) => {
-    const doi = p.doi ? `<a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">DOI ↗</a>` : "";
-    const bib = `<button type="button" class="bib-btn" data-i="${i}" aria-label="Copy BibTeX for ${esc(p.title)}">Copy BibTeX</button>`;
-    return `
-    <li class="pubcard" data-t="${esc(p.type || "")}" data-reveal style="--i:${i % 3}">
-      <div class="pubcard-top">
-        <span class="pub-year">${esc(p.year || "")}</span>
-        <span class="pub-type">${esc(p.type || "")}</span>
-      </div>
-      <h2 class="pubcard-title">${esc(p.title)}</h2>
-      <p class="pubcard-meta">
-        <span class="pub-venue">${esc(p.venue)}</span>
-        ${p.authors ? ` · ${esc(p.authors)}` : ""}
-        ${p.status ? ` · <span class="pub-status">${esc(p.status)}</span>` : ""}
-      </p>
-      ${p.abstract ? `<p class="pubcard-abstract">${esc(p.abstract)}</p>` : ""}
-      <div class="pubcard-links">${doi}${bib}<span class="bib-status" role="status"></span></div>
-    </li>`;
-  }).join("");
-
-  $("pub-filter").addEventListener("click", (e) => {
-    const btn = e.target.closest(".filter-btn");
-    if (!btn) return;
-    const t = btn.dataset.t;
-    $("pub-filter").querySelectorAll(".filter-btn").forEach((b) => {
-      const on = b === btn; b.classList.toggle("is-active", on); b.setAttribute("aria-pressed", on);
-    });
-    document.querySelectorAll(".pubcard").forEach((c) => {
-      c.classList.toggle("is-hidden", !(t === "all" || c.dataset.t === t));
-    });
-  });
+  $("pub-list").innerHTML = groups.map(([k, heading, list]) => `
+    <section class="pub-group" aria-labelledby="g-${k}">
+      <h2 id="g-${k}">${heading}</h2>
+      <ol class="cites">${list.map((p) => {
+        const i = pubs.indexOf(p);
+        return `
+        <li class="cite" data-reveal>
+          <div class="cite-head">${chip(p.category)}<span class="cite-year">${esc(p.year || "")}</span></div>
+          <h3 class="cite-title">${esc(p.title)}</h3>
+          <p class="cite-authors">${authorsHtml(p.authors)}</p>
+          <p class="cite-venue">${venueHtml(p)}</p>
+          ${p.abstract ? `<p class="cite-result">${esc(p.abstract)}</p>` : ""}
+          ${p.note ? `<p class="cite-note">${esc(p.note)}</p>` : ""}
+          <div class="ids">${idLinks(p)}${groupOf(p) === "presentation" ? "" : `<button type="button" class="bib-btn" data-i="${i}" aria-label="Copy BibTeX for ${esc(p.title)}">Copy BibTeX</button><span class="bib-status" role="status"></span>`}</div>
+        </li>`;
+      }).join("")}</ol>
+    </section>`).join("") + (pubs.some((p) => p.equal_contribution) ? EQ_FOOTNOTE : "");
 
   $("pub-list").addEventListener("click", async (e) => {
     const btn = e.target.closest(".bib-btn");
@@ -68,10 +51,10 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal } from "./
 
 /* BibTeX built only from stored fields; nothing is guessed. */
 function bibtex(p) {
-  const kind = { "Journal article": "article", "Conference paper": "inproceedings" }[p.type] || "misc";
-  const venueField = { article: "journal", inproceedings: "booktitle", misc: "howpublished" }[kind];
+  const kind = { journal: "article", conference: "inproceedings", thesis: "mastersthesis" }[p.category] || "misc";
+  const venueField = { article: "journal", inproceedings: "booktitle", mastersthesis: "school", misc: "howpublished" }[kind];
   const clean = (s) => String(s || "").replace(/[{}]/g, "");
-  const names = clean(p.authors).replace(/\s*et al\.?/i, "").split(/,|\band\b/)
+  const names = clean(p.authors).replace(/\*/g, "").replace(/\s*et al\.?/i, "").split(/,|\band\b/)
     .map((s) => s.trim()).filter(Boolean);
   const author = names.join(" and ") + (/et al/i.test(p.authors || "") ? " and others" : "");
   const surname = (names[0] || "anon").split(/[\s.]+/).filter(Boolean).pop().toLowerCase().replace(/[^a-z]/g, "");
@@ -80,8 +63,13 @@ function bibtex(p) {
     ["title", p.title && `{${clean(p.title)}}`],
     ["author", author],
     [venueField, clean(p.venue)],
+    ["type", kind === "mastersthesis" && clean(p.type)],
     ["year", clean(p.year)],
+    ["volume", clean(p.volume)],
+    ["number", clean(p.issue)],
+    ["pages", clean(p.article || p.pages).replace("–", "--")],
     ["doi", clean(p.doi)],
+    ["eprint", clean(p.arxiv)],
     ["note", clean(p.status)],
   ].filter(([, v]) => v).map(([k, v]) => `  ${k} = {${v}}`);
   return `@${kind}{${surname}${p.year || ""}${word},\n${fields.join(",\n")}\n}`;

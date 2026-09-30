@@ -99,9 +99,15 @@ def test_profile_fields_never_overwritten(cur):
 
 
 def test_profile_empty_field_is_filled(cur):
+    cur["profile"]["location"] = ""
+    ingest.merge(cur, {"profile": {"location": "Example City"}})
+    assert cur["profile"]["location"] == "Example City"
+
+
+def test_profile_phone_is_never_ingested(cur):
     cur["profile"]["phone"] = ""
     ingest.merge(cur, {"profile": {"phone": "+00 123"}})
-    assert cur["profile"]["phone"] == "+00 123"
+    assert cur["profile"]["phone"] == ""
 
 
 # ------------------------------------------------------------------ sorting
