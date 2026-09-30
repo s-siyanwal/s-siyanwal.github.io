@@ -18,6 +18,9 @@ import { mountCircuit } from "./circuit.js";
   $("hero-name").textContent = p.name;
   $("hero-tagline").textContent = p.tagline || "";
   $("hero-summary").textContent = p.summary || "";
+  const now = (data.experience || []).find((e) => e.current);
+  if (now) $("hero-now").innerHTML = `<span class="hero-now-k">Now</span> ${esc(now.role)} · ${esc(now.org)}`;
+  else $("hero-now")?.remove();
   if (p.availability) $("hero-avail").textContent = p.availability;
   else $("hero-avail")?.remove();
 
@@ -41,7 +44,7 @@ import { mountCircuit } from "./circuit.js";
   $("profiles").innerHTML = (p.profiles || []).filter((x) => x.primary).map((x) => `
     <a class="profile-link" href="${esc(x.url)}"${x.id === "email" ? "" : ' target="_blank" rel="noopener"'}>
       <span class="profile-label">${esc(x.label)}</span>
-      <span class="profile-handle">${esc(x.handle)}</span>
+      <span class="profile-handle">${esc(x.handle).replace("@", "@<wbr>")}</span>
       <span class="profile-go" aria-hidden="true">↗</span>
     </a>`).join("");
 

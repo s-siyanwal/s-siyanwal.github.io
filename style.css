@@ -121,6 +121,14 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; letter-spacing: -0.0
 }
 .topbar-nav a:hover { color: var(--accent); }
 .topbar-cv { color: var(--accent-ink) !important; font-weight: 500; }
+/* Narrow screens: nav drops to its own full-width row instead of scrolling off-screen unseen. */
+@media (max-width: 639px) {
+  .topbar { position: static; height: auto; backdrop-filter: none; }
+  .topbar-inner { flex-wrap: wrap; row-gap: .15rem; padding-top: .6rem; padding-bottom: .55rem; }
+  .topbar-nav { order: 3; flex: 1 0 100%; margin-left: 0; flex-wrap: wrap; overflow: visible; row-gap: .35rem; }
+  .topbar-nav a { padding: .35rem 0; }
+  html { scroll-padding-top: 12px; }
+}
 
 /* ---------------- Hero ---------------- */
 .hero { padding: clamp(2.4rem, 6vw, 4.2rem) 0 clamp(2rem, 5vw, 3.4rem); border-bottom: 1px solid var(--rule); }
@@ -147,6 +155,12 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; letter-spacing: -0.0
   padding: .55rem .8rem; max-width: 52ch;
 }
 .hero-cta { display: flex; flex-wrap: wrap; gap: .6rem; }
+.hero-lead .hero-avail { margin-top: 1.1rem; }
+.hero-now { margin: -.4rem 0 1.3rem; font-size: .95rem; color: var(--ink-soft); max-width: 60ch; }
+.hero-now-k {
+  font-family: var(--mono); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--accent-ink); margin-right: .45rem;
+}
 .btn {
   font-family: var(--mono); font-size: .8rem; letter-spacing: .02em; text-decoration: none;
   padding: .62rem 1.05rem; border: 1px solid var(--ink); color: var(--ink); background: transparent;
@@ -170,7 +184,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; letter-spacing: -0.0
 }
 .profile-link:hover { background: var(--accent-soft); }
 .profile-label { font-family: var(--mono); font-size: .78rem; letter-spacing: .02em; }
-.profile-handle { font-size: .82rem; color: var(--ink-faint); text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 55%; }
+.profile-handle { font-size: .82rem; color: var(--ink-faint); text-align: right; overflow-wrap: anywhere; max-width: 70%; }
 .profile-link:hover .profile-handle { color: var(--accent-ink); }
 
 /* ---------------- Sections ---------------- */
@@ -345,11 +359,14 @@ html.js .glance [data-reveal] { transform: none; }
 .hero-lead > .eyebrow      { animation-delay: .05s; }
 .hero-lead > h1            { animation-delay: .13s; }
 .hero-lead > .lede         { animation-delay: .21s; }
+.hero-lead > .hero-now     { animation-delay: .25s; }
 .hero-lead > .hero-cta     { animation-delay: .29s; }
+.hero-lead > .hero-avail   { animation-delay: .33s; }
 @media (prefers-reduced-motion: reduce) { .hero-lead > * { animation: none; } }
 
 /* ---------- Signature: circuit as CV ---------- */
 .hero-instrument { display: grid; gap: 1.2rem; margin-top: clamp(1.8rem, 4vw, 2.8rem); }
+@media (max-width: 959px) { .hero-instrument .glance { order: -1; } }
 @media (min-width: 960px) {
   .hero-instrument { grid-template-columns: 1fr 15rem; align-items: center; gap: 0; }
   .hero-instrument .glance { grid-column: 2; grid-row: 1 / span 2; }
@@ -358,6 +375,8 @@ html.js .glance [data-reveal] { transform: none; }
 .hero-circuit { min-width: 0; }
 .qc { width: 100%; height: auto; display: block; overflow: visible; }
 .qc-lbl   { font-family: var(--mono); font-size: 11px; letter-spacing: .01em; fill: var(--ink-soft); }
+/* Labels sit above the CNOT layer on a bg-coloured pad so the verticals never cross the text. */
+.qc-pad { fill: var(--bg); }
 .qc-wire  { stroke: var(--ink-faint); stroke-width: 1; }
 .qc-feed  { fill: none; stroke: var(--ink-faint); stroke-width: .8; }
 .qc-ket   { font-family: var(--mono); font-size: 10px; fill: var(--ink-soft); }
@@ -394,19 +413,20 @@ html.js .glance [data-reveal] { transform: none; }
 
 /* Live layer: only with JS, only when motion is welcome, only while on screen. */
 @media (prefers-reduced-motion: no-preference) {
-  html.js .hero.is-live .qc-packet { display: block; animation: packet 6.4s linear infinite; }
-  html.js .hero.is-live .qc-phase { animation: phase 6.4s linear infinite; }
-  html.js .hero.is-live .qc-g { animation: gateOn 6.4s linear infinite; animation-delay: var(--d, 0s); }
+  html.js .hero.is-live .qc-packet { display: block; animation: packet 6.4s linear 1 both; }
+  html.js .hero.is-live.is-done .qc-packet { display: none; }
+  html.js .hero.is-live .qc-phase { animation: phase 6.4s linear 1 both; }
+  html.js .hero.is-live .qc-g { animation: gateOn 6.4s linear 1; animation-delay: var(--d, 0s); }
   html.js .hero.is-live .glance .stat::after { animation: ping 300ms var(--ease-out) var(--ping, 5.4s) both; }
   html.js .hero.is-paused * { animation-play-state: paused !important; }
   html.js .hero.is-live .qc-pause { display: inline-flex; }
   .qc.has-near .qc-row, .qc.has-near .qc-multi { opacity: .6; }
   .qc.has-near .qc-row.is-near { opacity: 1; }
-  .qc-row.is-near .qc-lbl { fill: var(--ink); }
+  .qc-lbl.is-near { fill: var(--ink); }
   .qc-row.is-near .qc-wire { stroke: var(--ink); }
   .qc-row.is-near .qc-g { transform: scale(1.06); }
 }
-@keyframes packet { from { transform: translateX(0); } to { transform: translateX(calc(var(--qc-w) + 56px)); } }
+@keyframes packet { from { transform: translateX(0); } to { transform: translateX(calc(var(--qc-w) + var(--qc-pw))); } }
 @keyframes phase { 0%, 35% { stop-color: var(--accent); } 70%, 100% { stop-color: var(--accent-2); } }
 @keyframes gateOn { 0%, 100% { opacity: 1; } 3% { opacity: .55; } 9% { opacity: 1; } }
 @keyframes ping { from { transform: scaleX(0); } to { transform: scaleX(1); } }

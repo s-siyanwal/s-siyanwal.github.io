@@ -15,6 +15,8 @@ const PATTERN = [ // [column, wire, gate, target] for CNOT; [column, wire, gate,
   [4, 0, "RY", 1, 2], [4, 2, "cnot", 3],
   [5, 0, "cnot", 2], [5, 4, "RX", 1, 3],
 ];
+// Band values per digital-artist; the sweep runs once on load, then rests until Play.
+const PACKET = { width: 36, opacity: 0.28 };
 const DUR = 6.4; // seconds per sweep; keep in step with the .qc-packet animation
 
 // Statevector simulation of H on every wire then PATTERN; returns each qubit's
@@ -91,7 +93,7 @@ export function mountCircuit(host, labels, tiles) {
   motionQ.addEventListener("change", live);
 
   // WCAG 2.2.2: a loop longer than 5 s needs a user pause; nothing animates off-screen either.
-  let offscreen = false, held = false;
+  let offscreen = false, held = false, done = false;
   const sync = () => hero.classList.toggle("is-paused", offscreen || held);
   // Reuse the prerendered button so the build output and live page don't both add one.
   let btn = host.parentNode.querySelector(".qc-pause");
@@ -102,10 +104,22 @@ export function mountCircuit(host, labels, tiles) {
     host.after(btn);
   }
   const label = () => {
-    btn.setAttribute("aria-pressed", String(held));
-    btn.textContent = held ? "Play motion" : "Pause motion";
+    btn.setAttribute("aria-pressed", String(held || done));
+    btn.textContent = held || done ? "Play motion" : "Pause motion";
   };
-  btn.addEventListener("click", () => { held = !held; label(); sync(); });
+  host.addEventListener("animationend", (e) => {
+    if (e.animationName !== "packet") return;
+    done = true; hero.classList.add("is-done"); label();
+  });
+  btn.addEventListener("click", () => {
+    if (done) {
+      done = false;
+      hero.classList.remove("is-done", "is-live");
+      void hero.offsetWidth; // restart the one-shot sweep
+      hero.classList.add("is-live");
+    } else held = !held;
+    label(); sync();
+  });
   label();
   if ("IntersectionObserver" in window) {
     new IntersectionObserver(([en]) => { offscreen = !en.isIntersecting; sync(); }).observe(host);
@@ -123,6 +137,7 @@ export function mountCircuit(host, labels, tiles) {
     });
     s.classList.add("has-near");
     rows.forEach((row, i) => row.classList.toggle("is-near", i === best));
+    s.querySelectorAll("text.qc-lbl").forEach((t, i) => t.classList.toggle("is-near", i === best));
   });
   host.addEventListener("pointerleave", () => {
     const s = host.firstElementChild;
@@ -146,12 +161,13 @@ function svg(names, W) {
   const proj = ([bx, by, bz]) => [R * (bx * sa + by * ca), R * (-bz + 0.35 * (bx * ca - by * sa))].map((v) => +v.toFixed(2));
   const vecs = blochVectors(n);
 
-  let rows = "", multi = "";
+  let rows = "", multi = "", lbls = "";
   for (let w = 0; w < n; w++) {
     const yy = y(w), xb = col(6), xm = col(7);
     const [vx, vy] = proj(vecs[w]);
+    // Mono at 11px is ~6.6px per glyph; the pad keeps CNOT verticals from crossing the text.
+    lbls += `<rect class="qc-pad" x="${x0 - 2}" y="${yy - 25}" width="${Math.ceil(String(names[w]).length * 6.6) + 4}" height="14" rx="2"/><text class="qc-lbl" x="${x0}" y="${yy - 15}">${esc(names[w])}</text>`;
     rows += `<g class="qc-row" data-y="${yy}">
-<text class="qc-lbl" x="${x0}" y="${yy - 15}">${esc(names[w])}</text>
 <text class="qc-ket" x="${x0}" y="${yy + 3.5}">|0⟩</text>
 <line class="qc-wire" x1="${xs}" y1="${yy}" x2="${xm - 12}" y2="${yy}"/>
 <path class="qc-feed" d="M${xm + 12} ${yy - 1.25}H${W}M${xm + 12} ${yy + 1.25}H${W}"/>
@@ -167,9 +183,9 @@ ${PATTERN.filter((g) => g[1] === w && g[2] !== "cnot").map((g) => rot(col(g[0]),
   });
 
   const label = "Quantum circuit with one wire per focus area: " + names.join(", ");
-  return `<svg class="qc" viewBox="0 0 ${W} ${H}" data-w="${W}" data-mx="${col(7)}" style="--qc-w:${W}px" role="img" aria-label="${esc(label)}" xmlns="http://www.w3.org/2000/svg">
-<defs><linearGradient id="qc-packet-g"><stop class="qc-phase" offset="0" stop-opacity="0"/><stop class="qc-phase" offset=".5" stop-opacity=".55"/><stop class="qc-phase" offset="1" stop-opacity="0"/></linearGradient></defs>
-${rows}<g class="qc-multi">${multi}</g>
-<rect class="qc-packet" x="-56" y="0" width="56" height="${H}" fill="url(#qc-packet-g)"/>
+  return `<svg class="qc" viewBox="0 0 ${W} ${H}" data-w="${W}" data-mx="${col(7)}" style="--qc-w:${W}px;--qc-pw:${PACKET.width}px" role="img" aria-label="${esc(label)}" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="qc-packet-g"><stop class="qc-phase" offset="0" stop-opacity="0"/><stop class="qc-phase" offset=".5" stop-opacity="${PACKET.opacity}"/><stop class="qc-phase" offset="1" stop-opacity="0"/></linearGradient></defs>
+${rows}<g class="qc-multi">${multi}</g><g class="qc-lbls">${lbls}</g>
+<rect class="qc-packet" x="-${PACKET.width}" y="0" width="${PACKET.width}" height="${H}" fill="url(#qc-packet-g)"/>
 </svg>`;
 }
