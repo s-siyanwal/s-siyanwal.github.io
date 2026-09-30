@@ -86,16 +86,31 @@ const IMAGE_TABLE = `<details class="fig-data"><summary>Data (Tables 1–2)</sum
       .map(([e, q, d, g]) => `<tr><th scope="row">${e}</th><td>${q}</td><td>${d}</td><td>${g}</td></tr>`).join("")}</tbody>
   </table></details>`;
 
-/* Schematic only: host sends inputs and trained VQC weights to the FPGA kernel via HBM. No numbers. */
-function fpga() {
-  return box(24, 150, 150, 60, "host") +
-    `<text class="fg-s" x="99" y="232" text-anchor="middle">inputs + VQC weights</text>` + arrow(174, 180, 250, 180) +
-    `<text class="fg-s" x="212" y="168" text-anchor="middle">HBM</text>` +
-    `<rect class="fg-box" x="252" y="96" width="364" height="168" rx="4"/>` +
-    `<text class="fg-s" x="268" y="122">AMD Alveo U55C FPGA</text>` +
-    box(300, 150, 268, 60, "VQC kernel (Vitis HLS)", "fg-hbox") +
-    `<text class="fg-s" x="434" y="244" text-anchor="middle">low-latency inference</text>`;
-}
+/* Schematic from art/assets/figure-fpga.svg (DESIGN.md §6): VQC, FPGA kernel with HBM, edge inference. No numbers. */
+const fpga = (uid) => `<g font-size="16"><defs><marker id="${uid}-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--ink-faint,#4d5b57)"/></marker></defs>
+<g fill="none" stroke="var(--ink-faint,#4d5b57)" stroke-width="1.5">
+<rect x="24" y="96" width="156" height="120" rx="4" stroke="var(--rule-strong,#6f7f7a)"/>
+<path d="M44 128H160M44 156H160M44 184H160"/>
+<path d="M184 156H240" marker-end="url(#${uid}-ah)"/><path d="M424 156H464" marker-end="url(#${uid}-ah)"/><path d="M332 206V250" marker-end="url(#${uid}-ah)"/>
+<path d="M332 250V206" marker-end="url(#${uid}-ah)"/>
+<rect x="468" y="116" width="148" height="80" rx="4" stroke="var(--rule-strong,#6f7f7a)"/>
+<rect x="274" y="254" width="116" height="52" rx="4" stroke="var(--rule-strong,#6f7f7a)"/>
+</g>
+<g fill="var(--th,#94641c)">
+<rect x="66" y="118" width="20" height="20" rx="2"/><rect x="66" y="146" width="20" height="20" rx="2"/><rect x="66" y="174" width="20" height="20" rx="2"/>
+<rect x="116" y="146" width="20" height="20" rx="2"/>
+</g>
+<path d="M126 128V146M126 166V184" stroke="var(--th,#94641c)" stroke-width="2"/>
+<circle cx="126" cy="128" r="4" fill="var(--th,#94641c)"/><circle cx="126" cy="184" r="4" fill="var(--th,#94641c)"/>
+<rect x="244" y="116" width="176" height="80" rx="4" fill="none" stroke="var(--th,#94641c)" stroke-width="2.5"/>
+<g fill="var(--ink,#12201f)" text-anchor="middle">
+<text x="102" y="240">VQC</text>
+<text x="332" y="152">FPGA kernel</text>
+<text x="332" y="174" font-size="14" fill="var(--ink-faint,#4d5b57)">(HLS)</text>
+<text x="332" y="286">HBM</text>
+<text x="542" y="152">edge</text>
+<text x="542" y="174">inference</text>
+</g></g>`;
 
 function qkd(uid) {
   const g = `${uid}-loss`;
@@ -125,7 +140,7 @@ const FIGS = {
   nmr: [nmr, "Schematic. The six SLOCC classes of three-qubit pure states that the ANN distinguishes, and the reduction from 128 density-matrix elements to 18 ANOVA-ranked inputs."],
   weather: [weather, "Schematic. Illustrative temperature series with a classical baseline and a variational-circuit forecast; not data from the paper."],
   image: [image, "Circuit resources of four quantum image encodings for 16×16 images: qubit count against circuit depth on a log scale. Data from Tables 1–2 of the J. Supercomputing paper.", IMAGE_TABLE],
-  fpga: [fpga, "Schematic. The trained variational circuit runs as a custom HLS kernel on an AMD Alveo U55C FPGA, exchanging data with the host over HBM."],
+  fpga: [fpga, "Schematic. A variational quantum circuit (VQC) run as an FPGA kernel with HBM, for edge inference."],
   qkd: [qkd, "Schematic. Protocol layouts for DPS, COW and twin-field QKD studied at TCG CREST."],
 };
 
