@@ -1,7 +1,7 @@
 {
   "profile": {
     "name": "Shivanshu Siyanwal",
-    "title": "Quantum Software Engineer",
+    "title": "Quantum information and quantum machine learning",
     "tagline": "I build hybrid quantum-classical software — from variational algorithms and quantum ML to FPGA-accelerated inference and photonic network simulation.",
     "summary": "Quantum Software Engineer with 4+ years spanning quantum algorithm research and production software. I work across the full stack of quantum computing: variational algorithms (VQE/VQC/VQLS), quantum machine learning, quantum error correction, and photonic quantum networks — and I ship them as tested, deployable software on GPUs, FPGAs, and cloud quantum backends. Published in quantum ML, quantum cryptography, and NMR quantum simulation.",
     "location": "Uttar Pradesh, India",
@@ -66,6 +66,14 @@
         "url": "mailto:shivanshu.siyanwal@gmail.com",
         "primary": true,
         "audience": "both"
+      },
+      {
+        "id": "email-academic",
+        "label": "Academic email",
+        "handle": "shivanshuacademics@gmail.com",
+        "url": "mailto:shivanshuacademics@gmail.com",
+        "primary": true,
+        "audience": "academic"
       }
     ]
   },
@@ -181,7 +189,7 @@
       "org": "Dr. Arpita Maitra, IAI, TCG CREST",
       "role": "Project Junior Research Fellow — Quantum Networks & Linear Optics",
       "location": "Kolkata, India",
-      "period": "Mar 2024 – Sep 2024",
+      "period": "Mar 2024 – Oct 2024",
       "summary": "Simulated linear-optical QKD testbeds with realistic photonic impairments and security analysis.",
       "points": [
         "Designed and simulated linear-optical QKD testbeds (DPS, COW, Twin-Field) in OptiSystem and ANSYS, modelling realistic photonic loss and noise.",
@@ -191,7 +199,10 @@
       "tags": [
         "QKD",
         "Photonics",
-        "OptiSystem"
+        "OptiSystem",
+        "DPS",
+        "COW",
+        "Twin-field QKD"
       ]
     },
     {
@@ -482,44 +493,75 @@
   ],
   "publications": [
     {
-      "venue": "IEEE TQCEBT",
+      "venue": "IEEE TQCEBT 2026",
       "year": "2026",
-      "title": "Hybrid Variational Quantum Circuits based Temperature Forecasting with Low-Latency FPGA Inference",
+      "title": "Hybrid variational quantum circuits based temperature forecasting with low-latency FPGA inference",
       "type": "Conference paper",
-      "status": "accepted",
-      "authors": "S. Siyanwal et al.",
+      "status": "published",
+      "authors": "N. Khan, S. Siyanwal, K. Islur, A. Tiwari, H. Gupta",
       "doi": "",
-      "abstract": "We present a hybrid quantum-classical pipeline for short-horizon temperature forecasting built on a 7-qubit variational quantum circuit, and demonstrate low-latency inference by compiling the trained kernel to an AMD Alveo U55C FPGA using HLS with HBM. The deployment achieves 291.8 µs inference, a 6.7× speedup over GPU execution, while improving forecast accuracy by 56.5% over statistical baselines."
+      "abstract": "We present a hybrid quantum-classical pipeline for short-horizon temperature forecasting built on a 7-qubit variational quantum circuit, and demonstrate low-latency inference by compiling the trained kernel to an AMD Alveo U55C FPGA using HLS with HBM. The deployment achieves 291.8 µs inference, a 6.7× speedup over GPU execution, while improving forecast accuracy by 56.5% over statistical baselines.",
+      "pages": "1–6",
+      "xplore": "11681266",
+      "category": "conference"
     },
     {
-      "venue": "IEEE AI-ML, Bangalore",
+      "venue": "arXiv",
       "year": "2025",
-      "title": "Quantum Machine Learning Models for Enhanced Weather Prediction",
+      "title": "Quantum-assisted machine learning models for enhanced weather prediction",
+      "type": "Preprint",
+      "status": "preprint",
+      "authors": "S. Sakhuja*, S. Siyanwal*, A. Tiwari, Britant, S. Kashyap",
+      "doi": "",
+      "abstract": "",
+      "arxiv": "2503.23408",
+      "equal_contribution": true,
+      "note": "ERA5, Safdarjung; QGRU, QLSTM, QNN, VQC, QSVM.",
+      "category": "preprint"
+    },
+    {
+      "venue": "IEEE AIMLSystems 2025",
+      "year": "2025",
+      "title": "Quantum machine learning models for enhanced weather prediction",
       "type": "Conference paper",
-      "status": "",
-      "authors": "S. Siyanwal et al.",
+      "status": "published",
+      "authors": "A. Tiwari, S. Kumar, P. Tyagi, S. Siyanwal, S. Sakhuja",
       "doi": "",
-      "abstract": "We evaluate a family of quantum machine learning models for weather prediction tasks, comparing variational quantum classifiers and quantum kernel methods against classical baselines on meteorological time-series data."
+      "abstract": "We evaluate a family of quantum machine learning models for weather prediction tasks, comparing variational quantum classifiers and quantum kernel methods against classical baselines on meteorological time-series data.",
+      "pages": "446–451",
+      "xplore": "11330613",
+      "category": "conference"
     },
     {
-      "venue": "Springer Nature",
-      "year": "2025",
-      "title": "Quantum Image Representations based Quantum Neural Networks for Binary Classification",
-      "type": "Journal article",
-      "status": "under review",
-      "authors": "S. Siyanwal et al.",
-      "doi": "",
-      "abstract": "We compare three quantum image representations — FRQI, QPIE, and NEQR — as front-ends to quantum neural networks for binary image classification, holding downstream architecture fixed to isolate the effect of encoding on qubit cost, circuit depth, and trainability."
-    },
-    {
-      "venue": "Quantum Information Processing (Springer)",
-      "year": "2023",
-      "title": "Entanglement Detection in 3-Qubit NMR States via Artificial Neural Networks",
+      "venue": "The Journal of Supercomputing",
+      "year": "2026",
+      "title": "Quantum image representation-based quantum neural networks for binary classification",
       "type": "Journal article",
       "status": "published",
-      "authors": "S. Siyanwal et al.",
+      "authors": "A. Tiwari*, S. Siyanwal*, S. Sakhuja, S. Kumar, P. Tyagi",
+      "doi": "10.1007/s11227-026-08621-3",
+      "abstract": "We compare three quantum image representations — FRQI, QPIE, and NEQR — as front-ends to quantum neural networks for binary image classification, holding downstream architecture fixed to isolate the effect of encoding on qubit cost, circuit depth, and trainability.",
+      "volume": "82",
+      "equal_contribution": true,
+      "note": "NASS, QBIR, FTQR, FRQCI; binary MNIST 0/1 at 2×2, 4×4, 8×8.",
+      "category": "journal"
+    },
+    {
+      "venue": "Quantum Information Processing",
+      "year": "2025",
+      "title": "ANN-enhanced detection of multipartite entanglement in a three-qubit NMR quantum processor",
+      "type": "Journal article",
+      "status": "published",
+      "authors": "V. Gulati*, S. Siyanwal*, Arvind, K. Dorai",
       "doi": "",
-      "abstract": "We train artificial neural networks to detect genuine multipartite entanglement and perform SLOCC classification in 2- and 3-qubit NMR systems, using experimentally reconstructed density matrices, and analyse dataset structure with PCA, MCA, and LDA."
+      "abstract": "We train artificial neural networks to detect genuine multipartite entanglement and perform SLOCC classification in 2- and 3-qubit NMR systems, using experimentally reconstructed density matrices, and analyse dataset structure with PCA, MCA, and LDA.",
+      "volume": "24",
+      "issue": "3",
+      "article": "74",
+      "arxiv": "2409.19739",
+      "equal_contribution": true,
+      "note": "MS thesis, IISER Mohali, advisor Kavita Dorai.",
+      "category": "journal"
     },
     {
       "venue": "QTML, Univ. of Melbourne",
@@ -529,7 +571,8 @@
       "status": "",
       "authors": "S. Siyanwal",
       "doi": "",
-      "abstract": ""
+      "abstract": "",
+      "category": "poster"
     },
     {
       "venue": "QCC, IAI TCG CREST",
@@ -539,7 +582,8 @@
       "status": "",
       "authors": "S. Siyanwal",
       "doi": "",
-      "abstract": ""
+      "abstract": "",
+      "category": "poster"
     }
   ],
   "education": [
