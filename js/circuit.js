@@ -16,8 +16,16 @@ const PATTERN = [ // [column, wire, gate, target] for CNOT; [column, wire, gate,
   [5, 0, "cnot", 2], [5, 4, "RX", 1, 3],
 ];
 // Band values per digital-artist; the sweep runs once on load, then rests until Play.
-const PACKET = { width: 36, opacity: 0.28 };
-const DUR = 6.4; // seconds per sweep; keep in step with the .qc-packet animation
+const PACKET = { width: 28, opacity: 0.18 };
+const DUR = 3.2, LEAD = 0.4, PING = 2.9; // seconds; keep in step with the .qc-packet animation (DESIGN.md §5)
+// Time fraction at which the cubic-bezier(.45,0,.55,1) sweep reaches progress p, so gates dip as the band passes.
+const easeTime = (p) => {
+  const bx = (s) => 3 * (1 - s) ** 2 * s * 0.45 + 3 * (1 - s) * s * s * 0.55 + s ** 3;
+  const by = (s) => 3 * (1 - s) * s * s + s ** 3;
+  let lo = 0, hi = 1;
+  for (let i = 0; i < 20; i++) { const m = (lo + hi) / 2; if (by(m) < p) lo = m; else hi = m; }
+  return bx((lo + hi) / 2);
+};
 
 // Statevector simulation of H on every wire then PATTERN; returns each qubit's
 // Bloch vector (Tr ρσx, Tr ρσy, Tr ρσz) from its reduced density matrix.
@@ -82,7 +90,7 @@ export function mountCircuit(host, labels, tiles) {
     host.innerHTML = svg(names, wideQ.matches ? 680 : 360);
     const svgEl = host.firstElementChild;
     const mx = +svgEl.dataset.mx, w = +svgEl.dataset.w;
-    if (tiles) tiles.style.setProperty("--ping", (DUR * mx / w).toFixed(2) + "s");
+    if (tiles) tiles.style.setProperty("--ping", (LEAD + PING).toFixed(2) + "s");
   };
   draw();
   wideQ.addEventListener("change", draw);
@@ -153,7 +161,7 @@ function svg(names, W) {
   const col = (c) => Math.round(xs + 16 + span * (c / 7.4)); // 0..5 gates, 6 Bloch, 7 M
   const y = (w) => top + w * rowH;
   const esc = (s) => String(s).replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
-  const delay = (x) => `style="--d:${(DUR * x / W).toFixed(2)}s"`;
+  const delay = (x) => `style="--d:${(LEAD + DUR * easeTime((x + PACKET.width / 2) / (W + PACKET.width))).toFixed(2)}s"`;
   const box = (x, yy, t) => `<g class="qc-g" ${delay(x)}><rect class="qc-box" x="${x - 13}" y="${yy - 11}" width="26" height="22" rx="3"/><text class="qc-txt" x="${x}" y="${yy + 3.5}" text-anchor="middle">${t}</text></g>`;
   const rot = (x, yy, g, p, q) => `<g class="qc-g" ${delay(x)}><rect class="qc-box" x="${x - 13}" y="${yy - 11}" width="26" height="22" rx="3"/><text class="qc-txt" x="${x - 1}" y="${yy + 3.5}" text-anchor="middle">R<tspan class="qc-sub" dy="2.5">${g[1].toLowerCase()}</tspan></text><text class="qc-ang" x="${x}" y="${yy + 21}" text-anchor="middle">${p === 1 ? "" : p}π/${q}</text></g>`;
   // Bloch projection: z up, view turned 40° so +x points down-left and +y down-right.

@@ -92,7 +92,9 @@ Rules:
 4. Any loop longer than 5 seconds needs a visible pause control (WCAG 2.2.2).
 5. Numbers are never counted up; the HTML value is the truth.
 
-The hero live layer: a Gaussian wave packet travels the wires on a 6.4s loop, its gradient shifting verdigris → vermilion as it crosses the gates. Gates dip briefly as it passes, and the metric tiles get a one-time 300ms vermilion underline when it reaches the measurement boxes. On fine pointers the nearest wire lifts to full ink, its gates scale 1.06, and the rest dim to 60%. The loop pauses when the hero is off screen.
+The hero live layer (final values, `PACKET` in `js/circuit.js`): the band is **28px wide with a peak opacity of 0.18** in both themes. It sweeps **once, over 3.2s** with `cubic-bezier(.45,0,.55,1)`, starting 400ms after the hero comes on screen. Then it hides (`is-done`), and "Play motion" replays it. Its colour holds `--accent` until 80% of the sweep and snaps to `--accent-2` by 88%. **Never interpolate through the middle**, because the verdigris/vermilion midpoint is the brown smear. The tile ping fires at 2.9s so it lands as the packet reaches the M column. All CSS durations stay in step with `DUR = 3.2`.
+
+Original concept (superseded by the values above): a Gaussian wave packet travels the wires on a 6.4s loop, its gradient shifting verdigris → vermilion as it crosses the gates. Gates dip briefly as it passes, and the metric tiles get a one-time 300ms vermilion underline when it reaches the measurement boxes. On fine pointers the nearest wire lifts to full ink, its gates scale 1.06, and the rest dim to 60%. The loop pauses when the hero is off screen.
 
 ## 6. Components
 

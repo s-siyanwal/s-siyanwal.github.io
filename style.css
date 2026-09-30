@@ -402,7 +402,7 @@ html.js .glance [data-reveal] { transform: none; }
 .qc-pause {
   display: none; align-items: center; justify-self: start; min-width: 24px; min-height: 24px;
   margin-top: .5rem; padding: .2rem .55rem; font-family: var(--mono); font-size: .7rem; letter-spacing: .02em;
-  color: var(--ink-soft); background: transparent; border: 1px solid var(--rule-strong); border-radius: 999px; cursor: pointer;
+  color: var(--ink-soft); background: transparent; border: 1px solid var(--rule-strong); border-radius: 2px; cursor: pointer;
   transition: color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
 }
 .qc-pause:hover { color: var(--accent-ink); border-color: var(--accent); }
@@ -413,11 +413,11 @@ html.js .glance [data-reveal] { transform: none; }
 
 /* Live layer: only with JS, only when motion is welcome, only while on screen. */
 @media (prefers-reduced-motion: no-preference) {
-  html.js .hero.is-live .qc-packet { display: block; animation: packet 6.4s linear 1 both; }
+  html.js .hero.is-live .qc-packet { display: block; animation: packet 3.2s cubic-bezier(.45,0,.55,1) .4s 1 both; }
   html.js .hero.is-live.is-done .qc-packet { display: none; }
-  html.js .hero.is-live .qc-phase { animation: phase 6.4s linear 1 both; }
-  html.js .hero.is-live .qc-g { animation: gateOn 6.4s linear 1; animation-delay: var(--d, 0s); }
-  html.js .hero.is-live .glance .stat::after { animation: ping 300ms var(--ease-out) var(--ping, 5.4s) both; }
+  html.js .hero.is-live .qc-phase { animation: phase 3.2s cubic-bezier(.45,0,.55,1) .4s 1 both; }
+  html.js .hero.is-live .qc-g { animation: gateOn 3.2s linear 1; animation-delay: var(--d, 0s); }
+  html.js .hero.is-live .glance .stat::after { animation: ping 300ms var(--ease-out) var(--ping, 3.3s) both; }
   html.js .hero.is-paused * { animation-play-state: paused !important; }
   html.js .hero.is-live .qc-pause { display: inline-flex; }
   .qc.has-near .qc-row, .qc.has-near .qc-multi { opacity: .6; }
@@ -427,14 +427,15 @@ html.js .glance [data-reveal] { transform: none; }
   .qc-row.is-near .qc-g { transform: scale(1.06); }
 }
 @keyframes packet { from { transform: translateX(0); } to { transform: translateX(calc(var(--qc-w) + var(--qc-pw))); } }
-@keyframes phase { 0%, 35% { stop-color: var(--accent); } 70%, 100% { stop-color: var(--accent-2); } }
+/* Hold then snap: interpolating verdigris to vermilion passes through brown. */
+@keyframes phase { 0%, 80% { stop-color: var(--accent); } 88%, 100% { stop-color: var(--accent-2); } }
 @keyframes gateOn { 0%, 100% { opacity: 1; } 3% { opacity: .55; } 9% { opacity: 1; } }
 @keyframes ping { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 /* ---------- Theme toggle ---------- */
 .theme-toggle {
   font-family: var(--mono); font-size: .7rem; letter-spacing: .03em; text-transform: uppercase;
-  color: var(--ink-soft); background: transparent; border: 1px solid var(--rule-strong); border-radius: 999px;
+  color: var(--ink-soft); background: transparent; border: 1px solid var(--rule-strong); border-radius: 2px;
   padding: .28rem .7rem; cursor: pointer; flex: none;
   transition: color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
 }
