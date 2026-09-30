@@ -1,4 +1,4 @@
-import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, audLabel, projectHref, THREADS } from "./site.js";
+import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, audLabel, projectHref, THREADS, projectStatus } from "./site.js";
 import { figuresFor } from "./figures.js";
 
 (async function () {
@@ -41,6 +41,7 @@ import { figuresFor } from "./figures.js";
         <p class="lede">${esc(pr.blurb || "")}</p>
         <dl class="meta-block">
           ${pr.role ? `<div><dt>Role</dt><dd>${esc(pr.role)}</dd></div>` : ""}
+          <div><dt>Status</dt><dd>${esc(projectStatus(pr, data.publications))}</dd></div>
           <div><dt>Track</dt><dd>${esc(audLabel[pr.audience] || "Project")}</dd></div>
           ${(pr.tags || []).length ? `<div><dt>Topics</dt><dd>${esc(pr.tags.slice(0, 4).join(" · "))}</dd></div>` : ""}
         </dl>

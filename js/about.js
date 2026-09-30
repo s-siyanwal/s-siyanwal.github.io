@@ -10,7 +10,6 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags } fr
   const p = data.profile || {}, a = data.about || {};
   document.title = `About — ${p.name}`;
 
-  $("about-headline").textContent = a.headline || "About";
   $("about-statement").innerHTML = (a.statement || []).map((par, i) =>
     `<p data-reveal style="--i:${i}">${esc(par)}</p>`).join("");
 

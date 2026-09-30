@@ -164,6 +164,15 @@ export function idLinks(p) {
 export const EQ_FOOTNOTE = '<p class="footnote"><span class="eq">*</span> Equal contribution.</p>';
 
 /* Research threads are a display grouping of projects, not content. */
+/* Status line for a project: from the publication its `paper` field names. */
+export function projectStatus(pr, pubs) {
+  const pub = pr.paper && (pubs || []).find((x) => x.title === pr.paper);
+  if (!pub) return "Research project (unpublished)";
+  if (pub.category === "manuscript" || /manuscript/i.test(pub.status || "")) return "Manuscript in preparation";
+  const venue = pub.venue || "", year = String(pub.year || "");
+  return `Published · ${venue}${year && !venue.endsWith(year) ? ` ${year}` : ""}`;
+}
+
 export const THREADS = {
   "nmr-entanglement": ["nmr", "NMR entanglement"],
   "vqc-fpga": ["weather", "Weather QML · FPGA inference"],

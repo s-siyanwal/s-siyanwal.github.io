@@ -257,7 +257,7 @@ def assemble(data, site):
             extra="\n".join(jsonld(article_ld(x)) for x in pubs)),
         "about.html": head_block(
             site, "about.html", f"About — {name}",
-            clip(about.get("headline") or (about.get("statement") or [""])[0]),
+            clip((about.get("research_interests") or "").split(":")[0] or (about.get("statement") or [""])[0]),
             og_type="profile"),
     }
     for page, block in pages.items():

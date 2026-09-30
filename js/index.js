@@ -1,4 +1,4 @@
-import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, projectHref, THREADS, chip, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE } from "./site.js";
+import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, projectHref, THREADS, projectStatus, chip, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE } from "./site.js";
 import { mountCircuit } from "./circuit.js";
 
 (async function () {
@@ -16,6 +16,7 @@ import { mountCircuit } from "./circuit.js";
   // Hero
   $("hero-title").textContent = p.title;
   $("hero-name").textContent = p.name;
+  if (p.tagline) $("hero-tagline").textContent = p.tagline; else $("hero-tagline").remove();
   const now = (data.experience || []).find((e) => e.current);
   if (now) $("hero-now").innerHTML = `<span class="hero-now-k">Now</span> ${esc(now.role)} · ${esc(now.org)}`;
   else $("hero-now")?.remove();
@@ -58,6 +59,7 @@ import { mountCircuit } from "./circuit.js";
        data-aud="${esc(pr.audience || "both")}" data-reveal style="--i:${i % 3}">
       <span class="card-thread">${esc(label)}</span>
       <h3>${esc(pr.name)}</h3>
+      <p class="card-status">${esc(projectStatus(pr, data.publications))}</p>
       <p class="card-blurb">${esc(pr.blurb || "")}</p>
       ${(pr.metrics || []).length ? `<div class="card-metrics">${(pr.metrics || []).slice(0, 3).map((m) =>
         `<div class="card-metric"><div class="m-val">${esc(m.value)}</div><div class="m-lab">${esc(m.label)}</div></div>`).join("")}</div>` : ""}
@@ -95,7 +97,6 @@ import { mountCircuit } from "./circuit.js";
       ${idLinks(pb) ? `<div class="ids">${idLinks(pb)}</div>` : ""}
     </li>`).join("");
   $("paper-foot").innerHTML = byYear.some((x) => x.equal_contribution) ? EQ_FOOTNOTE : "";
-  $("pub-count").textContent = pubs.length;
 
   $("education-list").innerHTML = (data.education || []).map((ed) => `
     <div class="mini" data-reveal>

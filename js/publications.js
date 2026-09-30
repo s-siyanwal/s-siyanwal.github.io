@@ -16,7 +16,7 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, CATEGORIE
     .map(([k, heading]) => [k, heading, pubs.filter((p) => groupOf(p) === k)])
     .filter(([, , list]) => list.length);
   $("pub-lede").textContent =
-    `${pubs.length} entries in quantum machine learning, quantum cryptography and NMR quantum computing, grouped by type.`;
+    "Papers, preprints, posters and talks in quantum machine learning, NMR quantum computing and tensor-network simulation, grouped by type.";
 
   $("pub-list").innerHTML = groups.map(([k, heading, list]) => `
     <section class="pub-group" aria-labelledby="g-${k}">

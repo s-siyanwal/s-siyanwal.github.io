@@ -3,7 +3,7 @@
     "name": "Shivanshu Siyanwal",
     "title": "Quantum information and quantum machine learning",
     "tagline": "I build hybrid quantum-classical software — from variational algorithms and quantum ML to FPGA-accelerated inference and photonic network simulation.",
-    "summary": "Quantum Software Engineer with 4+ years spanning quantum algorithm research and production software. I work across the full stack of quantum computing: variational algorithms (VQE/VQC/VQLS), quantum machine learning, quantum error correction, and photonic quantum networks — and I ship them as tested, deployable software on GPUs, FPGAs, and cloud quantum backends. Published in quantum ML and NMR entanglement detection.",
+    "summary": "Quantum Software Engineer with 4+ years spanning quantum algorithm research and production software. I work across the full stack of quantum computing: variational algorithms (VQE/VQC/VQLS), quantum machine learning, and photonic quantum networks — and I ship them as tested, deployable software on GPUs, FPGAs, and cloud quantum backends. Published in quantum ML and NMR entanglement detection.",
     "location": "Uttar Pradesh, India",
     "email": "shivanshu.siyanwal@gmail.com",
     "phone": "",
@@ -12,8 +12,7 @@
       "Quantum algorithms",
       "Quantum machine learning",
       "Hybrid quantum-classical systems",
-      "Photonic quantum networks",
-      "Quantum error correction"
+      "Photonic quantum networks"
     ],
     "links": {
       "cv_pdf": "assets/Shivanshu_Siyanwal_CV.pdf"
@@ -94,9 +93,9 @@
       "note": "incl. INSPIRE-SHE, DRDO JRF"
     },
     {
-      "value": "5+",
-      "label": "Publications",
-      "note": "QML, NMR QC"
+      "value": "5",
+      "label": "Peer-reviewed papers",
+      "note": "2 journal, 3 conference"
     }
   ],
   "skills": [
@@ -115,7 +114,6 @@
     {
       "category": "Quantum domains",
       "items": [
-        "Quantum error correction",
         "Variational algorithms",
         "Linear-optical QC",
         "Quantum network simulation",
@@ -146,7 +144,6 @@
     {
       "category": "Hardware & cloud",
       "items": [
-        "AWS Braket",
         "AMD Alveo FPGA",
         "HLS",
         "HBM",
@@ -190,7 +187,7 @@
       "period": "Mar 2024 – Oct 2024",
       "summary": "Simulated linear-optical QKD testbeds with realistic photonic impairments and security analysis.",
       "points": [
-        "Designed and simulated linear-optical QKD testbeds (DPS, COW, Twin-Field) in OptiSystem and ANSYS, modelling realistic photonic loss and noise.",
+        "Designed and simulated linear-optical QKD testbeds (DPS, COW, Twin-Field) in OptiSystem and ANSYS, including loss, noise, and photonic channel impairments.",
         "Performed error modelling and security analysis against intercept-resend and PNS attacks; benchmarked resource-state and entanglement generation.",
         "Built Python post-processing tools for optical simulation data — reusable, maintainable quantum-network simulation software."
       ],
@@ -210,8 +207,8 @@
       "period": "Aug 2023 – Mar 2024",
       "summary": "Quantum circuits for block ciphers and a Grover-based plaintext–ciphertext attack.",
       "points": [
-        "Designed quantum circuits for block ciphers (Mini-AES, S-AES) and Galois-field arithmetic; validated on Qiskit simulators and IBM Quantum hardware.",
-        "Implemented a plaintext–ciphertext attack using Grover's search and amplitude amplification; contributed to error correction and circuit optimisation."
+        "Built quantum circuits for an 8-bit AES (Mini-AES / S-AES) and Galois-field arithmetic; ran them on Qiskit and IBM Quantum hardware.",
+        "Implemented a plaintext–ciphertext attack with Grover search and amplitude amplification."
       ],
       "tags": [
         "Quantum cryptography",
@@ -245,8 +242,8 @@
       "period": "May 2021 – Aug 2022",
       "summary": "Neural networks for multipartite entanglement detection on a three-qubit NMR processor.",
       "points": [
-        "Designed an ANN that detects genuine multipartite entanglement and assigns one of six SLOCC classes from a reduced set of density-matrix elements (canonical form; 128 elements reduced to 18, then ANOVA-ranked).",
-        "Validated on 30 experimental three-qubit states from an NMR processor; GME detection remained accurate with 4 features and SLOCC classification with 6. Equal contribution with V. Gulati."
+        "Designed an ANN that detects genuine multipartite entanglement and assigns one of six SLOCC classes to three-qubit states: 128 real features (Re and Im of the 64 elements of ρ), reduced to 18 (14 Re, 4 Im) by the canonical form, then ranked by ANOVA within the 18.",
+        "Validated on 30 experimental three-qubit states from an NMR processor: GME detection at 0.954 ± 0.046 accuracy with 4 features, SLOCC classification at 0.867 ± 0.090 with 6. Equal contribution with V. Gulati."
       ],
       "tags": [
         "QML",
@@ -281,7 +278,7 @@
       "links": [
         {
           "label": "Paper (IEEE)",
-          "url": ""
+          "url": "https://ieeexplore.ieee.org/document/11681266"
         },
         {
           "label": "Code",
@@ -293,7 +290,7 @@
       "sections": [
         {
           "h": "Problem",
-          "p": "Medium-range (24-day-ahead) temperature forecasting is hard: atmospheric dynamics are nonlinear and labelled data is limited. The question was whether a compact variational quantum circuit, trained on daily NCMRWF reanalysis data, could learn useful long-range patterns, and whether its inference could run fast enough for edge use."
+          "p": "24-day-ahead temperature forecasting is hard: atmospheric dynamics are nonlinear and labelled data is limited. The question was whether a compact variational quantum circuit, trained on daily NCMRWF reanalysis data, could learn useful long-range patterns, and whether its inference could run fast enough for edge use."
         },
         {
           "h": "Approach",
@@ -307,13 +304,14 @@
           "h": "Result",
           "p": "A hybrid VQC forecaster with low-latency FPGA inference for edge use. Published at IEEE TQCEBT 2026."
         }
-      ]
+      ],
+      "paper": "Hybrid variational quantum circuits based temperature forecasting with low-latency FPGA inference"
     },
     {
       "id": "qir-qnn",
       "name": "Quantum Image Representation Neural Networks",
       "blurb": "Quantum neural networks for binary image classification built on four quantum image encodings: NASS, QBIR, FTQR and FRQCI.",
-      "abstract": "Quantum neural networks that classify binary MNIST images (0 vs 1) at 2×2, 4×4 and 8×8, with pixel data encoded through four quantum image representations: NASS, QBIR, FTQR and FRQCI. It compares circuit depth, gate count and qubit usage for the four encodings; QBIR gives the shallowest circuits, FRQCI the deepest. Published in The Journal of Supercomputing 82:495 (2026).",
+      "abstract": "Quantum neural networks that classify binary MNIST images (0 vs 1) at 2×2 to 16×16, plus a three-class FashionMNIST generalization study, with pixel data encoded through four quantum image representations: NASS, QBIR, FTQR and FRQCI. It compares circuit depth, gate count and qubit usage for the four encodings; QBIR gives the shallowest circuits, FRQCI the deepest. Published in The Journal of Supercomputing 82:495 (2026).",
       "metrics": [
         {
           "value": "4",
@@ -345,13 +343,14 @@
         },
         {
           "h": "Approach",
-          "p": "I built quantum neural networks on four quantum image representations — NASS, QBIR, FTQR and FRQCI — for binary MNIST classification (0 vs 1) at 2×2, 4×4 and 8×8. It compares circuit depth, gate count and qubit usage for the four encodings; QBIR gives the shallowest circuits, FRQCI the deepest."
+          "p": "I built quantum neural networks on four quantum image representations — NASS, QBIR, FTQR and FRQCI — for binary MNIST classification (0 vs 1) at 2×2 to 16×16, plus a three-class FashionMNIST generalization study. It compares circuit depth, gate count and qubit usage for the four encodings; QBIR gives the shallowest circuits, FRQCI the deepest."
         },
         {
           "h": "Status",
           "p": "Published in The Journal of Supercomputing 82:495 (2026)."
         }
-      ]
+      ],
+      "paper": "Quantum image representation-based quantum neural networks for binary classification"
     },
     {
       "id": "qkd-testbeds",
@@ -386,11 +385,11 @@
         },
         {
           "h": "Approach",
-          "p": "I built simulation testbeds for three protocols — differential-phase-shift (DPS), coherent-one-way (COW), and Twin-Field QKD — in OptiSystem and ANSYS, modelling realistic photonic loss and noise across the channel."
+          "p": "I built simulation testbeds for three protocols — differential-phase-shift (DPS), coherent-one-way (COW), and Twin-Field QKD — in OptiSystem and ANSYS, including loss, noise, and photonic channel impairments."
         },
         {
           "h": "Security analysis",
-          "p": "Each protocol was evaluated against intercept-resend and photon-number-splitting attacks, with key-rate degradation quantified as a function of channel loss. I also benchmarked resource-state and entanglement generation."
+          "p": "Each protocol was evaluated against intercept-resend and photon-number-splitting attacks. I also benchmarked resource-state and entanglement generation."
         },
         {
           "h": "Tooling",
@@ -402,7 +401,7 @@
       "id": "qcrypto-circuits",
       "name": "Quantum Circuits for Block Ciphers",
       "blurb": "Mini-AES / S-AES circuits with a Grover-based plaintext–ciphertext attack demonstration.",
-      "abstract": "Quantum circuit designs for Mini-AES and S-AES block ciphers with Galois-field arithmetic, validated on Qiskit simulators and IBM Quantum hardware. Demonstrates a plaintext–ciphertext attack via Grover's search and amplitude amplification.",
+      "abstract": "Quantum circuit designs for an 8-bit AES (Mini-AES / S-AES) with Galois-field arithmetic, run on Qiskit and IBM Quantum hardware, demonstrating Grover key search on a scaled-down cipher, which needs O(√N) oracle queries versus O(N) classically.",
       "metrics": [],
       "tags": [
         "Quantum cryptography",
@@ -425,15 +424,11 @@
         },
         {
           "h": "Approach",
-          "p": "I designed quantum circuits for Mini-AES and S-AES, including the Galois-field arithmetic that the S-box depends on, and validated them on Qiskit simulators and IBM Quantum hardware."
+          "p": "I built quantum circuits for an 8-bit AES (Mini-AES / S-AES), including the Galois-field arithmetic the S-box depends on, and ran them on Qiskit and IBM Quantum hardware."
         },
         {
           "h": "Attack",
-          "p": "I demonstrated a plaintext–ciphertext attack using Grover's search with amplitude amplification, making the quadratic speedup concrete on a scaled-down cipher."
-        },
-        {
-          "h": "Notes",
-          "p": "Work also covered circuit optimisation and error-correction considerations for running these constructions on noisy devices."
+          "p": "I implemented a plaintext–ciphertext attack with Grover search and amplitude amplification, demonstrating Grover key search on a scaled-down cipher, which needs O(√N) oracle queries versus O(N) classically."
         }
       ]
     },
@@ -441,7 +436,7 @@
       "id": "nmr-entanglement",
       "name": "Entanglement Detection via Neural Networks (NMR)",
       "blurb": "An ANN that detects genuine multipartite entanglement and assigns SLOCC classes on a three-qubit NMR processor from 18 of 128 density-matrix elements.",
-      "abstract": "An artificial neural network that detects genuine multipartite entanglement and assigns one of six SLOCC classes to three-qubit states, using 18 of the 128 density-matrix elements, ranked by ANOVA. Validated on 30 experimental states from an NMR quantum processor. Published in Quantum Information Processing 24(3), 74 (2025).",
+      "abstract": "An artificial neural network that detects genuine multipartite entanglement and assigns one of six SLOCC classes to three-qubit states. Each density matrix gives 128 real features (Re and Im of the 64 elements of ρ); the canonical form reduces them to 18 (14 Re, 4 Im), which are then ranked by ANOVA. Validated on 30 experimental pseudopure states from an NMR quantum processor. Published in Quantum Information Processing 24(3), 74 (2025).",
       "metrics": [
         {
           "value": "128 → 18",
@@ -469,27 +464,28 @@
       "sections": [
         {
           "h": "Problem",
-          "p": "Detecting genuine multipartite entanglement in experimental NMR systems is hard: witnesses are state-specific and full state tomography is experimentally costly."
+          "p": "Detecting genuine multipartite entanglement in experimental NMR systems is hard: witnesses are state-specific and full state tomography is experimentally costly. The trained model needs only a few elements (4 for GME, 6 for SLOCC), which points to reduced-measurement protocols; here they were read off reconstructed states."
         },
         {
           "h": "Approach",
-          "p": "I designed an ANN that detects genuine multipartite entanglement and assigns one of six SLOCC classes from a reduced set of density-matrix elements: states in canonical form, 128 elements reduced to 18, then ranked by ANOVA."
+          "p": "I designed an ANN that detects genuine multipartite entanglement and assigns one of six SLOCC classes. Each state gives 128 real features (Re and Im of the 64 elements of ρ); writing states in canonical form leaves 18 (14 Re, 4 Im), which are then ranked by ANOVA within the 18."
         },
         {
           "h": "Findings",
-          "p": "Validated on 30 experimental three-qubit states from an NMR processor, GME detection remained accurate with 4 features and SLOCC classification with 6."
+          "p": "Validated on 30 experimental three-qubit pseudopure states from an NMR processor: GME detection reached 0.954 ± 0.046 accuracy with 4 features, and SLOCC classification 0.867 ± 0.090 with 6 (overall accuracy over the experimental states, Tables IV–V)."
         },
         {
           "h": "Status",
           "p": "Published in Quantum Information Processing 24(3), 74 (2025); preprint arXiv:2409.19739."
         }
-      ]
+      ],
+      "paper": "ANN-enhanced detection of multipartite entanglement in a three-qubit NMR quantum processor"
     },
     {
       "id": "vqls-forecasting",
       "name": "VQLS for Financial Time-Series Forecasting",
       "blurb": "A variational quantum linear solver applied end to end to next-day stock price forecasting on real market data.",
-      "abstract": "A variational quantum linear solver (VQLS) applied to time series forecasting on real financial market data. Hankel-like trajectory matrices are built from historical Reliance Industries stock prices and the resulting linear system is solved with a quantum-classical hybrid approach: Hadamard test circuits evaluate the cost function, COBYLA optimizes the variational parameters, and a SWAP test extracts the solution to produce next-day price forecasts. Quantum advantage is not realized at this problem scale (2 × 2 system), and classical baselines reach equivalent accuracy; the work establishes a verified pathway for VQLS deployment on NISQ devices and identifies its scalability bottlenecks.",
+      "abstract": "A variational quantum linear solver (VQLS) applied to time series forecasting on real financial market data. Hankel-like trajectory matrices are built from historical Reliance Industries stock prices and the resulting linear system is solved with a quantum-classical hybrid approach: Hadamard test circuits evaluate the cost function, COBYLA optimizes the variational parameters, and a SWAP test estimates the overlap of the solution state with recent market data to give the next-day forecast. Quantum advantage is not realized at this problem scale (2 × 2 system), and classical baselines reach equivalent accuracy; the workflow runs end to end on the Aer simulator with shallow circuits (depth ~6) compatible with NISQ hardware, and the paper identifies its scalability bottlenecks.",
       "metrics": [
         {
           "value": "2 × 2",
@@ -511,17 +507,18 @@
         },
         {
           "h": "Approach",
-          "p": "A Hankel-like trajectory matrix is built from daily closing prices of Reliance Industries (January to April 2023) and decomposed into a Pauli basis. Hadamard test circuits evaluate the VQLS cost function, COBYLA optimizes the variational parameter with 10,000 shots per circuit, and a SWAP test combines the solution with recent market data to give a next-day forecast. All circuits run in Qiskit on the Aer simulator."
+          "p": "A Hankel-like trajectory matrix is built from daily closing prices of Reliance Industries (January to April 2023) and decomposed into a Pauli basis. Hadamard test circuits evaluate the VQLS cost function, COBYLA optimizes the variational parameter with 10,000 shots per circuit, and a SWAP test estimates the overlap of the solution state with recent market data to give the next-day forecast. All circuits run in Qiskit on the Aer simulator."
         },
         {
           "h": "Result",
-          "p": "The workflow runs end to end and the solution is verified against AR(1) and linear regression baselines. Quantum advantage is not realized at this 2 × 2 scale, and the classical baselines reach equivalent accuracy in negligible time. The paper identifies the scalability bottlenecks: exponential growth of the Pauli decomposition and COBYLA shot overhead."
+          "p": "The workflow runs end to end on the Aer simulator with shallow circuits (depth ~6) compatible with NISQ hardware, and the solution is verified against AR(1) and linear regression baselines. Quantum advantage is not realized at this 2 × 2 scale, and the classical baselines reach equivalent accuracy in negligible time. The paper identifies the scalability bottlenecks: exponential growth of the Pauli decomposition and COBYLA shot overhead."
         },
         {
           "h": "Status",
           "p": "Published by IEEE, 2026."
         }
-      ]
+      ],
+      "paper": "Variational Quantum Linear Solver for Time Series Forecasting: A Practical Implementation on Financial Data"
     },
     {
       "id": "tensnet",
@@ -553,7 +550,8 @@
           "h": "Status",
           "p": "Manuscript in preparation."
         }
-      ]
+      ],
+      "paper": "TensNet: Memory-Efficient Tensor Network Methods for 2D Incompressible Flow Simulation"
     }
   ],
   "publications": [
@@ -565,7 +563,7 @@
       "status": "published",
       "authors": "S. Siyanwal, B. Kape, C. Pushkarna, K. Islur, T. Kumar, N. Khan, K. Dave",
       "doi": "",
-      "abstract": "A variational quantum linear solver (VQLS) applied to time series forecasting on real financial market data. Hankel-like trajectory matrices are built from historical Reliance Industries stock prices and the resulting linear system is solved with a quantum-classical hybrid approach: Hadamard test circuits evaluate the cost function, COBYLA optimizes the variational parameters, and a SWAP test extracts the solution to produce next-day price forecasts. Quantum advantage is not realized at this problem scale (2 × 2 system), and classical baselines reach equivalent accuracy; the work establishes a verified pathway for VQLS deployment on NISQ devices and identifies its scalability bottlenecks.",
+      "abstract": "A variational quantum linear solver (VQLS) applied to time series forecasting on real financial market data. Hankel-like trajectory matrices are built from historical Reliance Industries stock prices and the resulting linear system is solved with a quantum-classical hybrid approach: Hadamard test circuits evaluate the cost function, COBYLA optimizes the variational parameters, and a SWAP test estimates the overlap of the solution state with recent market data to give the next-day forecast. Quantum advantage is not realized at this problem scale (2 × 2 system), and classical baselines reach equivalent accuracy; the workflow runs end to end on the Aer simulator with shallow circuits (depth ~6) compatible with NISQ hardware, and the paper identifies its scalability bottlenecks.",
       "category": "conference"
     },
     {
@@ -627,10 +625,10 @@
       "status": "published",
       "authors": "A. Tiwari*, S. Siyanwal*, S. Sakhuja, S. Kumar, P. Tyagi",
       "doi": "10.1007/s11227-026-08621-3",
-      "abstract": "Quantum neural networks for binary MNIST classification (0 vs 1) at 2×2, 4×4 and 8×8, built on four quantum image encodings: NASS, QBIR, FTQR and FRQCI. It compares circuit depth, gate count and qubit usage for the four encodings; QBIR gives the shallowest circuits, FRQCI the deepest.",
+      "abstract": "Quantum neural networks for binary MNIST classification (0 vs 1) at 2×2 to 16×16, plus a three-class FashionMNIST generalization study, built on four quantum image encodings: NASS, QBIR, FTQR and FRQCI. It compares circuit depth, gate count and qubit usage for the four encodings; QBIR gives the shallowest circuits, FRQCI the deepest.",
       "volume": "82",
       "equal_contribution": true,
-      "note": "NASS, QBIR, FTQR, FRQCI; binary MNIST 0/1 at 2×2, 4×4, 8×8.",
+      "note": "NASS, QBIR, FTQR, FRQCI; binary MNIST 0/1 at 2×2 to 16×16; three-class FashionMNIST.",
       "category": "journal",
       "article": "495"
     },
@@ -642,7 +640,7 @@
       "status": "published",
       "authors": "V. Gulati*, S. Siyanwal*, Arvind, K. Dorai",
       "doi": "",
-      "abstract": "An artificial neural network identifies which of the six SLOCC classes an experimentally generated three-qubit pure state belongs to, and detects genuine multipartite entanglement. Feature reduction cuts the density-matrix elements needed from 128 to 18, ranked by ANOVA; the model is trained on simulated states, validated on 30 experimental states from an NMR quantum processor, and benchmarked against SVM and KNN.",
+      "abstract": "An artificial neural network identifies which of the six SLOCC classes an experimentally generated three-qubit pseudopure state belongs to, and detects genuine multipartite entanglement. The 128 real features (Re and Im of the 64 elements of ρ) are reduced to 18 (14 Re, 4 Im) by the canonical form, then ranked by ANOVA; the model is trained on simulated states, validated on 30 experimental states from an NMR quantum processor, and benchmarked against SVM and KNN.",
       "volume": "24",
       "issue": "3",
       "article": "74",
@@ -744,11 +742,11 @@
     }
   ],
   "about": {
-    "headline": "Bridging quantum theory and shipped software.",
     "statement": [
-      "My work sits at the seam between quantum information research and production engineering. I am interested in the question of what it actually takes to move a quantum algorithm off a whiteboard and onto hardware that runs under real constraints — noise, latency, memory bandwidth, and the unglamorous requirement that it keep working next week.",
-      "That has led me across three connected areas. In variational quantum algorithms and quantum machine learning, I study how circuit structure and data encoding govern trainability and expressivity, and how hybrid pipelines perform on real forecasting tasks. In quantum hardware acceleration, I compile trained quantum kernels down to FPGA fabric for low-latency inference, which is a systems-engineering problem as much as a quantum one. In photonic quantum networks, I simulate QKD protocols over lossy channels and analyse their security against realistic attacks.",
-      "What connects them is a conviction that quantum computing progresses fastest when research artefacts are built like software — tested, versioned, reproducible, and deployable. I want to keep working where those two cultures meet."
+      "My work connects quantum information research with production engineering: what it takes to run a quantum algorithm on hardware under real constraints (noise, latency, memory bandwidth) and keep it working reliably.",
+      "That has led me across three connected areas. In variational quantum algorithms and quantum machine learning, I study how data encoding and circuit structure affect resource cost (circuit depth, gate count, qubits) and how hybrid pipelines perform on real forecasting tasks. In quantum hardware acceleration, I compile trained variational circuits into state-vector simulation kernels on FPGA fabric for low-latency inference. In photonic quantum networks, I simulate QKD protocols over lossy channels and analyse their security against realistic attacks.",
+      "My MS research at IISER Mohali used neural networks to detect genuine multipartite entanglement and classify SLOCC classes on a three-qubit NMR processor (co-first author, Quantum Information Processing, 2025).",
+      "I think quantum research moves faster when its artefacts are built like software: tested, versioned, reproducible and deployable."
     ],
     "interests": [
       {
@@ -756,16 +754,12 @@
         "detail": "Trainability, barren plateaus, data encoding, and circuit ansatz design for near-term devices."
       },
       {
-        "title": "Quantum hardware acceleration",
-        "detail": "Compiling quantum kernels to FPGA/GPU fabric; latency, throughput, and memory-bandwidth constraints."
+        "title": "Hardware-accelerated quantum-circuit simulation",
+        "detail": "Compiling trained variational circuits into state-vector simulation kernels on FPGA fabric; latency, throughput and memory-bandwidth constraints."
       },
       {
         "title": "Photonic quantum networks",
         "detail": "Linear-optical QKD, resource-state generation, and security analysis under realistic channel loss."
-      },
-      {
-        "title": "Quantum error correction",
-        "detail": "Codes and decoders, and what error structure means for algorithm design on noisy hardware."
       }
     ],
     "looking_for": "I am seeking PhD or research-Master's positions in quantum information science, and remain open to industry Quantum R&D roles where research and engineering are equally weighted.",

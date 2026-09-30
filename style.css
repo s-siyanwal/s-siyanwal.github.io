@@ -229,6 +229,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; letter-spacing: -0.0
 }
 .hero-cta { display: flex; flex-wrap: wrap; gap: .6rem; }
 .hero-lead .hero-avail { margin-top: 1.1rem; }
+.hero-tagline { margin: -.4rem 0 1rem; font-size: 1rem; line-height: 1.5; color: var(--ink-soft); max-width: 56ch; }
 .hero-now { margin: 0 0 1rem; font-size: .95rem; color: var(--ink-soft); max-width: 60ch; }
 .hero-now-k {
   font-family: var(--mono); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase;
@@ -331,6 +332,7 @@ details > summary::-webkit-details-marker { display: none; }
 .card.is-hidden { display: none; }
 .card-thread { font-family: var(--mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); margin-bottom: .5rem; }
 .card h3 { font-size: 1.12rem; margin: 0 0 .5rem; line-height: 1.2; }
+.card-status { font-size: .8rem; color: var(--ink-soft); margin: -.2rem 0 .5rem; }
 .card-blurb { color: var(--ink-soft); font-size: .93rem; margin: 0 0 .85rem; flex: 1; }
 .card-metrics { display: flex; flex-wrap: wrap; gap: .9rem; margin-bottom: .85rem; }
 .card-metric { line-height: 1; }
@@ -433,6 +435,7 @@ html.js .glance [data-reveal] { transform: none; }
 .hero-lead > .eyebrow      { animation-delay: .05s; }
 .hero-lead > h1            { animation-delay: .13s; }
 .hero-lead > .lede         { animation-delay: .21s; }
+.hero-lead > .hero-tagline { animation-delay: .23s; }
 .hero-lead > .hero-now     { animation-delay: .25s; }
 .hero-lead > .hero-cta     { animation-delay: .29s; }
 .hero-lead > .hero-avail   { animation-delay: .33s; }
