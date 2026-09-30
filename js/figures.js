@@ -86,15 +86,16 @@ const IMAGE_TABLE = `<details class="fig-data"><summary>Data (Tables 1–2)</sum
       .map(([e, q, d, g]) => `<tr><th scope="row">${e}</th><td>${q}</td><td>${d}</td><td>${g}</td></tr>`).join("")}</tbody>
   </table></details>`;
 
+/* Batch size 1 only (Table III): 499.7 vs 3340.0 µs per sample. Bars share one scale. */
 function fpga() {
-  const x0 = 110, unit = 66;
+  const x0 = 110, k = 480 / 3340;
   return `<text class="fg-t" x="${x0 - 14}" y="86" text-anchor="end">FPGA</text>` +
-    `<rect class="fg-fill" x="${x0}" y="64" width="${unit}" height="34" rx="2"/>` +
-    `<text class="fg-s" x="${x0 + unit + 12}" y="86">291.8 µs</text>` +
+    `<rect class="fg-fill" x="${x0}" y="64" width="${(499.7 * k).toFixed(1)}" height="34" rx="2"/>` +
+    `<text class="fg-s" x="${(x0 + 499.7 * k + 12).toFixed(1)}" y="86">499.7 µs</text>` +
     `<text class="fg-t" x="${x0 - 14}" y="172" text-anchor="end">GPU</text>` +
-    `<rect class="fg-box" x="${x0}" y="150" width="${(unit * 6.7).toFixed(1)}" height="34" rx="2"/>` +
-    `<text class="fg-s" x="${x0 + 12}" y="172">GPU (6.7× slower)</text>` +
-    arrow(x0, 214, x0 + unit * 6.7, 214) + `<text class="fg-s" x="${x0}" y="236">inference latency</text>` +
+    `<rect class="fg-box" x="${x0}" y="150" width="480" height="34" rx="2"/>` +
+    `<text class="fg-s" x="${x0 + 12}" y="172">3340.0 µs (about 6.7× slower)</text>` +
+    arrow(x0, 214, x0 + 480, 214) + `<text class="fg-s" x="${x0}" y="236">per-sample inference latency, batch size 1</text>` +
     box(20, 280, 120, 46, "host") + arrow(140, 303, 196, 303) +
     box(198, 280, 220, 46, "VQC kernel (HLS)", "fg-hbox") + arrow(418, 303, 474, 303) +
     box(476, 280, 144, 46, "Alveo U55C");
@@ -128,7 +129,7 @@ const FIGS = {
   nmr: [nmr, "Schematic. The six SLOCC classes of three-qubit pure states that the ANN distinguishes, and the reduction from 128 density-matrix elements to 18 ANOVA-ranked inputs."],
   weather: [weather, "Schematic. Illustrative temperature series with a classical baseline and a variational-circuit forecast; not data from the paper."],
   image: [image, "Circuit resources of four quantum image encodings for 16×16 images: qubit count against circuit depth on a log scale. Data from Tables 1–2 of the J. Supercomputing paper.", IMAGE_TABLE],
-  fpga: [fpga, "Schematic. Relative inference latency, FPGA vs GPU, as reported in the project."],
+  fpga: [fpga, "Per-sample inference latency at batch size 1, FPGA kernel vs CUDA-accelerated PyTorch on a GPU, from Table III of the TQCEBT 2026 paper."],
   qkd: [qkd, "Schematic. Protocol layouts for DPS, COW and twin-field QKD studied at TCG CREST."],
 };
 

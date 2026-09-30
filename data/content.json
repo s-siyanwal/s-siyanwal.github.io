@@ -3,7 +3,7 @@
     "name": "Shivanshu Siyanwal",
     "title": "Quantum information and quantum machine learning",
     "tagline": "I build hybrid quantum-classical software — from variational algorithms and quantum ML to FPGA-accelerated inference and photonic network simulation.",
-    "summary": "Quantum Software Engineer with 4+ years spanning quantum algorithm research and production software. I work across the full stack of quantum computing: variational algorithms (VQE/VQC/VQLS), quantum machine learning, quantum error correction, and photonic quantum networks — and I ship them as tested, deployable software on GPUs, FPGAs, and cloud quantum backends. Published in quantum ML, quantum cryptography, and NMR quantum simulation.",
+    "summary": "Quantum Software Engineer with 4+ years spanning quantum algorithm research and production software. I work across the full stack of quantum computing: variational algorithms (VQE/VQC/VQLS), quantum machine learning, quantum error correction, and photonic quantum networks — and I ship them as tested, deployable software on GPUs, FPGAs, and cloud quantum backends. Published in quantum ML and NMR entanglement detection.",
     "location": "Uttar Pradesh, India",
     "email": "shivanshu.siyanwal@gmail.com",
     "phone": "",
@@ -86,17 +86,17 @@
     {
       "value": "6.7×",
       "label": "FPGA speedup",
-      "note": "vs GPU, 291.8 µs inference"
+      "note": "vs GPU at batch size 1"
     },
     {
       "value": "56.5%",
       "label": "Forecast gain",
-      "note": "VQC vs statistical baseline"
+      "note": "VQC vs the statistical baseline"
     },
     {
       "value": "5+",
       "label": "Publications",
-      "note": "QML, QKD, NMR QC"
+      "note": "QML, NMR QC"
     }
   ],
   "skills": [
@@ -130,7 +130,6 @@
         "Python (production)",
         "C++",
         "Git",
-        "CI/CD pipelines",
         "Linux"
       ]
     },
@@ -171,18 +170,17 @@
       "location": "Noida, India",
       "period": "Oct 2024 – Present",
       "current": true,
-      "summary": "Hybrid quantum-classical pipelines and FPGA-accelerated quantum inference on cloud simulation infrastructure.",
+      "summary": "Hybrid quantum-classical pipelines and FPGA-accelerated quantum inference.",
       "points": [
-        "Built hybrid quantum-classical pipelines for weather forecasting using a 7-qubit VQC (50 parameters), achieving 56.5% improvement over statistical baselines, deployed on cloud simulation infrastructure.",
+        "Built a 7-qubit, 50-parameter VQC for 24-day temperature forecasting on NCMRWF reanalysis data, trained on a CPU-based quantum simulator (test RMSE 3.01 K, R² 0.801); about 56.5% improvement over the statistical baseline.",
         "Implemented and optimised VQE, QCNN, and fidelity-based kernels in Qiskit and PennyLane; built scalable modules for quantum image encoding (FRQI, QPIE, NEQR).",
-        "Deployed a custom VQC kernel on an AMD Alveo U55C FPGA via HLS and HBM — 6.7× speedup over GPUs at 291.8 µs inference — integrated into CI/CD pipelines.",
+        "Deployed a custom VQC kernel on an AMD Alveo U55C FPGA via Vitis HLS, with the kernel exchanging batches with the host over HBM; about 6.7× faster than a CUDA-accelerated PyTorch GPU baseline at batch size 1.",
         "Collaborated across hardware, research, and engineering teams to optimise hybrid workflows and support cloud quantum platforms."
       ],
       "tags": [
         "Qiskit",
         "PennyLane",
-        "FPGA",
-        "CI/CD"
+        "FPGA"
       ]
     },
     {
@@ -261,16 +259,16 @@
     {
       "id": "vqc-fpga",
       "name": "Hybrid VQC Weather Forecasting with FPGA Inference",
-      "blurb": "7-qubit variational circuit for temperature forecasting, with a custom kernel on an AMD Alveo FPGA for low-latency inference.",
-      "abstract": "A hybrid quantum-classical pipeline that forecasts temperature using a 7-qubit variational quantum circuit (50 parameters). The trained inference kernel is compiled to an AMD Alveo U55C FPGA using HLS with HBM memory, reaching 291.8 µs inference — a 6.7× speedup over GPU execution — and is wired into CI/CD for continuous testing.",
+      "blurb": "7-qubit variational circuit for 24-day temperature forecasting, with a custom kernel on an AMD Alveo FPGA for low-latency edge inference.",
+      "abstract": "A hybrid quantum-classical model that forecasts temperature 24 days ahead from daily NCMRWF reanalysis data, using a 7-qubit variational quantum circuit (50 parameters) with StronglyEntanglingLayers. It improves on the statistical baseline by about 56.5%. For inference, the frozen model runs on a custom AMD Alveo U55C FPGA kernel built with HLS: about 6.7× faster than the GPU baseline at batch size 1, and 291.8 µs per sample at batch size 8.",
       "metrics": [
         {
           "value": "6.7×",
-          "label": "vs GPU"
+          "label": "vs GPU, batch 1"
         },
         {
           "value": "291.8 µs",
-          "label": "inference"
+          "label": "per sample, batch 8"
         },
         {
           "value": "7",
@@ -278,7 +276,6 @@
         }
       ],
       "tags": [
-        "Qiskit",
         "PennyLane",
         "FPGA",
         "HLS",
@@ -300,23 +297,19 @@
       "sections": [
         {
           "h": "Problem",
-          "p": "Classical statistical baselines for short-horizon temperature forecasting plateau quickly on limited sensor data. The open question was whether a variational quantum circuit could extract more signal — and, if so, whether it could run fast enough to matter operationally."
+          "p": "Medium-range (24-day-ahead) temperature forecasting is hard: atmospheric dynamics are nonlinear and labelled data is limited. The question was whether a compact variational quantum circuit, trained on daily NCMRWF reanalysis data, could learn useful long-range patterns, and whether its inference could run fast enough for edge use."
         },
         {
           "h": "Approach",
-          "p": "I designed a 7-qubit variational quantum circuit with 50 trainable parameters, using angle encoding to map meteorological features into the circuit and a hardware-efficient ansatz to keep depth tractable. The classical optimiser and the quantum layer were wired into a single hybrid training loop, implemented in Qiskit and PennyLane."
+          "p": "I designed a 7-qubit variational quantum circuit with 50 trainable parameters, using angle encoding to map meteorological variables onto the qubits and two StronglyEntanglingLayers as the ansatz. It was trained, validated and tested in PennyLane on a CPU-based quantum simulator, reaching a test RMSE of 3.01 K and R² of 0.801."
         },
         {
           "h": "Acceleration",
-          "p": "Inference latency, not training, is the operational bottleneck. I compiled the trained kernel to an AMD Alveo U55C FPGA using HLS, placing circuit parameters in HBM to keep memory access off the critical path. The result was 291.8 µs per inference — 6.7× faster than GPU execution of the same kernel."
-        },
-        {
-          "h": "Engineering",
-          "p": "The whole pipeline runs under CI/CD: circuit changes trigger retraining, regression tests on forecast accuracy, and a rebuild of the FPGA bitstream. This is what makes the result reproducible rather than a one-off benchmark."
+          "p": "For edge inference, the frozen model runs on a custom Vitis HLS kernel on an AMD Alveo U55C FPGA; the kernel exchanges batches of input features, pre-trained weights and expectation values with the host over HBM. Against a CUDA-accelerated PyTorch GPU baseline, the FPGA is about 6.7× faster at batch size 1 (499.7 vs 3340.0 µs per sample). At batch size 8 it reaches 291.8 µs per sample, about 1.4× faster than the GPU."
         },
         {
           "h": "Result",
-          "p": "56.5% improvement over statistical baselines, with inference fast enough for operational deployment. Accepted at IEEE TQCEBT 2026."
+          "p": "About 56.5% improvement over the statistical baseline, with low-latency FPGA inference for edge use. Published at IEEE TQCEBT 2026."
         }
       ]
     },
@@ -412,8 +405,8 @@
     {
       "id": "qcrypto-circuits",
       "name": "Quantum Circuits for Block Ciphers",
-      "blurb": "Mini-AES / S-AES circuits with a Grover-based chosen-ciphertext attack demonstration.",
-      "abstract": "Quantum circuit designs for Mini-AES and S-AES block ciphers with Galois-field arithmetic, validated on Qiskit simulators and IBM Quantum hardware. Demonstrates a chosen-ciphertext attack via Grover's search and amplitude amplification.",
+      "blurb": "Mini-AES / S-AES circuits with a Grover-based plaintext–ciphertext attack demonstration.",
+      "abstract": "Quantum circuit designs for Mini-AES and S-AES block ciphers with Galois-field arithmetic, validated on Qiskit simulators and IBM Quantum hardware. Demonstrates a plaintext–ciphertext attack via Grover's search and amplitude amplification.",
       "metrics": [],
       "tags": [
         "Quantum cryptography",
@@ -440,7 +433,7 @@
         },
         {
           "h": "Attack",
-          "p": "I demonstrated a chosen-ciphertext attack using Grover's search with amplitude amplification, making the quadratic speedup concrete on a scaled-down cipher."
+          "p": "I demonstrated a plaintext–ciphertext attack using Grover's search with amplitude amplification, making the quadratic speedup concrete on a scaled-down cipher."
         },
         {
           "h": "Notes",
@@ -506,7 +499,7 @@
       "status": "published",
       "authors": "N. Khan, S. Siyanwal, K. Islur, A. Tiwari, H. Gupta",
       "doi": "",
-      "abstract": "We present a hybrid quantum-classical pipeline for short-horizon temperature forecasting built on a 7-qubit variational quantum circuit, and demonstrate low-latency inference by compiling the trained kernel to an AMD Alveo U55C FPGA using HLS with HBM. The deployment achieves 291.8 µs inference, a 6.7× speedup over GPU execution, while improving forecast accuracy by 56.5% over statistical baselines.",
+      "abstract": "A hybrid quantum machine learning approach for 24-day temperature forecasting from daily NCMRWF reanalysis data, using a 7-qubit variational quantum circuit with Strongly Entangling Layers and 50 trainable parameters, trained on a CPU-based quantum simulator. The model improves on the statistical baseline by about 56.5%. Inference with frozen parameters is benchmarked on CPU, GPU and an AMD Alveo U55C FPGA kernel; at batch size 1 the FPGA is about 6.7× faster than the GPU.",
       "pages": "1–6",
       "xplore": "11681266",
       "category": "conference"
@@ -533,7 +526,7 @@
       "status": "published",
       "authors": "A. Tiwari, S. Kumar, P. Tyagi, S. Siyanwal, S. Sakhuja",
       "doi": "",
-      "abstract": "We evaluate a family of quantum machine learning models for weather prediction tasks, comparing variational quantum classifiers and quantum kernel methods against classical baselines on meteorological time-series data.",
+      "abstract": "Applies QGRU, QNN, QLSTM, VQC and QSVM models to ERA5 meteorological time-series data (Safdarjung, New Delhi) for regression and classification, benchmarked against classical counterparts.",
       "pages": "446–451",
       "xplore": "11330613",
       "category": "conference"
@@ -666,7 +659,7 @@
     "headline": "Bridging quantum theory and shipped software.",
     "statement": [
       "My work sits at the seam between quantum information research and production engineering. I am interested in the question of what it actually takes to move a quantum algorithm off a whiteboard and onto hardware that runs under real constraints — noise, latency, memory bandwidth, and the unglamorous requirement that it keep working next week.",
-      "That has led me across three connected areas. In variational quantum algorithms and quantum machine learning, I study how circuit structure and data encoding govern trainability and expressivity, and how hybrid pipelines can beat classical baselines on real forecasting tasks. In quantum hardware acceleration, I compile trained quantum kernels down to FPGA fabric, where a 6.7× speedup over GPUs is a systems-engineering result as much as a quantum one. In photonic quantum networks, I simulate QKD protocols over lossy channels and analyse their security against realistic attacks.",
+      "That has led me across three connected areas. In variational quantum algorithms and quantum machine learning, I study how circuit structure and data encoding govern trainability and expressivity, and how hybrid pipelines perform on real forecasting tasks. In quantum hardware acceleration, I compile trained quantum kernels down to FPGA fabric, where running about 6.7× faster than a GPU baseline at batch size 1 is a systems-engineering result as much as a quantum one. In photonic quantum networks, I simulate QKD protocols over lossy channels and analyse their security against realistic attacks.",
       "What connects them is a conviction that quantum computing progresses fastest when research artefacts are built like software — tested, versioned, reproducible, and deployable. I want to keep working where those two cultures meet."
     ],
     "interests": [
