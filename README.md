@@ -153,17 +153,17 @@ Empty URLs degrade gracefully — they show "links coming soon" rather than brea
 
 ## 5. Deploy
 
-1. Create a **public** repo `shivanshu-siyanwal.github.io`.
+1. Create a **public** repo `s-siyanwal.github.io`.
 2. Upload everything here (including the hidden `.github` folder — if drag-and-drop
    skips it, use the git commands below).
 3. **Settings → Pages → Source: GitHub Actions.** `pages.yml` builds and deploys.
-4. Live at `https://s-siyanwal.github.io/shivanshu-siyanwal.github.io/`
-   (a repo named `s-siyanwal.github.io` would get `https://s-siyanwal.github.io`).
+4. Live at `https://s-siyanwal.github.io/`
+   (a repo with any other name is served under `https://s-siyanwal.github.io/<repo-name>/`).
 
 ```bash
 git init && git add -A && git commit -m "Portfolio"
 git branch -M main
-git remote add origin https://github.com/s-siyanwal/shivanshu-siyanwal.github.io.git
+git remote add origin https://github.com/s-siyanwal/s-siyanwal.github.io.git
 git push -u origin main
 ```
 

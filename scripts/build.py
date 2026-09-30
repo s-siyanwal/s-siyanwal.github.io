@@ -44,7 +44,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "_site"
-DEFAULT_SITE_URL = "https://s-siyanwal.github.io/shivanshu-siyanwal.github.io"
+DEFAULT_SITE_URL = "https://s-siyanwal.github.io"
 
 COPY = ["index.html", "project.html", "publications.html", "about.html",
         "style.css", ".nojekyll", "js", "data", "assets"]
