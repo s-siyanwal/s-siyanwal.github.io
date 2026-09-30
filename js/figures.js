@@ -1,5 +1,5 @@
 /* Schematic figures for project pages (DESIGN.md §6). Hand-built SVG, 640×360.
-   Colours are ink, ink-faint and the thread hue only; no numbers that aren't in content. */
+   Colours are ink, ink-faint and the thread hue only; no numbers that aren't in content, except the image data figure (§6). */
 
 const box = (x, y, w, h, label, cls = "fg-box") =>
   `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="4"/>` +
@@ -49,18 +49,42 @@ function weather() {
     `<path class="fg-hue" d="${pt(vqc)}"/>` + legend;
 }
 
-function image() {
-  const px = [[1, 0], [0, 1]].flatMap((row, r) => row.map((on, c) =>
-    `<rect x="${30 + c * 40}" y="${140 + r * 40}" width="40" height="40" style="fill:${on ? "var(--ink)" : "var(--panel-solid)"}" stroke="var(--ink-faint)" stroke-width="1.4"/>`)).join("");
-  const enc = ["NASS", "QBIR", "FTQR", "FRQCI"];
-  return px + `<text class="fg-s" x="70" y="246" text-anchor="middle">pixels</text>` +
-    enc.map((e, i) => {
-      const y = 40 + i * 75;
-      return arrow(114, 180, 176, y + 22) + box(178, y, 130, 44, e, "fg-hbox") + arrow(308, y + 22, 376, 180);
-    }).join("") +
-    box(378, 158, 100, 44, "QNN", "fg-hbox") + arrow(478, 180, 526, 180) +
-    box(528, 158, 90, 44, "0 / 1") + `<text class="fg-s" x="573" y="226" text-anchor="middle">binary MNIST</text>`;
-}
+/* Data figure from Tables 1–2 of the J. Supercomputing paper (art/assets/figure-image-encodings.svg, DESIGN.md §6). */
+const image = () => `<line x1="80" y1="300.0" x2="600" y2="300.0" stroke="var(--rule,#c9d3cf)" stroke-width="1"/>
+<text x="70" y="305.0" text-anchor="end" font-size="15" fill="var(--ink-faint,#4d5b57)">10<tspan dy="-7" font-size="11">3</tspan></text>
+<line x1="80" y1="196.0" x2="600" y2="196.0" stroke="var(--rule,#c9d3cf)" stroke-width="1"/>
+<text x="70" y="201.0" text-anchor="end" font-size="15" fill="var(--ink-faint,#4d5b57)">10<tspan dy="-7" font-size="11">4</tspan></text>
+<line x1="80" y1="92.0" x2="600" y2="92.0" stroke="var(--rule,#c9d3cf)" stroke-width="1"/>
+<text x="70" y="97.0" text-anchor="end" font-size="15" fill="var(--ink-faint,#4d5b57)">10<tspan dy="-7" font-size="11">5</tspan></text>
+<text x="80.0" y="322" text-anchor="middle" font-size="15" fill="var(--ink-faint,#4d5b57)">8</text>
+<text x="184.0" y="322" text-anchor="middle" font-size="15" fill="var(--ink-faint,#4d5b57)">10</text>
+<text x="288.0" y="322" text-anchor="middle" font-size="15" fill="var(--ink-faint,#4d5b57)">12</text>
+<text x="392.0" y="322" text-anchor="middle" font-size="15" fill="var(--ink-faint,#4d5b57)">14</text>
+<text x="496.0" y="322" text-anchor="middle" font-size="15" fill="var(--ink-faint,#4d5b57)">16</text>
+<text x="600.0" y="322" text-anchor="middle" font-size="15" fill="var(--ink-faint,#4d5b57)">18</text>
+<path d="M80 300H600M80 300V32" stroke="var(--ink,#12201f)" stroke-width="1.5" fill="none"/>
+<text x="340" y="350" text-anchor="middle" font-size="16" fill="var(--ink,#12201f)">Qubit count</text>
+<text transform="translate(22 166) rotate(-90)" text-anchor="middle" font-size="16" fill="var(--ink,#12201f)">Circuit depth (log scale)</text>
+<text x="596" y="24" text-anchor="end" font-size="14" fill="var(--ink-faint,#4d5b57)">16×16 images</text>
+<circle cx="496.0" cy="222.1" r="7" fill="var(--th-image)"/>
+<text x="484.0" y="218.1" text-anchor="end" font-size="16" font-weight="600" fill="var(--ink,#12201f)">QBIR</text>
+<text x="484.0" y="236.1" text-anchor="end" font-size="13" fill="var(--ink-faint,#4d5b57)">16 qubits · depth 5,612</text>
+<circle cx="288.0" cy="129.8" r="7" fill="var(--th-image)"/>
+<text x="300.0" y="125.8" text-anchor="start" font-size="16" font-weight="600" fill="var(--ink,#12201f)">FTQR</text>
+<text x="300.0" y="143.8" text-anchor="start" font-size="13" fill="var(--ink-faint,#4d5b57)">12 qubits · depth 43,273</text>
+<circle cx="132.0" cy="122.9" r="7" fill="var(--th-image)"/>
+<text x="124.0" y="148.9" text-anchor="start" font-size="16" font-weight="600" fill="var(--ink,#12201f)">NASS</text>
+<text x="124.0" y="166.9" text-anchor="start" font-size="13" fill="var(--ink-faint,#4d5b57)">9 qubits · depth 50,436</text>
+<circle cx="236.0" cy="81.8" r="7" fill="var(--th-image)"/>
+<text x="248.0" y="77.8" text-anchor="start" font-size="16" font-weight="600" fill="var(--ink,#12201f)">FRQCI</text>
+<text x="248.0" y="95.8" text-anchor="start" font-size="13" fill="var(--ink-faint,#4d5b57)">11 qubits · depth 125,299</text>`;
+
+const IMAGE_TABLE = `<details class="fig-data"><summary>Data (Tables 1–2)</summary>
+  <table><caption>Circuit resources at 16×16</caption>
+    <thead><tr><th scope="col">Encoding</th><th scope="col">Qubits</th><th scope="col">Depth</th><th scope="col">Total gates</th></tr></thead>
+    <tbody>${[["QBIR", 16, "5,612", "9,701"], ["FTQR", 12, "43,273", "59,683"], ["NASS", 9, "50,436", "72,713"], ["FRQCI", 11, "125,299", "164,353"]]
+      .map(([e, q, d, g]) => `<tr><th scope="row">${e}</th><td>${q}</td><td>${d}</td><td>${g}</td></tr>`).join("")}</tbody>
+  </table></details>`;
 
 function fpga() {
   const x0 = 110, unit = 66;
@@ -103,7 +127,7 @@ function qkd(uid) {
 const FIGS = {
   nmr: [nmr, "Schematic. The six SLOCC classes of three-qubit pure states that the ANN distinguishes, and the reduction from 128 density-matrix elements to 18 ANOVA-ranked inputs."],
   weather: [weather, "Schematic. Illustrative temperature series with a classical baseline and a variational-circuit forecast; not data from the paper."],
-  image: [image, "Schematic. Four quantum image encodings feeding a QNN for binary MNIST (0 vs 1) at 2×2, 4×4 and 8×8."],
+  image: [image, "Circuit resources of four quantum image encodings for 16×16 images: qubit count against circuit depth on a log scale. Data from Tables 1–2 of the J. Supercomputing paper.", IMAGE_TABLE],
   fpga: [fpga, "Schematic. Relative inference latency, FPGA vs GPU, as reported in the project."],
   qkd: [qkd, "Schematic. Protocol layouts for DPS, COW and twin-field QKD studied at TCG CREST."],
 };
@@ -117,10 +141,10 @@ const BY_PROJECT = {
 
 export function figuresFor(projectId) {
   return (BY_PROJECT[projectId] || []).map((k) => {
-    const [draw, caption] = FIGS[k], id = `fig-${k}`;
+    const [draw, caption, extra = ""] = FIGS[k], id = `fig-${k}`;
     return `<figure class="fig th-${k}">
-      <svg viewBox="0 0 640 360" role="img" aria-labelledby="${id}-cap" xmlns="http://www.w3.org/2000/svg">${draw(id)}</svg>
-      <figcaption id="${id}-cap">${caption}</figcaption>
+      <svg viewBox="0 0 640 360" style="font-family:var(--text)" role="img" aria-labelledby="${id}-cap" xmlns="http://www.w3.org/2000/svg">${draw(id)}</svg>
+      <figcaption id="${id}-cap">${caption}</figcaption>${extra}
     </figure>`;
   }).join("");
 }
