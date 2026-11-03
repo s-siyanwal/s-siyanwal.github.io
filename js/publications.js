@@ -1,4 +1,4 @@
-import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, CATEGORIES, groupOf, chip, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE } from "./site.js";
+import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, CATEGORIES, groupOf, chip, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE , paperHref, readMore } from "./site.js";
 
 (async function () {
   let data;
@@ -31,6 +31,7 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, CATEGORIE
           <p class="cite-venue">${venueHtml(p)}</p>
           ${p.abstract ? `<p class="cite-result">${esc(p.abstract)}</p>` : ""}
           ${p.note ? `<p class="cite-note">${esc(p.note)}</p>` : ""}
+          ${readMore(paperHref(p))}
           <div class="ids">${idLinks(p)}${groupOf(p) === "presentation" ? "" : `<button type="button" class="bib-btn" data-i="${i}" aria-label="Copy BibTeX for ${esc(p.title)}">Copy BibTeX</button><span class="bib-status" role="status"></span>`}</div>
         </li>`;
       }).join("")}</ol>
