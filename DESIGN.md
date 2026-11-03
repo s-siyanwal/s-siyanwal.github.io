@@ -1,6 +1,6 @@
 # DESIGN.md: "Landscape" (v2)
 
-The design system for shivanshu-siyanwal.github.io, from Shivanshu's v2 brief (`inbox/redesign-v2-brief.md`, 30 Sep 2026). It supersedes "Interference": the paper ground is gone. The site should read as a **research record** for PhD committees in quantum information, QML and quantum software, set on glass panels over a quiet valley landscape.
+The design system for s-siyanwal.github.io, from Shivanshu's v2 brief (`inbox/redesign-v2-brief.md`, 30 Sep 2026). It supersedes "Interference": the paper ground is gone. The site should read as a **research record** for PhD committees in quantum information, QML and quantum software, set on glass panels over a quiet valley landscape.
 
 Still forbidden: invented facts or metrics, terminal cosplay, neon, text gradients, rainbow headings, remote images, fonts or scripts, and stock photography of people or things. The single background landscape (§2) and Shivanshu's own portrait (§8) are the only imagery allowed.
 
