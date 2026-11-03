@@ -46,7 +46,7 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "_site"
 DEFAULT_SITE_URL = "https://s-siyanwal.github.io"
 
-COPY = ["index.html", "project.html", "publications.html", "about.html", "notes.html",
+COPY = ["index.html", "project.html", "publications.html", "about.html", "notes.html", "detail.html",
         "style.css", ".nojekyll", "js", "data", "assets"]
 PAGES = ["index.html", "publications.html", "about.html", "notes.html"]
 
@@ -344,6 +344,180 @@ def build_notes(site, name):
     return written
 
 
+# ------------------------------------------------------------------ detail pages
+# One static page per publication (paper-<slug>.html) and per role
+# (role-<slug>.html), built ONLY from data/content.json. Sections with no
+# source text show a visible "Draft — to be verified" note instead of filler.
+# Keep slug() in sync with js/site.js.
+def slug(s):
+    s = re.sub(r"[^a-z0-9]+", "-", str(s or "").lower()).strip("-")
+    return s[:60].rstrip("-")
+
+
+def paper_file(p):
+    return f"paper-{slug(p['title'])}.html"
+
+
+def role_file(e):
+    return f"role-{slug(e['org'].split('(')[0] + ' ' + e['role'])}.html"
+
+
+DRAFT = ('<p class="draft-note" role="note"><strong>Draft — to be verified.</strong> {}</p>')
+
+
+def id_links(p):
+    out = []
+    if p.get("doi"):
+        out.append((f"doi:{p['doi']}", f"https://doi.org/{p['doi']}"))
+    if p.get("arxiv"):
+        out.append((f"arXiv:{p['arxiv']}", f"https://arxiv.org/abs/{p['arxiv']}"))
+    if p.get("xplore"):
+        out.append((f"IEEE Xplore {p['xplore']}", f"https://ieeexplore.ieee.org/document/{p['xplore']}"))
+    return out
+
+
+def flow_svg(steps, label):
+    """Self-made schematic: the write-up's own section headings as a left-to-right flow."""
+    steps = [s for s in steps if s][:5]
+    if len(steps) < 2:
+        return ""
+    w, bw, gap = 150, 128, 22
+    width = len(steps) * w
+    boxes = []
+    for i, s in enumerate(steps):
+        x = i * w + 4
+        boxes.append(f'<rect x="{x}" y="10" width="{bw}" height="44" rx="6" class="fl-box"/>'
+                     f'<text x="{x + bw / 2}" y="37" text-anchor="middle" class="fl-txt">{esc(s[:18])}</text>')
+        if i < len(steps) - 1:
+            ax = x + bw
+            boxes.append(f'<path d="M{ax + 2} 32 H{ax + gap - 2}" class="fl-arrow" marker-end="url(#fl-a)"/>')
+    return (f'<figure class="detail-fig"><svg viewBox="0 0 {width} 64" role="img" aria-label="{esc(label)}">'
+            '<defs><marker id="fl-a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">'
+            '<path d="M0 0 L8 4 L0 8 z" class="fl-head"/></marker></defs>'
+            + "".join(boxes) + f'</svg><figcaption>{esc(label)}</figcaption></figure>')
+
+
+def _month(s):
+    import datetime
+    s = s.strip()
+    if s.lower() == "present":
+        t = datetime.date.today()
+        return t.year + (t.month - 1) / 12
+    m = re.match(r"([A-Za-z]{3})\w*\s+(\d{4})", s)
+    if not m:
+        return None
+    mon = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"].index(m.group(1).lower())
+    return int(m.group(2)) + mon / 12
+
+
+def timeline_svg(roles, current):
+    """Self-made timeline of all roles from their listed periods, this one highlighted."""
+    spans = []
+    for e in roles:
+        parts = re.split(r"\s*[–-]\s*", e.get("period", ""))
+        if len(parts) == 2 and _month(parts[0]) and _month(parts[1]):
+            spans.append((e, _month(parts[0]), _month(parts[1])))
+    if not spans:
+        return ""
+    lo = min(s[1] for s in spans)
+    hi = max(s[2] for s in spans)
+    W, row = 600, 26
+    sx = lambda v: 8 + (v - lo) / max(hi - lo, 0.1) * (W - 16)
+    bars = []
+    for i, (e, a, b) in enumerate(spans):
+        cls = "tl-bar is-this" if e is current else "tl-bar"
+        y = 8 + i * row
+        bars.append(f'<rect x="{sx(a):.1f}" y="{y}" width="{max(sx(b) - sx(a), 3):.1f}" height="14" rx="3" class="{cls}">'
+                    f'<title>{esc(e["role"])} · {esc(e["period"])}</title></rect>')
+    ys = range(int(lo), int(hi) + 1)
+    ticks = "".join(f'<text x="{sx(y):.1f}" y="{8 + len(spans) * row + 12}" class="tl-tick" text-anchor="middle">{y}</text>'
+                    for y in ys if lo <= y <= hi)
+    h = 8 + len(spans) * row + 18
+    return (f'<figure class="detail-fig"><svg viewBox="0 0 {W} {h}" role="img" aria-label="Timeline of roles">'
+            + "".join(bars) + ticks +
+            '</svg><figcaption>Timeline of listed roles (from the periods on this site); this role highlighted.</figcaption></figure>')
+
+
+def _sec(h, body):
+    return f'<section class="prose-sec"><h2>{esc(h)}</h2>{body}</section>'
+
+
+def _page(tmpl, site, fname, title, desc, active, head, body, og="article"):
+    main = (f'<header class="page-head"><div class="wrap narrow"><div class="panel">{head}</div></div></header>'
+            f'<div class="wrap narrow"><div class="panel prose detail-body">{body}</div></div>')
+    doc = tmpl.replace("<!--DETAIL-->", main, 1).replace("<body>", f'<body data-active="{active}">', 1)
+    return mark_built(set_head(doc, head_block(site, fname, title, clip(desc), og_type=og)))
+
+
+def build_details(data, site, name):
+    tmpl = (ROOT / "detail.html").read_text(encoding="utf-8")
+    projects = data.get("projects", [])
+    pubs = data.get("publications", [])
+    written = []
+
+    for p in pubs:
+        fname = paper_file(p)
+        pr = next((x for x in projects if x.get("paper") == p["title"]), None)
+        secs = {s["h"].lower(): s["p"] for s in (pr or {}).get("sections", [])}
+        pick = lambda *keys: next((secs[k] for k in keys if k in secs), "")
+        venue = ", ".join(x for x in [p.get("venue", ""), p.get("type", ""), p.get("year", "")] if x)
+        links = id_links(p) + [(l["label"], l["url"]) for l in (pr or {}).get("links", []) if l.get("url")]
+        links = list(dict.fromkeys(links))
+        head = (f'<a class="backlink" href="publications.html">← Publications</a>'
+                f'<p class="eyebrow">{esc(p.get("type") or p.get("category", ""))}</p>'
+                f'<h1>{esc(p["title"])}</h1>'
+                f'<p class="lede">{esc(p.get("authors", ""))}</p>'
+                f'<p class="note-meta">{esc(venue)}{" · " + esc(p["status"]) if p.get("status") else ""}</p>'
+                + (f'<div class="hero-cta">' + "".join(
+                    f'<a class="btn" href="{esc(u)}" target="_blank" rel="noopener">{esc(l)} ↗</a>' for l, u in links)
+                   + '</div>' if links else ""))
+        missing = "Not yet written up on this site; to be filled from the paper."
+        body = [_sec("Overview", f'<p class="abstract">{esc(p["abstract"])}</p>' if p.get("abstract")
+                     else DRAFT.format("No abstract on this site yet."))]
+        body.append(_sec("Problem / motivation", f"<p>{esc(pick('problem', 'motivation'))}</p>" if pick('problem', 'motivation') else DRAFT.format(missing)))
+        meth = [f"<p>{esc(v)}</p>" for k, v in secs.items() if k not in ("problem", "motivation", "result", "results", "outcome")]
+        body.append(_sec("Methods", "".join(meth) if meth else DRAFT.format(missing)))
+        res = pick("result", "results", "outcome")
+        body.append(_sec("Results / outcomes", f"<p>{esc(res)}</p>" if res else DRAFT.format(
+            "See the abstract above; a fuller results summary is to be added from the paper.")))
+        role = (pr or {}).get("role") or p.get("note", "")
+        body.append(_sec("My role", f"<p>{esc(role)}</p>" if role else DRAFT.format(
+            "Contribution statement to be confirmed by Shivanshu.")))
+        if pr:
+            body.append(flow_svg([s["h"] for s in pr.get("sections", [])],
+                                 "Schematic: structure of the work (from the write-up's sections)"))
+            body.append(f'<p><a class="read-more" href="project-{esc(pr["id"])}.html">Project write-up with figures →</a></p>')
+        (OUT / fname).write_text(_page(tmpl, site, fname, f"{p['title']} — {name}",
+                                       p.get("abstract") or p["title"], "pubs", head, "".join(body)), encoding="utf-8")
+        written.append(fname)
+
+    roles = data.get("experience", []) + data.get("research", [])
+    for e in roles:
+        fname = role_file(e)
+        head = (f'<a class="backlink" href="index.html#work">← Work</a>'
+                f'<p class="eyebrow">{esc(e.get("period", ""))}{" · " + esc(e["location"]) if e.get("location") else ""}</p>'
+                f'<h1>{esc(e["role"])}</h1><p class="lede">{esc(e["org"])}</p>')
+        rel = [x for x in pubs if any(
+            (x.get("arxiv") and x["arxiv"] in pt) or (x.get("venue") and x["title"][:25] in pt) for pt in e.get("points", []))]
+        body = [_sec("Overview", f"<p>{esc(e['summary'])}</p>" if e.get("summary") else DRAFT.format("Summary to be added.")),
+                _sec("What I worked on", "<ul>" + "".join(f"<li>{esc(x)}</li>" for x in e.get("points", [])) + "</ul>"
+                     if e.get("points") else DRAFT.format("Details to be added.")),
+                _sec("Problem, methods and outcomes", DRAFT.format(
+                    "A longer narrative of this role (motivation, methods, outcomes) is to be written from Shivanshu's records; "
+                    "the points above are the verified summary.")),
+                timeline_svg(roles, e)]
+        if e.get("tags"):
+            body.append('<div class="tag-row">' + "".join(f'<span class="tag">{esc(t)}</span>' for t in e["tags"]) + "</div>")
+        if rel:
+            body.append(_sec("Related papers", "<ul>" + "".join(
+                f'<li><a href="{paper_file(x)}">{esc(x["title"])}</a></li>' for x in rel) + "</ul>"))
+        (OUT / fname).write_text(_page(tmpl, site, fname, f"{e['role']} — {name}",
+                                       e.get("summary") or e["role"], "work", head, "".join(body), og="profile"),
+                                 encoding="utf-8")
+        written.append(fname)
+    return written
+
+
 def assemble(data, site):
     if OUT.exists():
         shutil.rmtree(OUT)
@@ -378,7 +552,7 @@ def assemble(data, site):
         f = OUT / page
         f.write_text(mark_built(set_head(f.read_text(encoding="utf-8"), block)), encoding="utf-8")
 
-    written = list(PAGES) + build_notes(site, name)
+    written = list(PAGES) + build_notes(site, name) + build_details(data, site, name)
     tmpl = (ROOT / "project.html").read_text(encoding="utf-8")
     for pr in data.get("projects", []):
         pid = pr["id"]

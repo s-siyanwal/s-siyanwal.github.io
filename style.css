@@ -1,5 +1,4 @@
-/* ============================================================
-   Shivanshu Siyanwal — portfolio v2 "Landscape"
+/* =====================================================   Shivanshu Siyanwal — portfolio v2 "Landscape"
    A static hand-drawn valley behind frosted panels. Every text block
    sits in a panel; the ground never carries type. --accent-2 is kept
    for the equal-contribution mark, the active filter, the current
@@ -416,8 +415,7 @@ details > summary::-webkit-details-marker { display: none; }
   .pub-type { grid-column: 2; justify-self: start; margin-top: .2rem; }
 }
 
-/* ============================================================
-   v3 additions: motion, signature circuit, subpages
+/* =====================================================   v3 additions: motion, signature circuit, subpages
    ============================================================ */
 
 /* ---------- Scroll reveal ---------- */
@@ -723,3 +721,19 @@ a.card:hover h3 { color: var(--accent); }
 .note-body ul { padding-left: 1.2rem; color: var(--ink-soft); line-height: 1.68; margin: 0 0 1.15rem; }
 .note-body blockquote { margin: 1.4rem 0; padding-left: 1.1rem; border-left: 2px solid var(--accent); font-family: var(--display); }
 .note-body code { font-family: var(--mono); font-size: .9em; }
+/* ---------- Paper / role detail pages ---------- */
+.read-more { display: inline-block; margin-top: .6rem; font-family: var(--mono); font-size: .74rem; text-transform: uppercase; letter-spacing: .04em; color: var(--accent); text-decoration: none; }
+.read-more:hover { text-decoration: underline; }
+.draft-note { border: 1px dashed var(--accent); border-radius: 6px; padding: .6rem .8rem; font-size: .92rem !important; color: var(--ink-soft); }
+.detail-body ul { padding-left: 1.2rem; color: var(--ink-soft); line-height: 1.68; }
+.detail-fig { margin: 2rem 0; }
+.detail-fig svg { width: 100%; height: auto; display: block; }
+.detail-fig figcaption { font-family: var(--mono); font-size: .7rem; color: var(--ink-faint); margin-top: .5rem; }
+.fl-box { fill: none; stroke: var(--accent); stroke-width: 1.2; }
+.fl-txt { fill: var(--ink); font-family: var(--mono); font-size: 11px; }
+.fl-arrow { stroke: var(--ink-faint); stroke-width: 1.2; fill: none; }
+.fl-head { fill: var(--ink-faint); }
+.tl-bar { fill: var(--rule); }
+.tl-bar.is-this { fill: var(--accent); }
+.tl-tick { fill: var(--ink-faint); font-family: var(--mono); font-size: 10px; }
+.note-meta { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); }

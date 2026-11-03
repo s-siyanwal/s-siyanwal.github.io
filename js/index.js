@@ -1,4 +1,4 @@
-import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, projectHref, THREADS, projectStatus, chip, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE } from "./site.js";
+import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, projectHref, THREADS, projectStatus, chip, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE , paperHref, roleHref, readMore } from "./site.js";
 import { mountCircuit } from "./circuit.js";
 
 (async function () {
@@ -95,6 +95,7 @@ import { mountCircuit } from "./circuit.js";
       <p class="cite-venue">${venueHtml(pb)}</p>
       <p class="cite-result">${esc(firstSentence(pb.abstract))}</p>
       ${idLinks(pb) ? `<div class="ids">${idLinks(pb)}</div>` : ""}
+      ${readMore(paperHref(pb))}
     </li>`).join("");
   $("paper-foot").innerHTML = byYear.some((x) => x.equal_contribution) ? EQ_FOOTNOTE : "";
 
@@ -127,7 +128,7 @@ import { mountCircuit } from "./circuit.js";
         ${(e.tags || []).length ? `<div class="xp-tags">${tags(e.tags)}</div>` : ""}
         <span class="xp-toggle"><span class="chev" aria-hidden="true">▸</span> Details</span>
       </summary>
-      <div class="xp-detail"><ul>${(e.points || []).map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div>
+      <div class="xp-detail"><ul>${(e.points || []).map((t) => `<li>${esc(t)}</li>`).join("")}</ul>${readMore(roleHref(e), "Full role page")}</div>
     </details>`;
   }
 })();

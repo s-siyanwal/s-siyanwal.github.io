@@ -1,4 +1,4 @@
-import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags } from "./site.js";
+import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags , roleHref, readMore } from "./site.js";
 
 (async function () {
   let data;
@@ -33,7 +33,7 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags } fr
         ${(e.tags || []).length ? `<div class="xp-tags">${tags(e.tags)}</div>` : ""}
         <span class="xp-toggle"><span class="chev" aria-hidden="true">▸</span> Details</span>
       </summary>
-      <div class="xp-detail"><ul>${(e.points || []).map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div>
+      <div class="xp-detail"><ul>${(e.points || []).map((t) => `<li>${esc(t)}</li>`).join("")}</ul>${readMore(roleHref(e), "Full role page")}</div>
     </details>`).join("");
 
   // Skills
