@@ -46,9 +46,9 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "_site"
 DEFAULT_SITE_URL = "https://s-siyanwal.github.io"
 
-COPY = ["index.html", "project.html", "publications.html", "about.html",
+COPY = ["index.html", "project.html", "publications.html", "about.html", "notes.html",
         "style.css", ".nojekyll", "js", "data", "assets"]
-PAGES = ["index.html", "publications.html", "about.html"]
+PAGES = ["index.html", "publications.html", "about.html", "notes.html"]
 
 # Light-theme tokens from style.css (Interference); keep in sync.
 ACCENT = "#0b6a5a"
@@ -230,6 +230,120 @@ REDIRECT = """<script>
 
 
 # ------------------------------------------------------------------ build steps
+# ------------------------------------------------------------------ notes
+# Personal writing lives in notes/<slug>.md: a small front-matter block
+# (title, date YYYY-MM-DD, blurb, optional draft: true) and a Markdown body.
+# A tiny renderer covers paragraphs, ##/### headings, - lists, > quotes,
+# **bold**, *italic*, `code` and [links](url); no extra dependencies.
+NOTES_DIR = ROOT / "notes"
+
+
+def _inline(s):
+    s = esc(s)
+    s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
+    s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
+    s = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", s)
+    return re.sub(r"\[([^\]]+)\]\(([^)\s]+)\)", r'<a href="\2">\1</a>', s)
+
+
+def md_to_html(text):
+    out, buf, kind = [], [], None
+
+    def flush():
+        nonlocal buf, kind
+        if buf:
+            if kind == "ul":
+                out.append("<ul>" + "".join(f"<li>{_inline(x)}</li>" for x in buf) + "</ul>")
+            elif kind == "quote":
+                out.append(f"<blockquote><p>{_inline(' '.join(buf))}</p></blockquote>")
+            else:
+                out.append(f"<p>{_inline(' '.join(buf))}</p>")
+        buf, kind = [], None
+
+    for line in text.splitlines():
+        st = line.strip()
+        h = re.match(r"(#{2,4})\s+(.*)", st)
+        k = "ul" if re.match(r"[-*]\s+", st) else "quote" if st.startswith(">") else "p"
+        if not st:
+            flush()
+        elif h:
+            flush()
+            n = len(h.group(1))
+            out.append(f"<h{n}>{_inline(h.group(2))}</h{n}>")
+        else:
+            if kind and kind != k:
+                flush()
+            kind = k
+            buf.append(re.sub(r"^([-*]|>)\s*", "", st) if k != "p" else st)
+    flush()
+    return "\n".join(out)
+
+
+def load_notes():
+    notes = []
+    for f in (sorted(NOTES_DIR.glob("*.md")) if NOTES_DIR.exists() else []):
+        raw = f.read_text(encoding="utf-8")
+        m = re.match(r"---\s*\n(.*?)\n---\s*\n(.*)", raw, re.S)
+        if not m:
+            sys.exit(f"{f.name}: missing front matter (--- title/date/blurb ---)")
+        meta = {}
+        for line in m.group(1).splitlines():
+            kv = re.match(r"\s*([A-Za-z_]+)\s*:\s*(.*)", line)
+            if kv:
+                meta[kv.group(1).lower()] = kv.group(2).strip().strip('"')
+        if meta.get("draft", "").lower() == "true":
+            continue
+        for key in ("title", "date"):
+            if not meta.get(key):
+                sys.exit(f"{f.name}: front matter needs '{key}'")
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", meta["date"]):
+            sys.exit(f"{f.name}: date must be YYYY-MM-DD")
+        notes.append({**meta, "slug": f.stem, "body": md_to_html(m.group(2))})
+    return sorted(notes, key=lambda n: n["date"], reverse=True)
+
+
+def nice_date(d):
+    import datetime
+    x = datetime.date.fromisoformat(d)
+    return f"{x.day} {x:%b %Y}"
+
+
+def build_notes(site, name):
+    """Fill notes.html and write note-<slug>.html; returns the article filenames."""
+    notes = load_notes()
+    items = "".join(
+        f'<li class="note-item"><a class="note-link" href="note-{esc(n["slug"])}.html">'
+        f'<span class="note-title">{esc(n["title"])}</span>'
+        f'<time class="note-date" datetime="{esc(n["date"])}">{nice_date(n["date"])}</time></a>'
+        f'<p class="note-blurb">{esc(n.get("blurb", ""))}</p></li>' for n in notes)
+    listing = (f'<ul class="notes-list">{items}</ul>' if notes
+               else '<p class="notes-empty">Nothing here yet.</p>')
+    idx = OUT / "notes.html"
+    tmpl = idx.read_text(encoding="utf-8")
+    doc = set_head(tmpl.replace("<!--NOTES_LIST-->", listing, 1),
+                   head_block(site, "notes.html", f"Notes — {name}",
+                              clip(f"Personal notes and essays by {name}.")))
+    idx.write_text(mark_built(doc), encoding="utf-8")
+
+    written = []
+    for n in notes:
+        fname = f"note-{n['slug']}.html"
+        art = (f'<header class="page-head"><div class="wrap narrow"><div class="panel">'
+               f'<a class="backlink" href="notes.html">← Notes</a>'
+               f'<h1>{esc(n["title"])}</h1>'
+               f'<p class="note-meta"><time datetime="{esc(n["date"])}">{nice_date(n["date"])}</time></p>'
+               f'</div></div></header>\n'
+               f'  <div class="wrap narrow"><div class="panel"><article class="prose note-body">\n'
+               f'{n["body"]}\n</article></div></div>')
+        doc = re.sub(r'<main id="main">.*</main>', lambda _: f'<main id="main">\n  {art}\n</main>',
+                     tmpl, count=1, flags=re.S)
+        doc = set_head(doc, head_block(site, fname, f"{n['title']} — {name}",
+                                       clip(n.get("blurb") or n["title"]), og_type="article"))
+        (OUT / fname).write_text(mark_built(doc), encoding="utf-8")
+        written.append(fname)
+    return written
+
+
 def assemble(data, site):
     if OUT.exists():
         shutil.rmtree(OUT)
@@ -264,8 +378,8 @@ def assemble(data, site):
         f = OUT / page
         f.write_text(mark_built(set_head(f.read_text(encoding="utf-8"), block)), encoding="utf-8")
 
+    written = list(PAGES) + build_notes(site, name)
     tmpl = (ROOT / "project.html").read_text(encoding="utf-8")
-    written = list(PAGES)
     for pr in data.get("projects", []):
         pid = pr["id"]
         fname = f"project-{pid}.html"

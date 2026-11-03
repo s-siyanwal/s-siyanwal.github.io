@@ -33,6 +33,7 @@ export function mountChrome(data, active) {
       ${item("publications.html", "Publications", "pubs")}
       ${item("about.html", "About", "about")}
       ${cv ? `<a class="topbar-cv" href="${esc(cv)}" target="_blank" rel="noopener">CV ↓</a>` : ""}
+      <a class="topbar-notes" href="notes.html"${active === "notes" ? ' aria-current="page"' : ""}>Notes</a>
     </nav>
     <button type="button" class="theme-toggle"></button>`;
   mountThemeToggle(bar.querySelector(".theme-toggle"));
@@ -71,7 +72,7 @@ export function mountFooter(data) {
         <p class="footer-name">${esc(p.name)}</p>
         <p class="footer-loc">${esc(p.location || "")}</p>
       </div>
-      <div class="footer-links">${links}</div>
+      <div class="footer-links">${links}<a class="footer-notes" href="notes.html">Notes</a></div>
     </div></div>`;
 }
 

@@ -703,3 +703,23 @@ a.card:hover h3 { color: var(--accent); }
   main a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .8em; color: var(--ink-faint); word-break: break-all; }
   .footer { border-top: 1px solid var(--rule); }
 }
+
+/* ---------- Notes (secondary, personal writing) ---------- */
+.topbar-notes { font-size: .72rem !important; opacity: .7; }
+.topbar-notes:hover, .topbar-notes[aria-current] { opacity: 1; }
+.footer-links a.footer-notes { color: var(--ink-faint); }
+.notes-lede { color: var(--ink-soft); margin: 0; }
+.notes-list { list-style: none; margin: 0; padding: 0; }
+.note-item { padding: 1.1rem 0; border-top: 1px solid var(--rule); }
+.note-item:first-child { border-top: 0; padding-top: 0; }
+.note-link { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; text-decoration: none; color: var(--ink); }
+.note-link:hover .note-title { color: var(--accent); }
+.note-title { font-family: var(--display); font-size: 1.2rem; }
+.note-date, .note-meta { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); white-space: nowrap; }
+.note-blurb { margin: .35rem 0 0; color: var(--ink-soft); }
+.note-body { max-width: 68ch; }
+.note-body h2 { font-size: 1.22rem; margin: 2rem 0 .55rem; }
+.note-body h3 { font-size: 1.05rem; margin: 1.6rem 0 .45rem; }
+.note-body ul { padding-left: 1.2rem; color: var(--ink-soft); line-height: 1.68; margin: 0 0 1.15rem; }
+.note-body blockquote { margin: 1.4rem 0; padding-left: 1.1rem; border-left: 2px solid var(--accent); font-family: var(--display); }
+.note-body code { font-family: var(--mono); font-size: .9em; }

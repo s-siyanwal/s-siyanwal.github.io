@@ -190,3 +190,29 @@ Accessibility: keyboard-operable throughout, visible focus rings, correct headin
 order, `prefers-reduced-motion` freezes all animation, and reveal animations are
 fail-safe (content shows with JS disabled, on print, and via a 2.5s timeout).
 Change colors/fonts via the CSS variables at the top of `style.css`.
+
+---
+
+## How to add a note
+
+`Notes` is a small, secondary section for personal, non-research writing
+(habits, essays, creative pieces). It appears only as the last item in the top
+bar and as a footer link; it is never featured on the homepage.
+
+1. Create `notes/<slug>.md` (the slug becomes the URL: `note-<slug>.html`).
+2. Start it with front matter:
+   ```
+   ---
+   title: My note title
+   date: 2026-11-03
+   blurb: One line shown on the Notes index.
+   ---
+   ```
+   Add `draft: true` to keep it out of the build.
+3. Write the body in Markdown: paragraphs, `##` headings, `-` lists, `>` quotes,
+   `**bold**`, `*italic*`, `` `code` ``, `[links](url)`.
+4. Commit to `main`. The Pages build lists it on `/notes.html` (newest first)
+   and renders the article page.
+
+`notes/example-placeholder.md` is a placeholder showing the format; delete it
+once you add a real note.
