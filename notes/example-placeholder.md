@@ -1,6 +1,7 @@
 ---
 title: Example note (placeholder)
 date: 2026-11-03
+draft: true
 blurb: A placeholder showing how a note looks. Replace or delete it before publishing real notes.
 ---
 
