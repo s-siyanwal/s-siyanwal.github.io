@@ -442,6 +442,33 @@ def _sec(h, body):
     return f'<section class="prose-sec"><h2>{esc(h)}</h2>{body}</section>'
 
 
+RESULT_KEYS = ("result", "results", "outcome", "outcomes", "findings", "validation")
+PROBLEM_KEYS = ("problem", "motivation")
+NOT_METHODS = PROBLEM_KEYS + RESULT_KEYS + ("status",)
+
+
+def _paras(v):
+    """Section text from content.json: a string or a list of paragraphs."""
+    return "".join(f"<p>{esc(x)}</p>" for x in ([v] if isinstance(v, str) else v or []) if x)
+
+
+def _table(t):
+    """Optional data table on a section: {"caption", "head": [...], "rows": [[...], ...]}."""
+    if not t:
+        return ""
+    head = "".join(f'<th scope="col">{esc(h)}</th>' for h in t.get("head", []))
+    rows = "".join("<tr>" + "".join(
+        (f'<th scope="row">{esc(c)}</th>' if i == 0 else f"<td>{esc(c)}</td>") for i, c in enumerate(r)) + "</tr>"
+        for r in t.get("rows", []))
+    cap = f"<caption>{esc(t['caption'])}</caption>" if t.get("caption") else ""
+    return (f'<div class="fig-data fig-scroll" tabindex="0"><table>{cap}<thead><tr>{head}</tr></thead>'
+            f"<tbody>{rows}</tbody></table></div>")
+
+
+def _body(sec):
+    return _paras(sec.get("p")) + "".join(_table(t) for t in sec.get("tables", []))
+
+
 def _page(tmpl, site, fname, title, desc, active, head, body, og="article"):
     main = (f'<header class="page-head"><div class="wrap narrow"><div class="panel">{head}</div></div></header>'
             f'<div class="wrap narrow"><div class="panel prose detail-body">{body}</div></div>')
@@ -458,8 +485,9 @@ def build_details(data, site, name):
     for p in pubs:
         fname = paper_file(p)
         pr = next((x for x in projects if x.get("paper") == p["title"]), None)
-        secs = {s["h"].lower(): s["p"] for s in (pr or {}).get("sections", [])}
-        pick = lambda *keys: next((secs[k] for k in keys if k in secs), "")
+        # A publication's own sections/role take precedence over its linked project's.
+        secs = {s["h"].lower(): s for s in (p.get("sections") or (pr or {}).get("sections", []))}
+        pick = lambda keys: "".join(_body(secs[k]) for k in keys if k in secs)
         venue = ", ".join(x for x in [p.get("venue", ""), p.get("type", ""), p.get("year", "")] if x)
         links = id_links(p) + [(l["label"], l["url"]) for l in (pr or {}).get("links", []) if l.get("url")]
         links = list(dict.fromkeys(links))
@@ -468,21 +496,29 @@ def build_details(data, site, name):
                 f'<h1>{esc(p["title"])}</h1>'
                 f'<p class="lede">{esc(p.get("authors", ""))}</p>'
                 f'<p class="note-meta">{esc(venue)}{" · " + esc(p["status"]) if p.get("status") else ""}</p>'
+                + (f'<p class="note-meta">Supervisor: {esc(p["supervisor"])}</p>' if p.get("supervisor") else "")
                 + (f'<div class="hero-cta">' + "".join(
                     f'<a class="btn" href="{esc(u)}" target="_blank" rel="noopener">{esc(l)} ↗</a>' for l, u in links)
                    + '</div>' if links else ""))
         missing = "Not yet written up on this site; to be filled from the paper."
         body = [_sec("Overview", f'<p class="abstract">{esc(p["abstract"])}</p>' if p.get("abstract")
                      else DRAFT.format("No abstract on this site yet."))]
-        body.append(_sec("Problem / motivation", f"<p>{esc(pick('problem', 'motivation'))}</p>" if pick('problem', 'motivation') else DRAFT.format(missing)))
-        meth = [f"<p>{esc(v)}</p>" for k, v in secs.items() if k not in ("problem", "motivation", "result", "results", "outcome")]
-        body.append(_sec("Methods", "".join(meth) if meth else DRAFT.format(missing)))
-        res = pick("result", "results", "outcome")
-        body.append(_sec("Results / outcomes", f"<p>{esc(res)}</p>" if res else DRAFT.format(
+        prob = pick(PROBLEM_KEYS)
+        body.append(_sec("Problem / motivation", prob or DRAFT.format(missing)))
+        meth = "".join(_body(v) for k, v in secs.items() if k not in NOT_METHODS)
+        body.append(_sec("Methods", meth or DRAFT.format(missing)))
+        res = pick(RESULT_KEYS)
+        body.append(_sec("Results / outcomes", res or DRAFT.format(
             "See the abstract above; a fuller results summary is to be added from the paper.")))
-        role = (pr or {}).get("role") or p.get("note", "")
-        body.append(_sec("My role", f"<p>{esc(role)}</p>" if role else DRAFT.format(
-            "Contribution statement to be confirmed by Shivanshu.")))
+        # The free-text `note` is context, not a contribution statement, so it is never used as "My role".
+        role = p.get("role") or (pr or {}).get("role")
+        if p.get("role_section", True):
+            body.append(_sec("My role", _paras(role) if role else DRAFT.format(
+                "Contribution statement to be confirmed by Shivanshu.")))
+        rel = [x for x in pubs if x["title"] in p.get("related", [])]
+        if rel:
+            body.append(_sec("Related", "<ul>" + "".join(
+                f'<li><a href="{paper_file(x)}">{esc(x["title"])}</a></li>' for x in rel) + "</ul>"))
         if pr:
             body.append(flow_svg([s["h"] for s in pr.get("sections", [])],
                                  "Schematic: structure of the work (from the write-up's sections)"))
@@ -502,7 +538,7 @@ def build_details(data, site, name):
         body = [_sec("Overview", f"<p>{esc(e['summary'])}</p>" if e.get("summary") else DRAFT.format("Summary to be added.")),
                 _sec("What I worked on", "<ul>" + "".join(f"<li>{esc(x)}</li>" for x in e.get("points", [])) + "</ul>"
                      if e.get("points") else DRAFT.format("Details to be added.")),
-                _sec("Problem, methods and outcomes", DRAFT.format(
+                _sec("Problem, methods and outcomes", _paras(e["narrative"]) if e.get("narrative") else DRAFT.format(
                     "A longer narrative of this role (motivation, methods, outcomes) is to be written from Shivanshu's records; "
                     "the points above are the verified summary.")),
                 timeline_svg(roles, e)]

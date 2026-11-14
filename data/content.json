@@ -234,7 +234,7 @@
   ],
   "research": [
     {
-      "org": "NMR Quantum Computing Group, IISER Mohali (PI: Prof. Kavita Dorai; co-supervisor: Prof. Arvind)",
+      "org": "NMR Quantum Computing Group, IISER Mohali (PI: Prof. Kavita Dorai)",
       "role": "MS Research Student",
       "location": "Punjab, India",
       "period": "May 2021 – Aug 2022",
@@ -309,7 +309,7 @@
       "id": "qir-qnn",
       "name": "Quantum Image Representation Neural Networks",
       "blurb": "Quantum neural networks for binary image classification built on four quantum image encodings: NASS, QBIR, FTQR and FRQCI.",
-      "abstract": "Quantum neural networks that classify binary MNIST images (0 vs 1) at 2×2 to 16×16, plus a three-class FashionMNIST generalization study, with pixel data encoded through four quantum image representations: NASS, QBIR, FTQR and FRQCI. It compares circuit depth, gate count and qubit usage for the four encodings; QBIR gives the shallowest circuits, FRQCI the deepest. Published in The Journal of Supercomputing 82:495 (2026).",
+      "abstract": "A controlled comparison of four quantum image representations (NASS, QBIR, FTQR, FRQCI) inside one variational quantum neural network framework for image classification on near-term (NISQ) devices, tested on binary MNIST (0 vs 1) and a three-class FashionMNIST subset at resolutions from 2×2 to 16×16, under both noiseless simulation and a calibrated noise model of the IBM Heron r3 processor. Two reference models, a quanvolutional network (QCNN) and a hybrid CNN–QNN (HCQNN), place the encodings against established baselines.",
       "metrics": [
         {
           "value": "4",
@@ -333,7 +333,7 @@
         }
       ],
       "featured": true,
-      "role": "Co-first author (equal contribution).",
+      "role": "I conceived this study: the question of how the choice of quantum image encoding shapes the trainability, noise robustness and cost of variational QNNs. I designed the experimental protocol, selected and implemented the four encodings (NASS, QBIR, FTQR, FRQCI) in a single QNN framework, and carried out the comparative analysis, the visualisations and the organisation of results. During revision, in response to referee and editor feedback from The Journal of Supercomputing, I also carried out the state-of-the-art comparison, the gradient (trainability) analysis and the mathematical modelling.",
       "sections": [
         {
           "h": "Problem",
@@ -341,11 +341,15 @@
         },
         {
           "h": "Approach",
-          "p": "I built quantum neural networks on four quantum image representations — NASS, QBIR, FTQR and FRQCI — for binary MNIST classification (0 vs 1) at 2×2 to 16×16, plus a three-class FashionMNIST generalization study. It compares circuit depth, gate count and qubit usage for the four encodings; QBIR gives the shallowest circuits, FRQCI the deepest. The paper also analyses trainability (gradient variance and norms) and expressivity, not just resource cost."
+          "p": "Four quantum image representations — Normal Arbitrary Superposition State (NASS), Quantum Block Image Representation (QBIR), Fourier-based Threshold Quantum Representation (FTQR) and Flexible Representation for Quantum Color Images (FRQCI) — are compared within one variational QNN framework. The main protocol runs the four encodings under a ring-entangled ansatz from 2×2 to 8×8; an ablation repeats the comparison with a hardware-efficient two-design ansatz and a strongly entangling ansatz, at all four resolutions on both datasets. Resource cost is measured as circuit depth, gate count and qubit count, and trainability through per-epoch gradient variance, L2 gradient norm, mean signed gradient and parameter-change magnitude. Every result is a mean ± σ over 20 random seeds."
+        },
+        {
+          "h": "Results",
+          "p": "HCQNN was the strongest overall, with test accuracy up to 0.9756 ± 0.0076 (2×2, noiseless, two-design). Among the fully quantum models, QBIR gave the best balance of accuracy, noise robustness and depth: 0.9396 ± 0.0140 (2×2, noiseless, two-design), and the strongest fully quantum encoding at every resolution under Heron r3 noise. NASS was competitive at low resolution (up to 0.8928 ± 0.0196) but fell to 0.691 at 4×4 under the ring protocol. FTQR and FRQCI did not converge reliably, with test accuracy near chance (≈ 0.50–0.61), consistent with barren plateaus. At 16×16, QBIR needs depth 5,612, 9,701 gates and 16 qubits; FRQCI needs depth 125,299, 164,353 gates and 11 qubits."
         },
         {
           "h": "Status",
-          "p": "Published in The Journal of Supercomputing 82:495 (2026)."
+          "p": "Published in The Journal of Supercomputing 82(8):495 (2026)."
         }
       ],
       "paper": "Quantum image representation-based quantum neural networks for binary classification"
@@ -449,12 +453,16 @@
       "audience": "academic",
       "links": [
         {
+          "label": "Paper",
+          "url": "https://doi.org/10.1007/s11128-025-04696-8"
+        },
+        {
           "label": "Preprint",
           "url": "https://arxiv.org/abs/2409.19739"
         }
       ],
       "featured": false,
-      "role": "Co-first author (equal contribution with V. Gulati); MS research student.",
+      "role": "I worked on the machine-learning side of this study. I explored multiple ANN architectures and configurations, problem formulations, input representations and encodings (one-hot, binary and categorical), and came up with the feature-reduction approach: writing states in canonical form, then ranking the remaining density-matrix elements by ANOVA. V. Gulati handled the experimental side: sample preparation, NMR gate preparation, the physical experiments and measurements, and the analysis and cleaning of the raw experimental data.",
       "sections": [
         {
           "h": "Problem",
@@ -462,11 +470,11 @@
         },
         {
           "h": "Approach",
-          "p": "I designed an ANN that detects genuine multipartite entanglement and assigns one of six SLOCC classes. Each state gives 128 real features (Re and Im of the 64 elements of ρ); writing states in canonical form leaves 18 (14 Re, 4 Im), which are then ranked by ANOVA within the 18."
+          "p": "An ANN detects genuine multipartite entanglement and assigns one of six SLOCC classes. Each state gives 128 real features (Re and Im of the 64 elements of ρ); writing states in canonical form leaves 18 (14 Re, 4 Im), which are then ranked by ANOVA. The model is trained on simulated states (12 × 10³ states) and tested on 30 experimental three-qubit states prepared on an NMR quantum processor."
         },
         {
-          "h": "Findings",
-          "p": "Validated on 30 experimental three-qubit pseudopure states from an NMR processor: GME detection reached 0.954 ± 0.046 accuracy with 4 features, and SLOCC classification 0.867 ± 0.090 with 6 (overall accuracy over the experimental states, Tables IV–V)."
+          "h": "Results",
+          "p": "Validated on 30 experimental three-qubit pseudopure states from an NMR processor: GME detection reached 0.954 ± 0.046 accuracy with 4 features, and SLOCC classification 0.867 ± 0.090 with 6 (overall accuracy over the experimental states, Tables IV–V). The ANN is benchmarked against SVM and KNN, and against existing three-qubit classification schemes (the 3-tangle and correlation tensors)."
         },
         {
           "h": "Status",
@@ -518,7 +526,7 @@
       "id": "tensnet",
       "name": "TensNet: Tensor Networks for 2D Flow Simulation",
       "blurb": "A tensor network library using MPS and MPO for memory-efficient simulation of 2D incompressible flow.",
-      "abstract": "TensNet is a library implementing tensor network methods, using Matrix Product States (MPS) and Matrix Product Operators (MPO), for memory-efficient simulation of the 2D incompressible Navier–Stokes equations. It keeps solution accuracy through adaptive bond-dimension truncation, uses the DMRG algorithm to solve the implicit pressure-correction equations, and uses cross-approximation to handle complex immersed boundaries, reducing the memory footprint relative to traditional methods.",
+      "abstract": "TensNet is a library implementing tensor network methods, using Matrix Product States (MPS) and Matrix Product Operators (MPO), for simulating the 2D incompressible Navier–Stokes equations. It is designed to reduce memory use compared with standard grid-based solvers, keeping accuracy through adaptive bond-dimension truncation; it uses the DMRG algorithm to solve the implicit pressure-correction equations and cross-approximation to handle complex immersed boundaries.",
       "tags": [
         "Tensor networks",
         "MPS",
@@ -534,18 +542,132 @@
         },
         {
           "h": "Approach",
-          "p": "TensNet represents flow fields as Matrix Product States and operators as Matrix Product Operators, compressing them by SVD truncation with adaptive bond dimensions. The two-site DMRG algorithm solves the implicit Poisson equations in the pressure-correction scheme, and cross-approximation represents immersed boundaries and obstacle geometries as MPS."
+          "p": "TensNet represents flow fields as Matrix Product States and operators as Matrix Product Operators, compressing them by SVD truncation with adaptive bond dimensions. The two-site DMRG algorithm solves the implicit Poisson equations in the pressure-correction scheme, and cross-approximation represents immersed boundaries and obstacle geometries as MPS. Benchmarks: a cylinder in cross-flow, a square obstacle and a 3×2 array of cylinders, compared against a dense finite-difference solution on the same grid."
         },
         {
-          "h": "Validation",
-          "p": "Benchmarks include a cylinder in cross-flow and arrays of circular obstacles, with drag coefficients and Strouhal numbers compared against reference values."
+          "h": "Results",
+          "p": [
+            "Reported in the submitted manuscript (under review at ICSSCC 2026).",
+            "Setup: Intel i7 workstation with 16 GB RAM and no GPU; 256 × 64 grid, Δt = 10⁻³, ν = 0.01; accuracy measured against a dense finite-difference solution on the same grid.",
+            "At D_max = 30 the L2 error is below 10⁻² and memory falls from about 8 GB to 5.8 MB, a reduction of roughly 1.4 × 10³. The L2 velocity error falls roughly exponentially with D_max at Re = 15, 30, 100 and 500; higher Re needs a moderately larger D_max.",
+            "Scalability: on a 1024 × 256 grid with D_max = 50, TensNet uses about 35 MB; the manuscript estimates about 2 TB for a dense finite-difference solver."
+          ],
+          "tables": [
+            {
+              "caption": "Memory vs accuracy, cylinder in cross-flow (t = 1.0, 100 time steps)",
+              "head": [
+                "D_max",
+                "Memory",
+                "L2 error",
+                "Time"
+              ],
+              "rows": [
+                [
+                  "10",
+                  "2.3 MB",
+                  "0.087",
+                  "45 s"
+                ],
+                [
+                  "20",
+                  "4.1 MB",
+                  "0.032",
+                  "68 s"
+                ],
+                [
+                  "30",
+                  "5.8 MB",
+                  "0.008",
+                  "92 s"
+                ],
+                [
+                  "50",
+                  "8.2 MB",
+                  "0.002",
+                  "145 s"
+                ],
+                [
+                  "Dense reference",
+                  "8,000 MB",
+                  "—",
+                  "3,600 s"
+                ]
+              ]
+            },
+            {
+              "caption": "Cylinder flow statistics, TensNet at D_max = 30 vs literature",
+              "head": [
+                "Re",
+                "Cd (TensNet)",
+                "Cd (reference)",
+                "St (TensNet)",
+                "St (reference)"
+              ],
+              "rows": [
+                [
+                  "15",
+                  "2.41",
+                  "2.35–2.40",
+                  "–",
+                  "–"
+                ],
+                [
+                  "30",
+                  "1.68",
+                  "1.62–1.68",
+                  "0.198",
+                  "0.190–0.200"
+                ],
+                [
+                  "100",
+                  "1.32",
+                  "1.25–1.35",
+                  "0.166",
+                  "0.160–0.170"
+                ],
+                [
+                  "500",
+                  "1.14",
+                  "1.06–1.20",
+                  "0.211",
+                  "0.205–0.220"
+                ]
+              ]
+            },
+            {
+              "caption": "Computational cost, 256 × 64 grid, 100 steps",
+              "head": [
+                "Solver",
+                "Memory",
+                "Runtime"
+              ],
+              "rows": [
+                [
+                  "TensNet (D_max = 30)",
+                  "5.8 MB",
+                  "92 s"
+                ],
+                [
+                  "Dense finite-difference",
+                  "8,000 MB",
+                  "3,600 s"
+                ],
+                [
+                  "GPU-optimised finite-difference",
+                  "6,000 MB",
+                  "450 s"
+                ]
+              ]
+            }
+          ]
         },
         {
           "h": "Status",
-          "p": "Manuscript in preparation."
+          "p": "Submitted to ICSSCC 2026 (under review)."
         }
       ],
-      "paper": "TensNet: Memory-Efficient Tensor Network Methods for 2D Incompressible Flow Simulation"
+      "paper": "TensNet: Memory-Efficient Tensor Network Methods for 2D Incompressible Flow Simulation",
+      "role": "TensNet was originally developed by N. Khan and S. S. Pandey. I carried out the testing, code troubleshooting, benchmarking and visualisation, and prepared the manuscript."
     }
   ],
   "publications": [
@@ -561,14 +683,14 @@
       "category": "conference"
     },
     {
-      "venue": "",
-      "year": "",
+      "venue": "ICSSCC 2026",
+      "year": "2026",
       "title": "TensNet: Memory-Efficient Tensor Network Methods for 2D Incompressible Flow Simulation",
       "type": "Manuscript",
-      "status": "manuscript in preparation",
+      "status": "submitted (under review)",
       "authors": "S. Siyanwal, N. Khan, S. S. Pandey, K. Y. Islur, K. Dave, S. Chhipa",
       "doi": "",
-      "abstract": "TensNet is a library implementing tensor network methods, using Matrix Product States (MPS) and Matrix Product Operators (MPO), for memory-efficient simulation of the 2D incompressible Navier–Stokes equations. It keeps solution accuracy through adaptive bond-dimension truncation, uses the DMRG algorithm to solve the implicit pressure-correction equations, and uses cross-approximation to handle complex immersed boundaries, reducing the memory footprint relative to traditional methods.",
+      "abstract": "TensNet is a library implementing tensor network methods, using Matrix Product States (MPS) and Matrix Product Operators (MPO), for simulating the 2D incompressible Navier–Stokes equations. It is designed to reduce memory use compared with standard grid-based solvers, keeping accuracy through adaptive bond-dimension truncation; it uses the DMRG algorithm to solve the implicit pressure-correction equations and cross-approximation to handle complex immersed boundaries.",
       "category": "manuscript"
     },
     {
@@ -585,20 +707,6 @@
       "category": "conference"
     },
     {
-      "venue": "arXiv",
-      "year": "2025",
-      "title": "Quantum-assisted machine learning models for enhanced weather prediction",
-      "type": "Preprint",
-      "status": "preprint",
-      "authors": "S. Sakhuja*, S. Siyanwal*, A. Tiwari, Britant, S. Kashyap",
-      "doi": "",
-      "abstract": "",
-      "arxiv": "2503.23408",
-      "equal_contribution": true,
-      "note": "ERA5, Safdarjung; QGRU, QLSTM, QNN, VQC, QSVM.",
-      "category": "preprint"
-    },
-    {
       "venue": "IEEE AIMLSystems 2025",
       "year": "2025",
       "title": "Quantum machine learning models for enhanced weather prediction",
@@ -606,10 +714,26 @@
       "status": "published",
       "authors": "A. Tiwari, S. Kumar, P. Tyagi, S. Siyanwal, S. Sakhuja",
       "doi": "",
-      "abstract": "Applies QGRU, QNN, QLSTM, VQC and QSVM models to ERA5 meteorological time-series data (Safdarjung, New Delhi) for regression and classification, benchmarked against classical counterparts.",
+      "abstract": "We apply five quantum machine learning models (QGRU, QLSTM, QNN, VQC and QSVM) to meteorological time-series data from the ERA5 reanalysis dataset, for both regression (forecasting) and classification tasks.",
       "pages": "446–451",
       "xplore": "11330613",
-      "category": "conference"
+      "category": "conference",
+      "arxiv": "2503.23408",
+      "sections": [
+        {
+          "h": "Problem",
+          "p": "Whether current QML models can be used for weather prediction, and where hardware limits and noise constrain them."
+        },
+        {
+          "h": "Methods",
+          "p": "Meteorological features from ERA5 single-level data for Safdarjung, Delhi, are preprocessed and fed to quantum recurrent (QGRU, QLSTM), variational (VQC, QNN) and kernel (QSVM) models. Each model is evaluated on regression and classification tasks, and compared with classical baselines: LSTM and SVM (built by me) and GRU and ANN (built by S. Sakhuja)."
+        },
+        {
+          "h": "Results",
+          "p": "The models reach reasonable accuracy on both prediction and classification, best on binary classification. Hardware limitations and noise limit scalability and generalisation."
+        }
+      ],
+      "role": "I built the QLSTM and QSVM models and their classical baselines (LSTM and SVM), extracted the dataset from ERA5, and carried out the data analysis. S. Sakhuja carried out the remaining work."
     },
     {
       "venue": "The Journal of Supercomputing",
@@ -619,12 +743,13 @@
       "status": "published",
       "authors": "A. Tiwari*, S. Siyanwal*, S. Sakhuja, S. Kumar, P. Tyagi",
       "doi": "10.1007/s11227-026-08621-3",
-      "abstract": "Quantum neural networks for binary MNIST classification (0 vs 1) at 2×2 to 16×16, plus a three-class FashionMNIST generalization study, built on four quantum image encodings: NASS, QBIR, FTQR and FRQCI. It compares circuit depth, gate count and qubit usage for the four encodings; QBIR gives the shallowest circuits, FRQCI the deepest.",
+      "abstract": "A controlled comparison of four quantum image representations (NASS, QBIR, FTQR, FRQCI) inside one variational quantum neural network framework for image classification on near-term (NISQ) devices, tested on binary MNIST (0 vs 1) and a three-class FashionMNIST subset at resolutions from 2×2 to 16×16, under both noiseless simulation and a calibrated noise model of the IBM Heron r3 processor. Two reference models, a quanvolutional network (QCNN) and a hybrid CNN–QNN (HCQNN), place the encodings against established baselines.",
       "volume": "82",
       "equal_contribution": true,
       "note": "NASS, QBIR, FTQR, FRQCI; binary MNIST 0/1 at 2×2 to 16×16; three-class FashionMNIST.",
       "category": "journal",
-      "article": "495"
+      "article": "495",
+      "issue": "8"
     },
     {
       "venue": "Quantum Information Processing",
@@ -633,7 +758,7 @@
       "type": "Journal article",
       "status": "published",
       "authors": "V. Gulati*, S. Siyanwal*, Arvind, K. Dorai",
-      "doi": "",
+      "doi": "10.1007/s11128-025-04696-8",
       "abstract": "An artificial neural network identifies which of the six SLOCC classes an experimentally generated three-qubit pseudopure state belongs to, and detects genuine multipartite entanglement. The 128 real features (Re and Im of the 64 elements of ρ) are reduced to 18 (14 Re, 4 Im) by the canonical form, then ranked by ANOVA; the model is trained on simulated states, validated on 30 experimental states from an NMR quantum processor, and benchmarked against SVM and KNN.",
       "volume": "24",
       "issue": "3",
@@ -641,19 +766,51 @@
       "arxiv": "2409.19739",
       "equal_contribution": true,
       "note": "Grew out of the BS–MS thesis at IISER Mohali (advisor Prof. Kavita Dorai).",
-      "category": "journal"
+      "category": "journal",
+      "related": [
+        "Entanglement detection and gate optimization in the system of three and four NMR qubits using deep learning and machine learning"
+      ]
     },
     {
       "venue": "IISER Mohali",
       "year": "2022",
       "title": "Entanglement detection and gate optimization in the system of three and four NMR qubits using deep learning and machine learning",
       "type": "BS–MS thesis",
-      "status": "",
+      "status": "held in the IISER Mohali library; not yet public (to be released with the supervisor's permission)",
       "authors": "S. Siyanwal",
       "doi": "",
-      "abstract": "",
-      "note": "BS–MS thesis. Advisor: Prof. Kavita Dorai.",
-      "category": "thesis"
+      "abstract": "This thesis applies machine learning and deep learning to two tasks in NMR quantum computing. The first is detecting and classifying entanglement in two-, three- and four-qubit states. The second is optimizing quantum gates by designing radio-frequency pulse sequences with a genetic algorithm.",
+      "note": "BS–MS thesis. Supervisor: Prof. Kavita Dorai.",
+      "category": "thesis",
+      "related": [
+        "ANN-enhanced detection of multipartite entanglement in a three-qubit NMR quantum processor"
+      ],
+      "supervisor": "Prof. Kavita Dorai",
+      "role_section": false,
+      "sections": [
+        {
+          "h": "Problem",
+          "p": "Entanglement witnesses detect only some entangled states. Full state tomography detects them all, but the number of measurements it needs grows exponentially with system size. Separately, implementing high-fidelity gates on NMR hardware requires breaking each gate into an optimized sequence of pulses."
+        },
+        {
+          "h": "Methods",
+          "p": [
+            "Neural networks (Keras/TensorFlow) trained on simulated pure-state density matrices: 15,000 states (2 qubits), 100,000 (3 qubits) and 70,000 (4 qubits). Labels were entangled vs separable for 2 qubits, and separability classes for 3 and 4 qubits.",
+            "K-nearest neighbours and PCA + K-means on 50,000, 100,000 and 70,000 simulated pure states; PCA + K-means was also applied to 54 experimental two-qubit NMR states provided by V. Gulati, and their theoretical counterparts. A GAN with a complex-valued pseudo-siamese network was used for two-qubit states.",
+            "Gate optimization: a genetic algorithm, following the approach of Devra et al., that searches over sequences of hard pulses and delays (pulse width, phase and delay), using gate fidelity as the fitness function."
+          ]
+        },
+        {
+          "h": "Results",
+          "p": [
+            "Neural networks: validation accuracy of 0.9997 (2 qubits), 0.9971 (3) and 0.9996 (4) on simulated pure states. They could not separate states within the fully entangled class, such as GHZ and W states.",
+            "K-nearest neighbours: best accuracy of 0.9981 (2 qubits, k = 3), 0.9862 (3 qubits, k = 1 or 3) and 0.9619 (4 qubits, k = 15 or 17).",
+            "PCA + K-means formed cluster boundaries for 2-, 3- and 4-qubit states; how accurate those boundaries are was left for further study. The GAN + pseudo-siamese network, trained only on separable two-qubit states, classified entangled states in the test set.",
+            "Genetic-algorithm pulse design: for a two-qubit homonuclear system, the thesis reports a gate fidelity of 0.8513 (about 8 hours of computation). It was not fully optimized and was not tested on the NMR hardware.",
+            "Open problems identified: training on noisy states, and working from incomplete tomography. The three-qubit classification on experimental NMR data was developed further into the published paper."
+          ]
+        }
+      ]
     },
     {
       "venue": "University of Melbourne",
