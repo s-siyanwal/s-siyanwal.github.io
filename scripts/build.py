@@ -13,7 +13,8 @@ What it does
    Chromium and saving the resulting HTML. Crawlers and link previews (LinkedIn,
    Slack, X) then see real content. The JS still runs in visitors' browsers as
    progressive enhancement (filters, disclosure widgets, motion).
-5. Adds favicon.svg, og.png (1200x630 preview image), sitemap.xml, robots.txt
+5. Adds favicon.svg, og.png (1200x630 preview image), sitemap.xml, robots.txt,
+   and generates assets/Shivanshu_Siyanwal_CV.pdf from content.json
    and 404.html.
 
 The only input is data/content.json; nothing here needs editing for routine
@@ -358,6 +359,11 @@ def paper_file(p):
     return f"paper-{slug(p['title'])}.html"
 
 
+def has_detail(p):
+    """A paper gets a detail page only when there is something beyond the citation (keep in sync with js/site.js)."""
+    return bool(p.get("abstract") or p.get("sections"))
+
+
 def role_file(e):
     return f"role-{slug(e['org'].split('(')[0] + ' ' + e['role'])}.html"
 
@@ -442,6 +448,33 @@ def _sec(h, body):
     return f'<section class="prose-sec"><h2>{esc(h)}</h2>{body}</section>'
 
 
+RESULT_KEYS = ("result", "results", "outcome", "outcomes", "findings", "validation")
+PROBLEM_KEYS = ("problem", "motivation")
+NOT_METHODS = PROBLEM_KEYS + RESULT_KEYS + ("status",)
+
+
+def _paras(v):
+    """Section text from content.json: a string or a list of paragraphs."""
+    return "".join(f"<p>{esc(x)}</p>" for x in ([v] if isinstance(v, str) else v or []) if x)
+
+
+def _table(t):
+    """Optional data table on a section: {"caption", "head": [...], "rows": [[...], ...]}."""
+    if not t:
+        return ""
+    head = "".join(f'<th scope="col">{esc(h)}</th>' for h in t.get("head", []))
+    rows = "".join("<tr>" + "".join(
+        (f'<th scope="row">{esc(c)}</th>' if i == 0 else f"<td>{esc(c)}</td>") for i, c in enumerate(r)) + "</tr>"
+        for r in t.get("rows", []))
+    cap = f"<caption>{esc(t['caption'])}</caption>" if t.get("caption") else ""
+    return (f'<div class="fig-data fig-scroll" tabindex="0"><table>{cap}<thead><tr>{head}</tr></thead>'
+            f"<tbody>{rows}</tbody></table></div>")
+
+
+def _body(sec):
+    return _paras(sec.get("p")) + "".join(_table(t) for t in sec.get("tables", []))
+
+
 def _page(tmpl, site, fname, title, desc, active, head, body, og="article"):
     main = (f'<header class="page-head"><div class="wrap narrow"><div class="panel">{head}</div></div></header>'
             f'<div class="wrap narrow"><div class="panel prose detail-body">{body}</div></div>')
@@ -456,10 +489,13 @@ def build_details(data, site, name):
     written = []
 
     for p in pubs:
+        if not has_detail(p):
+            continue
         fname = paper_file(p)
         pr = next((x for x in projects if x.get("paper") == p["title"]), None)
-        secs = {s["h"].lower(): s["p"] for s in (pr or {}).get("sections", [])}
-        pick = lambda *keys: next((secs[k] for k in keys if k in secs), "")
+        # A publication's own sections/role take precedence over its linked project's.
+        secs = {s["h"].lower(): s for s in (p.get("sections") or (pr or {}).get("sections", []))}
+        pick = lambda keys: "".join(_body(secs[k]) for k in keys if k in secs)
         venue = ", ".join(x for x in [p.get("venue", ""), p.get("type", ""), p.get("year", "")] if x)
         links = id_links(p) + [(l["label"], l["url"]) for l in (pr or {}).get("links", []) if l.get("url")]
         links = list(dict.fromkeys(links))
@@ -468,21 +504,29 @@ def build_details(data, site, name):
                 f'<h1>{esc(p["title"])}</h1>'
                 f'<p class="lede">{esc(p.get("authors", ""))}</p>'
                 f'<p class="note-meta">{esc(venue)}{" · " + esc(p["status"]) if p.get("status") else ""}</p>'
+                + (f'<p class="note-meta">Supervisor: {esc(p["supervisor"])}</p>' if p.get("supervisor") else "")
                 + (f'<div class="hero-cta">' + "".join(
                     f'<a class="btn" href="{esc(u)}" target="_blank" rel="noopener">{esc(l)} ↗</a>' for l, u in links)
                    + '</div>' if links else ""))
         missing = "Not yet written up on this site; to be filled from the paper."
         body = [_sec("Overview", f'<p class="abstract">{esc(p["abstract"])}</p>' if p.get("abstract")
                      else DRAFT.format("No abstract on this site yet."))]
-        body.append(_sec("Problem / motivation", f"<p>{esc(pick('problem', 'motivation'))}</p>" if pick('problem', 'motivation') else DRAFT.format(missing)))
-        meth = [f"<p>{esc(v)}</p>" for k, v in secs.items() if k not in ("problem", "motivation", "result", "results", "outcome")]
-        body.append(_sec("Methods", "".join(meth) if meth else DRAFT.format(missing)))
-        res = pick("result", "results", "outcome")
-        body.append(_sec("Results / outcomes", f"<p>{esc(res)}</p>" if res else DRAFT.format(
+        prob = pick(PROBLEM_KEYS)
+        body.append(_sec("Problem / motivation", prob or DRAFT.format(missing)))
+        meth = "".join(_body(v) for k, v in secs.items() if k not in NOT_METHODS)
+        body.append(_sec("Methods", meth or DRAFT.format(missing)))
+        res = pick(RESULT_KEYS)
+        body.append(_sec("Results / outcomes", res or DRAFT.format(
             "See the abstract above; a fuller results summary is to be added from the paper.")))
-        role = (pr or {}).get("role") or p.get("note", "")
-        body.append(_sec("My role", f"<p>{esc(role)}</p>" if role else DRAFT.format(
-            "Contribution statement to be confirmed by Shivanshu.")))
+        # The free-text `note` is context, not a contribution statement, so it is never used as "My role".
+        role = p.get("role") or (pr or {}).get("role")
+        if p.get("role_section", True):
+            body.append(_sec("My role", _paras(role) if role else DRAFT.format(
+                "Contribution statement to be confirmed by Shivanshu.")))
+        rel = [x for x in pubs if x["title"] in p.get("related", []) and has_detail(x)]
+        if rel:
+            body.append(_sec("Related", "<ul>" + "".join(
+                f'<li><a href="{paper_file(x)}">{esc(x["title"])}</a></li>' for x in rel) + "</ul>"))
         if pr:
             body.append(flow_svg([s["h"] for s in pr.get("sections", [])],
                                  "Schematic: structure of the work (from the write-up's sections)"))
@@ -497,12 +541,12 @@ def build_details(data, site, name):
         head = (f'<a class="backlink" href="index.html#work">← Work</a>'
                 f'<p class="eyebrow">{esc(e.get("period", ""))}{" · " + esc(e["location"]) if e.get("location") else ""}</p>'
                 f'<h1>{esc(e["role"])}</h1><p class="lede">{esc(e["org"])}</p>')
-        rel = [x for x in pubs if any(
+        rel = [x for x in pubs if has_detail(x) and any(
             (x.get("arxiv") and x["arxiv"] in pt) or (x.get("venue") and x["title"][:25] in pt) for pt in e.get("points", []))]
         body = [_sec("Overview", f"<p>{esc(e['summary'])}</p>" if e.get("summary") else DRAFT.format("Summary to be added.")),
                 _sec("What I worked on", "<ul>" + "".join(f"<li>{esc(x)}</li>" for x in e.get("points", [])) + "</ul>"
                      if e.get("points") else DRAFT.format("Details to be added.")),
-                _sec("Problem, methods and outcomes", DRAFT.format(
+                _sec("Problem, methods and outcomes", _paras(e["narrative"]) if e.get("narrative") else DRAFT.format(
                     "A longer narrative of this role (motivation, methods, outcomes) is to be written from Shivanshu's records; "
                     "the points above are the verified summary.")),
                 timeline_svg(roles, e)]
@@ -593,7 +637,121 @@ def clean_snapshot(doc):
     return "<!DOCTYPE html>\n" + doc if not doc.lstrip().lower().startswith("<!doctype") else doc
 
 
-def prerender(pages, og_html):
+# ------------------------------------------------------------------ CV (PDF)
+# The CV is generated from data/content.json on every build, so it always
+# matches the site. It is printed with the same headless Chromium and the
+# self-hosted fonts. The phone number is never included.
+CV_NAME = "Shivanshu_Siyanwal_CV.pdf"
+
+
+def _authors_cv(a, me="S. Siyanwal"):
+    out = esc(a or "").replace("*", "<sup>∗</sup>")
+    return out.replace(esc(me), f"<strong>{esc(me)}</strong>")
+
+
+def _cite_cv(p):
+    bits = []
+    v = p.get("venue")
+    if p.get("category") == "journal":
+        vol = p.get("volume", "")
+        vol += f"({p['issue']})" if p.get("issue") else ""
+        bits.append(f"<em>{esc(v)}</em> {esc(vol)}" + (f", {esc(p['article'])}" if p.get("article") else "")
+                    + f" ({esc(p.get('year', ''))})")
+    elif v:
+        lead = f"{esc(p['type'])}, " if p.get("category") == "thesis" and p.get("type") else ""
+        yr = p.get("year", "")
+        bits.append(lead + f"<em>{esc(v)}</em>" + (f", pp. {esc(p['pages'])}" if p.get("pages") else "")
+                    + (f" ({esc(yr)})" if yr and yr not in v else ""))
+    elif p.get("year"):
+        bits.append(esc(p["year"]))
+    if p.get("status") and p.get("category") in ("manuscript",):
+        bits.append(esc(p["status"].capitalize()))
+    if p.get("doi"):
+        bits.append(f"doi:{esc(p['doi'])}")
+    if p.get("xplore"):
+        bits.append(f"IEEE Xplore {esc(p['xplore'])}")
+    if p.get("arxiv"):
+        bits.append(f"arXiv:{esc(p['arxiv'])}")
+    eq = " <sup>∗</sup>Equal contribution." if p.get("equal_contribution") else ""
+    return (f'<li>{_authors_cv(p.get("authors"))}. {esc(p["title"])}. ' + ". ".join(bits) + "." + eq + "</li>")
+
+
+def cv_html(data):
+    p = data.get("profile", {})
+    links = [x for x in p.get("profiles", []) if x.get("primary") and real_url(x.get("url")) or
+             (x.get("primary") and str(x.get("url", "")).startswith("mailto:"))]
+    contact = " · ".join(esc(x["url"].replace("mailto:", "").replace("https://", "").replace("www.", "").rstrip("/"))
+                         for x in links)
+    loc = esc(p.get("location", ""))
+
+    def role(e):
+        org = esc(e["org"])
+        pts = "".join(f"<li>{esc(t)}</li>" for t in e.get("points", []))
+        return (f'<div class="it"><div class="row"><b>{org}</b><span>{esc(e.get("location", ""))}</span></div>'
+                f'<div class="row"><i>{esc(e["role"])}</i><span>{esc(e.get("period", ""))}</span></div>'
+                f"<ul>{pts}</ul></div>")
+
+    def edu(e):
+        note = f"<ul><li>{esc(e['note'])}</li></ul>" if e.get("note") else ""
+        return (f'<div class="it"><div class="row"><b>{esc(e["school"])}</b><span>{esc(e.get("location", ""))}</span></div>'
+                f'<div class="row"><i>{esc(e["degree"])}</i><span>{esc(e.get("period", ""))}</span></div>{note}</div>')
+
+    pubs = data.get("publications", [])
+    groups = [("Journal articles", ("journal",)), ("Conference papers", ("conference",)),
+              ("Submitted manuscripts", ("manuscript",)), ("Preprints", ("preprint",)), ("Thesis", ("thesis",))]
+    pub_html = ""
+    for h, cats in groups:
+        items = [x for x in pubs if x.get("category") in cats]
+        if items:
+            pub_html += f"<h3>{h}</h3><ul class='pubs'>" + "".join(_cite_cv(x) for x in items) + "</ul>"
+    talks = [x for x in pubs if x.get("category") in ("poster", "presentation")]
+    talk_html = "".join(
+        f"<li>{'Poster' if x.get('category') == 'poster' else 'Presentation'}, {esc(x['title'])}"
+        + (f", {esc(x['venue'])}" if x.get("venue") else "") + ".</li>" for x in talks)
+    awards = "".join(f"<li>{esc(a['title'])}" + (f" ({esc(a['year'])})" if a.get("year") else "") + ".</li>"
+                     for a in data.get("awards", []))
+    skills = "".join(f"<li><b>{esc(s['category'])}:</b> {esc(', '.join(s.get('items', [])))}.</li>"
+                     for s in data.get("skills", []))
+    interests = p.get("research_interests") or ""
+    roles = data.get("experience", []) + data.get("research", [])
+    sec = lambda h, body: f"<section><h2>{h}</h2>{body}</section>" if body else ""
+    return f"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/>
+<title>{esc(p.get('name'))} — CV</title>
+<style>
+@font-face {{ font-family: "Fraunces"; src: url("assets/fonts/fraunces.woff2") format("woff2"); font-weight: 400 700; }}
+@font-face {{ font-family: "Geist"; src: url("assets/fonts/geist.woff2") format("woff2"); font-weight: 400 600; }}
+@page {{ size: A4; margin: 15mm 16mm 15mm 16mm; }}
+html {{ font: 9.6pt/1.38 Geist, Helvetica, Arial, sans-serif; color: #1b1a17; }}
+body {{ margin: 0; }}
+h1 {{ font: 600 21pt/1.1 Fraunces, Georgia, serif; margin: 0 0 3pt; text-align: center; }}
+.contact {{ text-align: center; color: #4a483f; font-size: 8.8pt; margin-bottom: 8pt; }}
+h2 {{ font: 600 10.5pt Fraunces, Georgia, serif; color: {ACCENT}; text-transform: uppercase; letter-spacing: .06em;
+      border-bottom: .8pt solid {ACCENT}; padding-bottom: 1.5pt; margin: 9pt 0 4pt; }}
+h3 {{ font: 600 9.6pt Geist, sans-serif; margin: 4pt 0 2pt; }}
+h2, h3 {{ break-after: avoid; page-break-after: avoid; }}
+section {{ break-inside: auto; }}
+.it {{ margin: 0 0 4pt; break-inside: avoid; }}
+.row {{ display: flex; justify-content: space-between; gap: 12pt; }}
+.row span {{ white-space: nowrap; color: #4a483f; }}
+ul {{ margin: 1.5pt 0 0; padding-left: 12pt; }}
+li {{ margin: 0 0 1.5pt; }}
+ul.pubs li {{ break-inside: avoid; }}
+p {{ margin: 0; }}
+a {{ color: inherit; text-decoration: none; }}
+</style></head><body>
+<h1>{esc(p.get('name'))}</h1>
+<p class="contact">{loc}{' · ' if loc and contact else ''}{contact}</p>
+{sec('Research interests', f'<p>{esc(interests)}</p>' if interests else '')}
+{sec('Education', ''.join(edu(e) for e in data.get('education', [])[:1]))}
+{sec('Research experience', ''.join(role(e) for e in roles))}
+{sec('Publications', pub_html)}
+{sec('Presentations', f'<ul>{talk_html}</ul>' if talk_html else '')}
+{sec('Awards and fellowships', f'<ul>{awards}</ul>' if awards else '')}
+{sec('Technical skills', f'<ul>{skills}</ul>' if skills else '')}
+</body></html>"""
+
+
+def prerender(pages, og_html, cv_doc=None):
     from playwright.sync_api import sync_playwright
 
     class Quiet(SimpleHTTPRequestHandler):
@@ -633,6 +791,15 @@ def prerender(pages, og_html):
             if failed:
                 sys.exit(f"og.png: self-hosted fonts failed to load: {failed}")
             pg.screenshot(path=str(OUT / "og.png"))
+
+            if cv_doc:
+                (OUT / "cv-print.html").write_text(cv_doc, encoding="utf-8")
+                pg = browser.new_page()
+                pg.goto(base + "cv-print.html", wait_until="load")
+                pg.evaluate("document.fonts.ready")
+                (OUT / "assets").mkdir(exist_ok=True)
+                pg.pdf(path=str(OUT / "assets" / CV_NAME), format="A4", print_background=True, prefer_css_page_size=True)
+                (OUT / "cv-print.html").unlink()
             browser.close()
     finally:
         srv.shutdown()
@@ -642,7 +809,7 @@ def main():
     data = json.loads((ROOT / "data" / "content.json").read_text(encoding="utf-8"))
     site = (os.environ.get("SITE_URL") or DEFAULT_SITE_URL).rstrip("/")
     pages = assemble(data, site)
-    prerender(pages, og_card(data))
+    prerender(pages, og_card(data), cv_html(data))
     print(f"Built {len(pages)} pages into {OUT.relative_to(ROOT)}/ for {site}")
 
 

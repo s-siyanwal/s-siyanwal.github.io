@@ -75,7 +75,7 @@ js/
   circuit.js          Animated quantum-circuit hero motif
   index.js  project.js  publications.js  about.js
 data/content.json     ★ ALL CONTENT
-assets/               CV PDF
+assets/               CV PDF (generated from content.json by scripts/build.py)
 inbox/                ← drop files here to update
 scripts/ingest.py     Parser/merger (provider-agnostic)
 scripts/build.py      Prerenders the site into _site/ (run by pages.yml)

@@ -187,5 +187,8 @@ export const THREADS = {
 /* ---------- Detail pages (built by scripts/build.py; keep slug() in sync with build.py) ---------- */
 export const slug = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60).replace(/-+$/, "");
 export const paperHref = (p) => `paper-${slug(p.title)}.html`;
+/* A paper gets a detail page only when there is something to say beyond the citation (keep in sync with build.py). */
+export const hasDetail = (p) => Boolean(p.abstract || (p.sections || []).length);
 export const roleHref = (e) => `role-${slug(e.org.split("(")[0] + " " + e.role)}.html`;
+export const paperMore = (p) => (hasDetail(p) ? readMore(paperHref(p)) : "");
 export const readMore = (href, label = "Read more") => `<a class="read-more" href="${href}">${label} →</a>`;
