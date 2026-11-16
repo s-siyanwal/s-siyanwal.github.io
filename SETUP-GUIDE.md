@@ -167,10 +167,15 @@ Open `data/content.json`, click the pencil icon, edit, commit. The site updates
 in a minute. Paste the file into <https://jsonlint.com> first if you're unsure —
 a missing comma is the only thing that can break the site.
 
-### Adding a photo or a new CV PDF
-Upload into the `assets/` folder. To swap the downloadable CV, either keep the
-filename `Shivanshu_Siyanwal_CV.pdf` or update `profile.links.cv_pdf` in
-`content.json`.
+### Adding a photo, and how the CV is made
+Upload photos into the `assets/` folder.
+
+The downloadable CV (`assets/Shivanshu_Siyanwal_CV.pdf`) is **generated from
+`data/content.json` on every deploy**, so it always matches the site: education,
+roles, publications, presentations, awards and skills. To change the CV, edit
+`content.json`; don't upload a PDF over it (the next deploy would replace it).
+The phone number is never printed. The research-interests paragraph at the top
+comes from `profile.research_interests`.
 
 ---
 

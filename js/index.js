@@ -1,4 +1,4 @@
-import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, projectHref, THREADS, projectStatus, chip, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE , paperHref, roleHref, readMore } from "./site.js";
+import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, projectHref, THREADS, projectStatus, chip, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE , paperHref, paperMore, roleHref, readMore } from "./site.js";
 import { mountCircuit } from "./circuit.js";
 
 (async function () {
@@ -95,7 +95,7 @@ import { mountCircuit } from "./circuit.js";
       <p class="cite-venue">${venueHtml(pb)}</p>
       <p class="cite-result">${esc(firstSentence(pb.abstract))}</p>
       ${idLinks(pb) ? `<div class="ids">${idLinks(pb)}</div>` : ""}
-      ${readMore(paperHref(pb))}
+      ${paperMore(pb)}
     </li>`).join("");
   $("paper-foot").innerHTML = byYear.some((x) => x.equal_contribution) ? EQ_FOOTNOTE : "";
 

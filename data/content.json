@@ -74,7 +74,8 @@
         "primary": true,
         "audience": "academic"
       }
-    ]
+    ],
+    "research_interests": "Quantum information and near-term quantum algorithms: variational quantum circuits and quantum machine learning for scientific data, quantum image representations, entanglement detection on NMR processors, linear-optical quantum networks and QKD, and hybrid quantum–classical implementations including FPGA inference."
   },
   "metrics": [
     {
@@ -177,7 +178,8 @@
         "Qiskit",
         "PennyLane",
         "FPGA"
-      ]
+      ],
+      "narrative": "At C-DAC's Embedded Systems Division I am primarily responsible for the quantum machine learning (QML) based weather forecasting project, under the supervision of Mr. Abhishek Tiwari (Scientist F, Principal Investigator). I research and develop QML models for weather forecasting, including quantum recurrent neural networks (QLSTM and QGRU), quantum generative adversarial networks (QGANs) and quantum neural networks (QNNs). Published outcomes so far: the weather-prediction paper at IEEE AIMLSystems 2025 (arXiv:2503.23408), a comparison of quantum image encodings in QNNs in The Journal of Supercomputing (2026), and a co-authored FPGA deployment of a hybrid variational circuit for temperature forecasting at IEEE TQCEBT 2026."
     },
     {
       "org": "Institute for Advancing Intelligence, TCG CREST (PI: Dr. Arpita Maitra)",
@@ -196,7 +198,8 @@
         "DPS",
         "COW",
         "Twin-field QKD"
-      ]
+      ],
+      "narrative": "As a DRDO Junior Research Fellow in Dr. Arpita Maitra's group, I worked on simulating quantum key distribution (QKD) on realistic photonic hardware. I modelled differential-phase-shift (DPS), coherent-one-way (COW) and twin-field QKD on linear-optical testbeds in OptiSystem and ANSYS, including loss, noise and photonic channel impairments, and modelled intercept-resend and photon-number-splitting attacks against them. I also benchmarked resource-state and entanglement generation."
     },
     {
       "org": "Institute for Advancing Intelligence, TCG CREST (PI: Dr. Arpita Maitra)",
@@ -212,7 +215,8 @@
         "Quantum cryptography",
         "Grover",
         "Qiskit"
-      ]
+      ],
+      "narrative": "As a research intern in Dr. Arpita Maitra's group, I studied quantum attacks on block ciphers. I built quantum circuits for an 8-bit AES variant (Mini-AES / S-AES), including the Galois-field arithmetic it needs, and ran them in Qiskit and on IBM Quantum hardware. On these circuits I implemented a plaintext–ciphertext attack using Grover search and amplitude amplification."
     },
     {
       "org": "Arqanum Technologies Pvt. Ltd.",
@@ -229,7 +233,8 @@
         "VQLS",
         "AWS Braket",
         "Finance"
-      ]
+      ],
+      "narrative": "At Arqanum Technologies I developed variational quantum algorithms for time-series and financial models: data encodings (amplitude, phase and angle), Ising-Hamiltonian circuits, and VQC, QSVM and quantum Boltzmann machine models. I ran VQLS jobs on Amazon Braket and Rigetti hardware, and contributed code to two external projects: Dicke-state simulation for MeitY–QCAL, and a quantum cryptographic hash with IIT Kharagpur."
     }
   ],
   "research": [
@@ -247,7 +252,8 @@
         "QML",
         "NMR",
         "Entanglement"
-      ]
+      ],
+      "narrative": "My MS research in Prof. Kavita Dorai's NMR Quantum Computing Group used machine learning to detect and classify entanglement. In the BS–MS thesis I trained neural networks, K-nearest neighbours, PCA + K-means and a GAN-based classifier on simulated two-, three- and four-qubit states, and tested a genetic-algorithm approach to NMR pulse design. The three-qubit work was developed with V. Gulati into the published paper: an ANN that detects genuine multipartite entanglement and assigns the SLOCC class from a reduced set of density-matrix elements, validated on 30 experimental states from the NMR processor."
     }
   ],
   "projects": [
@@ -835,7 +841,7 @@
       "category": "poster"
     },
     {
-      "venue": "",
+      "venue": "The LNM Institute of Information Technology (LNMIIT), Jaipur",
       "year": "2026",
       "title": "12th International Conference on Mathematics and Computing (ICMC) 2026",
       "type": "Presentation",
