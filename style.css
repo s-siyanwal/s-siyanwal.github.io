@@ -733,9 +733,13 @@ a.card:hover h3 { color: var(--accent); }
 .fl-txt { fill: var(--ink); font-family: var(--mono); font-size: 11px; }
 .fl-arrow { stroke: var(--ink-faint); stroke-width: 1.2; fill: none; }
 .fl-head { fill: var(--ink-faint); }
-.tl-bar { fill: var(--rule); }
-.tl-bar.is-this { fill: var(--accent); }
-.tl-tick { fill: var(--ink-faint); font-family: var(--mono); font-size: 10px; }
+.tl-bar { fill: var(--ink-faint); opacity: .55; }
+.tl-bar.is-this { fill: var(--accent); opacity: 1; }
+.tl-tick { fill: var(--ink-faint); font-family: var(--mono); font-size: 11px; }
+.tl-label { fill: var(--ink-soft); font-family: var(--text, inherit); font-size: 14px; }
+.tl-label.is-this { fill: var(--ink); font-weight: 600; }
+.tl-grid { stroke: var(--rule); stroke-width: 1; }
+.tl-fig svg { width: 100%; max-width: 480px; height: auto; display: block; }
 .note-meta { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); }
 
 /* Detail-page meta lines (venue, status, supervisor) can be long: let them wrap on phones. */
