@@ -496,7 +496,9 @@ def build_details(data, site, name):
         # A publication's own sections/role take precedence over its linked project's.
         secs = {s["h"].lower(): s for s in (p.get("sections") or (pr or {}).get("sections", []))}
         pick = lambda keys: "".join(_body(secs[k]) for k in keys if k in secs)
-        venue = ", ".join(x for x in [p.get("venue", ""), p.get("type", ""), p.get("year", "")] if x)
+        # The type is already the eyebrow above the title, so the meta line is venue + year only.
+        yr = p.get("year", "")
+        venue = ", ".join(x for x in [p.get("venue", ""), yr if yr not in p.get("venue", "") else ""] if x)
         links = id_links(p) + [(l["label"], l["url"]) for l in (pr or {}).get("links", []) if l.get("url")]
         links = list(dict.fromkeys(links))
         head = (f'<a class="backlink" href="publications.html">← Publications</a>'
@@ -541,7 +543,8 @@ def build_details(data, site, name):
         head = (f'<a class="backlink" href="index.html#work">← Work</a>'
                 f'<p class="eyebrow">{esc(e.get("period", ""))}{" · " + esc(e["location"]) if e.get("location") else ""}</p>'
                 f'<h1>{esc(e["role"])}</h1><p class="lede">{esc(e["org"])}</p>')
-        rel = [x for x in pubs if has_detail(x) and any(
+        explicit = [x for x in pubs if x["title"] in e.get("related", []) and has_detail(x)]
+        rel = explicit or [x for x in pubs if has_detail(x) and any(
             (x.get("arxiv") and x["arxiv"] in pt) or (x.get("venue") and x["title"][:25] in pt) for pt in e.get("points", []))]
         body = [_sec("Overview", f"<p>{esc(e['summary'])}</p>" if e.get("summary") else DRAFT.format("Summary to be added.")),
                 _sec("What I worked on", "<ul>" + "".join(f"<li>{esc(x)}</li>" for x in e.get("points", [])) + "</ul>"
@@ -698,7 +701,7 @@ def cv_html(data):
 
     pubs = data.get("publications", [])
     groups = [("Journal articles", ("journal",)), ("Conference papers", ("conference",)),
-              ("Submitted manuscripts", ("manuscript",)), ("Preprints", ("preprint",)), ("Thesis", ("thesis",))]
+              ("Manuscripts", ("manuscript",)), ("Preprints", ("preprint",)), ("Thesis", ("thesis",))]
     pub_html = ""
     for h, cats in groups:
         items = [x for x in pubs if x.get("category") in cats]

@@ -179,7 +179,12 @@
         "PennyLane",
         "FPGA"
       ],
-      "narrative": "At C-DAC's Embedded Systems Division I am primarily responsible for the quantum machine learning (QML) based weather forecasting project, under the supervision of Mr. Abhishek Tiwari (Scientist F, Principal Investigator). I research and develop QML models for weather forecasting, including quantum recurrent neural networks (QLSTM and QGRU), quantum generative adversarial networks (QGANs) and quantum neural networks (QNNs). Published outcomes so far: the weather-prediction paper at IEEE AIMLSystems 2025 (arXiv:2503.23408), a comparison of quantum image encodings in QNNs in The Journal of Supercomputing (2026), and a co-authored FPGA deployment of a hybrid variational circuit for temperature forecasting at IEEE TQCEBT 2026."
+      "narrative": "At C-DAC's Embedded Systems Division I am primarily responsible for the quantum machine learning (QML) based weather forecasting project, under the supervision of Mr. Abhishek Tiwari (Scientist F, Principal Investigator). I research and develop QML models for weather forecasting, including quantum recurrent neural networks (QLSTM and QGRU), quantum generative adversarial networks (QGANs) and quantum neural networks (QNNs). Published outcomes so far: the weather-prediction paper at IEEE AIMLSystems 2025 (arXiv:2503.23408), a comparison of quantum image encodings in QNNs in The Journal of Supercomputing (2026), and a co-authored FPGA deployment of a hybrid variational circuit for temperature forecasting at IEEE TQCEBT 2026.",
+      "related": [
+        "Quantum machine learning models for enhanced weather prediction",
+        "Quantum image representation-based quantum neural networks for binary classification",
+        "Hybrid variational quantum circuits based temperature forecasting with low-latency FPGA inference"
+      ]
     },
     {
       "org": "Institute for Advancing Intelligence, TCG CREST (PI: Dr. Arpita Maitra)",
@@ -253,7 +258,11 @@
         "NMR",
         "Entanglement"
       ],
-      "narrative": "My MS research in Prof. Kavita Dorai's NMR Quantum Computing Group used machine learning to detect and classify entanglement. In the BS–MS thesis I trained neural networks, K-nearest neighbours, PCA + K-means and a GAN-based classifier on simulated two-, three- and four-qubit states, and tested a genetic-algorithm approach to NMR pulse design. The three-qubit work was developed with V. Gulati into the published paper: an ANN that detects genuine multipartite entanglement and assigns the SLOCC class from a reduced set of density-matrix elements, validated on 30 experimental states from the NMR processor."
+      "narrative": "My MS research in Prof. Kavita Dorai's NMR Quantum Computing Group used machine learning to detect and classify entanglement. In the BS–MS thesis I trained neural networks, K-nearest neighbours, PCA + K-means and a GAN-based classifier on simulated two-, three- and four-qubit states, and tested a genetic-algorithm approach to NMR pulse design. The three-qubit work was developed with V. Gulati into the published paper: an ANN that detects genuine multipartite entanglement and assigns the SLOCC class from a reduced set of density-matrix elements, validated on 30 experimental states from the NMR processor.",
+      "related": [
+        "ANN-enhanced detection of multipartite entanglement in a three-qubit NMR quantum processor",
+        "Entanglement detection and gate optimization in the system of three and four NMR qubits using deep learning and machine learning"
+      ]
     }
   ],
   "projects": [
@@ -819,9 +828,9 @@
       ]
     },
     {
-      "venue": "University of Melbourne",
+      "venue": "Quantum Techniques in Machine Learning (QTML) 2024, University of Melbourne",
       "year": "2024",
-      "title": "Quantum Techniques in Machine Learning (QTML) 2024",
+      "title": "Detecting and Classifying Tripartite Entanglement using Neural Networks",
       "type": "Poster",
       "status": "",
       "authors": "S. Siyanwal",

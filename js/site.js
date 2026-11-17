@@ -126,7 +126,7 @@ export const CATEGORIES = [
   ["conference", "Conference papers", "Conference"],
   ["preprint", "Preprints", "Preprint"],
   ["thesis", "Theses", "Thesis"],
-  ["manuscript", "Manuscripts in preparation", "Manuscript"],
+  ["manuscript", "Manuscripts", "Manuscript"],
   ["presentation", "Presentations", "Presentation"],
   ["poster", null, "Poster"],
 ];
@@ -169,6 +169,7 @@ export const EQ_FOOTNOTE = '<p class="footnote"><span class="eq">*</span> Equal 
 export function projectStatus(pr, pubs) {
   const pub = pr.paper && (pubs || []).find((x) => x.title === pr.paper);
   if (!pub) return "Research project (unpublished)";
+  if (/submitted|under review/i.test(pub.status || "")) return `Submitted · ${pub.venue || ""}`.replace(/ · $/, "");
   if (pub.category === "manuscript" || /manuscript/i.test(pub.status || "")) return "Manuscript in preparation";
   const venue = pub.venue || "", year = String(pub.year || "");
   return `Published · ${venue}${year && !venue.endsWith(year) ? ` ${year}` : ""}`;

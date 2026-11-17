@@ -703,8 +703,8 @@ a.card:hover h3 { color: var(--accent); }
 }
 
 /* ---------- Notes (secondary, personal writing) ---------- */
-.topbar-notes { font-size: .72rem !important; opacity: .7; }
-.topbar-notes:hover, .topbar-notes[aria-current] { opacity: 1; }
+.topbar-notes { font-size: .72rem !important; color: var(--ink-faint) !important; }
+.topbar-notes:hover, .topbar-notes[aria-current] { color: var(--ink) !important; }
 .footer-links a.footer-notes { color: var(--ink-faint); }
 .notes-lede { color: var(--ink-soft); margin: 0; }
 .notes-list { list-style: none; margin: 0; padding: 0; }
@@ -737,3 +737,6 @@ a.card:hover h3 { color: var(--accent); }
 .tl-bar.is-this { fill: var(--accent); }
 .tl-tick { fill: var(--ink-faint); font-family: var(--mono); font-size: 10px; }
 .note-meta { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); }
+
+/* Detail-page meta lines (venue, status, supervisor) can be long: let them wrap on phones. */
+.page-head .note-meta { white-space: normal; overflow-wrap: anywhere; }
