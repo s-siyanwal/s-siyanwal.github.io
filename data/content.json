@@ -168,7 +168,7 @@
       "location": "Noida, India",
       "period": "Oct 2024 – Present",
       "current": true,
-      "summary": "Hybrid quantum-classical pipelines and FPGA-accelerated quantum inference.",
+      "summary": "Primarily responsible for the QML-based weather forecasting project in the Embedded Systems Division.",
       "points": [
         "Co-developed quantum-assisted weather models (QGRU, QLSTM, QNN, VQC, QSVM) on ERA5 single-level data for Safdarjung, Delhi; equal-contribution preprint arXiv:2503.23408 and a related IEEE AIMLSystems 2025 paper.",
         "Compared quantum image encodings (NASS, QBIR, FTQR, FRQCI) in QNNs for binary classification; equal-contribution paper in The Journal of Supercomputing (2026).",
