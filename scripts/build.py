@@ -47,7 +47,7 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "_site"
 DEFAULT_SITE_URL = "https://s-siyanwal.github.io"
 
-COPY = ["index.html", "project.html", "publications.html", "about.html", "notes.html",
+COPY = ["index.html", "project.html", "publications.html", "about.html", "notes.html", "lab",
         "style.css", ".nojekyll", "js", "data", "assets"]
 PAGES = ["index.html", "publications.html", "about.html", "notes.html"]
 
@@ -617,7 +617,7 @@ def assemble(data, site):
         f.write_text(mark_built(set_head(f.read_text(encoding="utf-8"), block)), encoding="utf-8")
 
     notes = build_notes(site, name)
-    written = list(PAGES) + notes + build_details(data, site, name)
+    written = list(PAGES) + notes + build_details(data, site, name) + ["lab/index.html"]
     tmpl = (ROOT / "project.html").read_text(encoding="utf-8")
     for pr in data.get("projects", []):
         pid = pr["id"]
@@ -647,7 +647,8 @@ def assemble(data, site):
                          encoding="utf-8")
     urls = "\n".join(
         f"  <url><loc>{esc(site + '/' + ('' if w == 'index.html' else w))}</loc></url>"
-        for w in written if notes or w != "notes.html")
+        # The lab edition is an experimental parallel design (noindex) and stays out of the sitemap.
+        for w in written if (notes or w != "notes.html") and not w.startswith("lab/"))
     (OUT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -806,13 +807,18 @@ def prerender(pages, og_html, cv_doc=None):
         with sync_playwright() as pw:
             browser = pw.chromium.launch(**kw)
             ctx = browser.new_context(reduced_motion="reduce")
+            # Lets pages skip purely runtime effects (the lab field and kinetic type) while being snapshotted.
+            ctx.add_init_script("window.__PRERENDER__ = true")
             errors = []
             for page_name in pages:
                 pg = ctx.new_page()
                 pg.on("pageerror", lambda e, n=page_name: errors.append(f"{n}: {e}"))
                 pg.goto(base + page_name, wait_until="load")
-                pg.wait_for_selector(".topbar-name", timeout=15000)
-                pg.wait_for_selector("#footer-slot .footer-name", timeout=15000)
+                if page_name.startswith("lab/"):
+                    pg.wait_for_selector("html[data-lab-ready]", timeout=15000)
+                else:
+                    pg.wait_for_selector(".topbar-name", timeout=15000)
+                    pg.wait_for_selector("#footer-slot .footer-name", timeout=15000)
                 (OUT / page_name).write_text(clean_snapshot(pg.content()), encoding="utf-8")
                 pg.close()
             if errors:
