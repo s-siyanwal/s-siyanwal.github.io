@@ -10,7 +10,7 @@
 <meta property="og:type" content="website"/>
 <link rel="preload" href="assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href="assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin/>
-<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}try{if("speechSynthesis"in window)document.documentElement.classList.add("tts")}catch(e){}</script>
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
@@ -21,7 +21,7 @@
   <header class="hero" id="top">
     <div class="wrap">
       <div class="panel hero-panel">
-        <img class="portrait" src="assets/portrait.jpg" width="148" height="185" alt="Portrait of Shivanshu Siyanwal" loading="eager" decoding="async"/>
+        <picture class="portrait-pic"><source type="image/webp" srcset="assets/portrait-296.webp 296w, assets/portrait-440.webp 440w" sizes="148px"/><img class="portrait" src="assets/portrait.jpg" width="148" height="185" alt="Portrait of Shivanshu Siyanwal" loading="eager" decoding="async"/></picture>
         <div class="hero-lead">
           <h1 id="hero-name"></h1>
           <p class="research-line" id="hero-title"></p>
