@@ -231,7 +231,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; letter-spacing: -0.0
 .hero-tagline { margin: -.4rem 0 1rem; font-size: 1rem; line-height: 1.5; color: var(--ink-soft); max-width: 56ch; }
 .hero-now { margin: 0 0 1rem; font-size: .95rem; color: var(--ink-soft); max-width: 60ch; }
 .hero-now-k {
-  font-family: var(--mono); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase;
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
   color: var(--accent); margin-right: .45rem;
 }
 .btn {
@@ -299,7 +299,7 @@ main { padding-bottom: var(--gap); }
 .xp-org .loc { color: var(--ink-faint); font-style: normal; }
 .xp-teaser { grid-column: 1 / -1; color: var(--ink-soft); font-size: .95rem; margin: .15rem 0 0; }
 .xp-tags { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .55rem; }
-.xp-toggle { grid-column: 1 / -1; font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .04em; color: var(--accent); margin-top: .5rem; display: inline-flex; align-items: center; gap: .35rem; }
+.xp-toggle { grid-column: 1 / -1; font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--accent); margin-top: .5rem; display: inline-flex; align-items: center; gap: .35rem; }
 .xp-toggle .chev { transition: transform var(--dur-2) var(--ease-out); }
 .xp[open] .xp-toggle .chev { transform: rotate(90deg); }
 .xp-detail { padding: 0 .2rem 1.3rem; }
@@ -348,7 +348,7 @@ details > summary::-webkit-details-marker { display: none; }
 .pub-year { font-family: var(--mono); font-size: .8rem; color: var(--accent); }
 .pub-main { min-width: 0; }
 .pub-title { color: var(--ink); font-size: 1.02rem; }
-.pub-meta { font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-faint); margin-top: .25rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+.pub-meta { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-faint); margin-top: .25rem; display: flex; flex-wrap: wrap; gap: .5rem; }
 .pub-venue { color: var(--accent); }
 .pub-status { text-transform: none; letter-spacing: 0; font-family: var(--text); color: var(--ink-faint); }
 
@@ -372,7 +372,7 @@ details > summary::-webkit-details-marker { display: none; }
 .mini { }
 .mini-degree { font-family: var(--display); font-size: 1.02rem; font-weight: 500; margin: 0; }
 .mini-school { color: var(--accent); font-size: .92rem; margin: .15rem 0 0; }
-.mini-meta { font-family: var(--mono); font-size: .7rem; color: var(--ink-faint); margin: .25rem 0 0; }
+.mini-meta { font-family: var(--mono); font-size: .72rem; color: var(--ink-faint); margin: .25rem 0 0; }
 .mini-note { font-size: .88rem; color: var(--ink-soft); margin: .3rem 0 0; }
 
 .awards { margin: 0; padding: 0; list-style: none; }
@@ -478,7 +478,7 @@ html.js .glance [data-reveal] { transform: none; }
 /* Metric tiles: the measurement outputs. */
 .qc-pause {
   display: none; align-items: center; justify-self: start; min-width: 24px; min-height: 24px;
-  margin-top: .5rem; padding: .2rem .55rem; font-family: var(--mono); font-size: .7rem; letter-spacing: .02em;
+  margin-top: .5rem; padding: .2rem .55rem; font-family: var(--mono); font-size: .72rem; letter-spacing: .02em;
   color: var(--ink-soft); background: transparent; border: 1px solid var(--rule-strong); border-radius: 2px; cursor: pointer;
   transition: color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
 }
@@ -511,7 +511,7 @@ html.js .glance [data-reveal] { transform: none; }
 
 /* ---------- Theme toggle ---------- */
 .theme-toggle {
-  font-family: var(--mono); font-size: .7rem; letter-spacing: .03em; text-transform: uppercase;
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .03em; text-transform: uppercase;
   color: var(--ink-soft); background: transparent; border: 1px solid var(--rule-strong); border-radius: 2px;
   padding: .28rem .7rem; cursor: pointer; flex: none;
   transition: color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
@@ -738,7 +738,7 @@ a.card:hover h3 { color: var(--accent); }
 .detail-body ul { padding-left: 1.2rem; color: var(--ink-soft); line-height: 1.68; }
 .detail-fig { margin: 2rem 0; }
 .detail-fig svg { width: 100%; height: auto; display: block; }
-.detail-fig figcaption { font-family: var(--mono); font-size: .7rem; color: var(--ink-faint); margin-top: .5rem; }
+.detail-fig figcaption { font-family: var(--mono); font-size: .72rem; color: var(--ink-faint); margin-top: .5rem; }
 .fl-box { fill: none; stroke: var(--accent); stroke-width: 1.2; }
 .fl-txt { fill: var(--ink); font-family: var(--mono); font-size: 11px; }
 .fl-arrow { stroke: var(--ink-faint); stroke-width: 1.2; fill: none; }
