@@ -89,7 +89,7 @@
       "note": "compared in J. Supercomputing"
     },
     {
-      "value": "7",
+      "value": "8",
       "label": "Awards",
       "note": "incl. INSPIRE-SHE, DRDO JRF"
     },
@@ -128,6 +128,7 @@
       "items": [
         "Python (production)",
         "C++",
+        "Rust",
         "Git",
         "Linux"
       ]
@@ -148,7 +149,9 @@
         "AMD Alveo FPGA",
         "HLS",
         "HBM",
-        "REST APIs"
+        "REST APIs",
+        "Rigetti QPUs",
+        "NVIDIA RTX A6000 GPUs"
       ]
     },
     {
@@ -878,6 +881,10 @@
     }
   ],
   "awards": [
+    {
+      "title": "Honorable Mention, Quandela Q-volution Hackathon (Track B, photonic quantum computing) — FinTeQ: Photonic Quantum Kernel for Swaption IVS Forecasting",
+      "year": "2026"
+    },
     {
       "title": "INSPIRE-SHE Fellow, Department of Science and Technology, Government of India",
       "year": "2017–2022"
