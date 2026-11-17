@@ -247,7 +247,7 @@ h1, h2, h3 { font-family: var(--display); font-weight: 500; letter-spacing: -0.0
 .hero-side { display: grid; gap: 1.4rem; }
 
 .stat-value { font-family: var(--display); font-size: 1.62rem; font-weight: 600; line-height: 1; color: var(--accent); }
-.stat-label { font-family: var(--mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); margin-top: .35rem; }
+.stat-label { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); margin-top: .35rem; }
 .stat-note { font-size: .8rem; color: var(--ink-faint); margin-top: .12rem; line-height: 1.3; }
 
 .profiles { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
@@ -293,7 +293,7 @@ main { padding-bottom: var(--gap); }
 }
 .xp-summary:hover { background: color-mix(in srgb, var(--accent-soft) 55%, transparent); }
 .xp-role { font-family: var(--display); font-size: 1.18rem; font-weight: 500; margin: 0; }
-.xp-current { font-family: var(--mono); font-size: .6rem; text-transform: uppercase; letter-spacing: .05em; color: var(--on-accent); background: var(--accent-2); padding: .12rem .4rem; margin-left: .5rem; vertical-align: middle; border-radius: 2px; }
+.xp-current { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--on-accent); background: var(--accent-2); padding: .12rem .4rem; margin-left: .5rem; vertical-align: middle; border-radius: 2px; }
 .xp-period { font-family: var(--mono); font-size: .74rem; color: var(--ink-faint); white-space: nowrap; }
 .xp-org { color: var(--accent); font-size: .98rem; grid-column: 1 / -1; margin: 0; }
 .xp-org .loc { color: var(--ink-faint); font-style: normal; }
@@ -312,7 +312,7 @@ details > summary { list-style: none; }
 details > summary::-webkit-details-marker { display: none; }
 
 .tag {
-  font-family: var(--mono); font-size: .66rem; letter-spacing: .02em; text-transform: uppercase;
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .02em; text-transform: uppercase;
   color: var(--accent); background: var(--accent-soft); padding: .2rem .48rem; border-radius: 2px;
 }
 
@@ -329,17 +329,17 @@ details > summary::-webkit-details-marker { display: none; }
 }
 .card:hover { border-color: var(--rule-strong); transform: translateY(-3px); box-shadow: var(--shadow); }
 .card.is-hidden { display: none; }
-.card-thread { font-family: var(--mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); margin-bottom: .5rem; }
+.card-thread { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); margin-bottom: .5rem; }
 .card h3 { font-size: 1.12rem; margin: 0 0 .5rem; line-height: 1.2; }
 .card-status { font-size: .8rem; color: var(--ink-soft); margin: -.2rem 0 .5rem; }
 .card-blurb { color: var(--ink-soft); font-size: .93rem; margin: 0 0 .85rem; flex: 1; }
 .card-metrics { display: flex; flex-wrap: wrap; gap: .9rem; margin-bottom: .85rem; }
 .card-metric { line-height: 1; }
 .card-metric .m-val { font-family: var(--display); font-weight: 600; font-size: 1.15rem; color: var(--accent); }
-.card-metric .m-lab { font-family: var(--mono); font-size: .6rem; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-faint); margin-top: .2rem; }
+.card-metric .m-lab { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-faint); margin-top: .2rem; }
 .card-foot { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-top: auto; padding-top: .6rem; border-top: 1px solid var(--rule); }
 .card-tags { display: flex; flex-wrap: wrap; gap: .3rem; }
-.card-more { font-family: var(--mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .03em; color: var(--accent); white-space: nowrap; }
+.card-more { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .03em; color: var(--accent); white-space: nowrap; }
 
 /* ---------------- Publications ---------------- */
 .pubs { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); }
@@ -398,12 +398,12 @@ details > summary::-webkit-details-marker { display: none; }
 .detail-inner { padding: 1.8rem clamp(1.3rem, 4vw, 2.2rem) 2rem; position: relative; }
 .detail-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; font-size: 1.1rem; color: var(--ink-faint); cursor: pointer; line-height: 1; padding: .3rem; }
 .detail-close:hover { color: var(--accent); }
-.detail-aud { font-family: var(--mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); }
+.detail-aud { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); }
 .detail h3 { font-size: 1.5rem; margin: .3rem 0 .9rem; line-height: 1.15; }
 .detail-abstract { color: var(--ink-soft); font-size: 1rem; margin: 0 0 1.2rem; }
 .detail-metrics { display: flex; flex-wrap: wrap; gap: 1.4rem; padding: 1rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 1.2rem; }
 .detail-metric .m-val { font-family: var(--display); font-weight: 600; font-size: 1.5rem; color: var(--accent); }
-.detail-metric .m-lab { font-family: var(--mono); font-size: .64rem; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-faint); margin-top: .25rem; }
+.detail-metric .m-lab { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-faint); margin-top: .25rem; }
 .detail-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1.3rem; }
 .detail-links { display: flex; flex-wrap: wrap; gap: .6rem; }
 
@@ -555,7 +555,7 @@ a.card:hover h3 { color: var(--accent); }
 .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2.4rem 0 0; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
 .pager a { text-decoration: none; display: block; padding: .9rem 1rem; border: 1px solid var(--rule); transition: border-color .18s ease, background .18s ease; }
 .pager a:hover { border-color: var(--rule-strong); background: var(--surface); }
-.pager span { display: block; font-family: var(--mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); margin-bottom: .3rem; }
+.pager span { display: block; font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-faint); margin-bottom: .3rem; }
 .pager strong { font-family: var(--display); font-weight: 500; font-size: .98rem; color: var(--ink); }
 .pager-next { text-align: right; }
 
@@ -592,12 +592,12 @@ a.card:hover h3 { color: var(--accent); }
 /* ---------- Detail metrics on project page ---------- */
 .page-head .detail-metrics { display: flex; flex-wrap: wrap; gap: 1.6rem; padding: 1.1rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin: 0 0 1.3rem; }
 .page-head .detail-metric .m-val { font-family: var(--display); font-weight: 600; font-size: 1.5rem; color: var(--accent); }
-.page-head .detail-metric .m-lab { font-family: var(--mono); font-size: .64rem; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-faint); margin-top: .25rem; }
+.page-head .detail-metric .m-lab { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-faint); margin-top: .25rem; }
 
 /* ---------- Project metadata block (Distill-style byline) ---------- */
 .meta-block { display: grid; gap: .55rem 1.6rem; margin: 0 0 1.3rem; padding: .9rem 0; border-top: 1px solid var(--rule); }
 @media (min-width: 620px) { .meta-block { grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); } }
-.meta-block dt { font-family: var(--mono); font-size: .64rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-faint); }
+.meta-block dt { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-faint); }
 .meta-block dd { margin: .2rem 0 0; font-size: .92rem; color: var(--ink); }
 
 .pub-authors { text-transform: none; letter-spacing: 0; font-family: var(--text); color: var(--ink-faint); }
@@ -626,7 +626,7 @@ a.card:hover h3 { color: var(--accent); }
 
 /* Category chips: the word is always written, the hue only supports it. */
 .chip-cat {
-  font-family: var(--mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .04em;
+  font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .04em;
   padding: .16rem .45rem; border-radius: 3px; color: var(--c); background: var(--cb);
 }
 .chip-cat--journal { --c: var(--chip-journal); --cb: var(--chip-journal-bg); }
