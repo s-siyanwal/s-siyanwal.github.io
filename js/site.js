@@ -77,8 +77,24 @@ export function mountFooter(data) {
 }
 
 /* ---------- Scroll reveal (respects reduced motion) ---------- */
+/* Reading time for long single-topic pages (plain words in <main>, ~200 wpm); list pages are skipped.
+   Called from initReveal so it runs after every page render; prerendering bakes it in for no-JS readers. */
+function readTime() {
+  const head = document.querySelector(".page-head"), main = document.querySelector("main"), h1 = head && head.querySelector("h1");
+  if (!h1 || !main || head.querySelector(".read-time") || /(publications|notes|404)\.html$/.test(location.pathname)) return;
+  const c = main.cloneNode(true);
+  c.querySelectorAll("svg, figure, nav, script, style, .fig-data, .backlink").forEach((n) => n.remove());
+  const words = (c.textContent.match(/\S+/g) || []).length;
+  if (words < 350) return;
+  const p = document.createElement("p");
+  p.className = "read-time";
+  p.textContent = `About ${Math.round(words / 200)} min read`;
+  h1.after(p);
+}
+
 export function initReveal() {
   initPrint();
+  readTime();
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const els = document.querySelectorAll("[data-reveal]");
   const showAll = () => els.forEach((e) => e.classList.add("is-in"));
