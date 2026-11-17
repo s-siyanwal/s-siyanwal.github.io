@@ -1,5 +1,7 @@
 import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, tags, projectHref, THREADS, projectStatus, chip, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE , paperHref, paperMore, roleHref, readMore } from "./site.js";
 import { mountCircuit } from "./circuit.js";
+import { mountField } from "./field.js";
+import { mountBlochNav } from "./blochnav.js";
 
 (async function () {
   let data;
@@ -30,6 +32,12 @@ import { mountCircuit } from "./circuit.js";
   $("hero-cta").innerHTML = cta.join("");
 
   mountCircuit($("hero-circuit"), p.focus_areas, $("glance"));
+  // The wave field is pointer-driven: draw it only where there is a mouse/trackpad and room for it,
+  // and only once the page is idle, so phones pay nothing for it.
+  if (window.matchMedia("(min-width: 900px) and (pointer: fine)").matches) {
+    const start = () => mountField(document.querySelector(".hero-panel"));
+    "requestIdleCallback" in window ? requestIdleCallback(start, { timeout: 1500 }) : setTimeout(start, 300);
+  }
 
   // Metrics
   $("glance").innerHTML = (data.metrics || []).map((m, i) => `
@@ -111,6 +119,7 @@ import { mountCircuit } from "./circuit.js";
 
   mountFooter(data);
   initReveal();
+  mountBlochNav(["papers", "projects", "work", "education", "awards"]);
 
   function firstSentence(t) {
     const m = String(t).match(/^.+?[.!?](?=\s+[A-Z]|$)/s);
