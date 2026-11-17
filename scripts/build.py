@@ -47,7 +47,7 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "_site"
 DEFAULT_SITE_URL = "https://s-siyanwal.github.io"
 
-COPY = ["index.html", "project.html", "publications.html", "about.html", "notes.html", "detail.html",
+COPY = ["index.html", "project.html", "publications.html", "about.html", "notes.html",
         "style.css", ".nojekyll", "js", "data", "assets"]
 PAGES = ["index.html", "publications.html", "about.html", "notes.html"]
 
