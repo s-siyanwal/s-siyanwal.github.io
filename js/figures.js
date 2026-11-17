@@ -143,6 +143,28 @@ function qkd(uid) {
       box(110, 282, 70, 36, "Alice") + box(312, 282, 96, 36, "Charlie", "fg-hbox") + box(520, 282, 70, 36, "Bob"));
 }
 
+/* VQLS forecasting (from the write-up's Approach): prices → Hankel-like matrix → Pauli basis; ansatz, Hadamard-test
+   cost and COBYLA form the hybrid loop; a SWAP test against recent data gives the forecast. Price line is illustrative. */
+function vqls() {
+  const px = [0, .35, .2, .55, .45, .7, .6, .9, .75, 1].map((v, i) => `${i ? "L" : "M"}${28 + i * 15} ${78 - v * 44}`).join("");
+  const brk = (x, d) => `<path class="fg-ln" d="M${x + d * 8} 30 H${x} V84 H${x + d * 8}"/>`;
+  const loopBack = `<path class="fg-faint" d="M532 216 V244 H180"/>` + arrow(180, 244, 180, 218);
+  return `<path class="fg-hue" d="${px}"/>` +
+    `<text class="fg-s" x="94" y="108" text-anchor="middle">closing prices</text>` +
+    arrow(172, 57, 214, 57) + brk(222, 1) + brk(298, -1) +
+    `<text class="fg-t" x="260" y="52" text-anchor="middle">x₁  x₂</text><text class="fg-t" x="260" y="76" text-anchor="middle">x₂  x₃</text>` +
+    `<text class="fg-s" x="260" y="108" text-anchor="middle">Hankel-like matrix A</text>` +
+    arrow(310, 57, 376, 57) + box(380, 32, 236, 50, "Pauli basis: A = Σ cₗPₗ") +
+    box(24, 160, 170, 56, ["ansatz", "|x(θ)⟩"], "fg-hbox") +
+    box(236, 160, 170, 56, ["Hadamard tests", "cost C(θ)"], "fg-hbox") +
+    box(448, 160, 168, 56, ["COBYLA", "update θ"]) +
+    arrow(194, 188, 236, 188) + arrow(406, 188, 448, 188) + arrow(470, 84, 345, 158) + loopBack +
+    `<text class="fg-s" x="356" y="262" text-anchor="middle">classical optimisation loop</text>` +
+    arrow(60, 216, 60, 284) +
+    box(24, 286, 250, 56, ["SWAP test", "solution · recent data"], "fg-hbox") +
+    box(366, 286, 250, 56, "next-day forecast") + arrow(274, 314, 366, 314);
+}
+
 /* TensNet (from the write-up's Approach): grid field → SVD truncation → MPS; each step applies MPOs,
    solves the pressure Poisson equation with two-site DMRG, obstacles enter as MPS by cross-approximation. */
 function tensor() {
@@ -177,6 +199,7 @@ const FIGS = {
   image: [image, "Circuit resources of four quantum image encodings for 16×16 images: qubit count against circuit depth on a log scale. Data from Tables 1–2 of the J. Supercomputing paper.", IMAGE_TABLE],
   fpga: [fpga, "Schematic. A variational quantum circuit (VQC) run as an FPGA kernel with HBM, for edge inference."],
   qkd: [qkd, "Schematic. Protocol layouts for DPS, COW and twin-field QKD studied at TCG CREST."],
+  vqls: [vqls, "Schematic. A Hankel-like trajectory matrix built from daily closing prices is decomposed into a Pauli basis. Quantum circuits (outlined in colour) prepare the ansatz state and evaluate the cost with Hadamard tests; COBYLA, a classical optimiser, updates the parameter. A SWAP test of the solution state against recent market data gives the next-day forecast. The price line is illustrative, not data."],
   tensor: [tensor, "Schematic. A velocity field on a grid (here around a cylinder) is compressed into a matrix product state by SVD truncation to bond dimension D ≤ D_max. Each pressure-correction step applies operators as MPOs, solves the pressure Poisson equation with two-site DMRG, and gives the corrected velocity for the next step; obstacles enter as MPS built by cross-approximation."],
 };
 
@@ -186,6 +209,7 @@ const BY_PROJECT = {
   "qir-qnn": ["image"],
   "qkd-testbeds": ["qkd"],
   "tensnet": ["tensor"],
+  "vqls-forecasting": ["vqls"],
 };
 
 export function figuresFor(projectId) {
