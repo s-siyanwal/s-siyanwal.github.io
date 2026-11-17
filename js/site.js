@@ -77,8 +77,66 @@ export function mountFooter(data) {
 }
 
 /* ---------- Scroll reveal (respects reduced motion) ---------- */
+/* Reading time for long single-topic pages (plain words in <main>, ~200 wpm); list pages are skipped.
+   Called from initReveal so it runs after every page render; prerendering bakes it in for no-JS readers. */
+function readTime() {
+  const head = document.querySelector(".page-head"), main = document.querySelector("main"), h1 = head && head.querySelector("h1");
+  if (!h1 || !main || head.querySelector(".read-time") || /(publications|notes|404)\.html$/.test(location.pathname)) return;
+  const c = main.cloneNode(true);
+  c.querySelectorAll("svg, figure, nav, script, style, .fig-data, .backlink").forEach((n) => n.remove());
+  const words = (c.textContent.match(/\S+/g) || []).length;
+  if (words < 350) return;
+  const p = document.createElement("p");
+  p.className = "read-time";
+  p.textContent = `About ${Math.round(words / 200)} min read`;
+  h1.after(p);
+}
+
+/* Optional read-aloud with the browser's own speech synthesis. Progressive enhancement: it is added only when the
+   API exists, and build.py strips it from prerendered HTML so no-JS readers never see a dead button. */
+function mountListen() {
+  const synth = window.speechSynthesis, head = document.querySelector(".page-head"), h1 = head && head.querySelector("h1");
+  if (!synth || !window.SpeechSynthesisUtterance || !h1 || head.querySelector(".listen")) return;
+  const skip = "svg, figure, nav, script, style, .backlink, .listen, .read-time, .fig-data, [aria-hidden='true']";
+  const sel = "h1, h2, h3, h4, p, li, dt, dd, th, td";
+  const blocks = () => [...document.querySelectorAll(`main :is(${sel})`)]
+    .filter((el) => !el.closest(skip) && !el.querySelector(sel))
+    .map((el) => el.textContent.replace(/\s+/g, " ").trim()).filter(Boolean);
+  const box = document.createElement("div");
+  box.className = "listen";
+  box.innerHTML = '<button type="button" class="btn listen-play">Listen to this page</button>' +
+    '<button type="button" class="btn listen-stop" hidden>Stop</button><span class="listen-status" role="status"></span>';
+  const [play, stop, status] = box.children;
+  let state = "idle";
+  const set = (s) => {
+    state = s;
+    play.textContent = s === "playing" ? "Pause" : s === "paused" ? "Resume" : "Listen to this page";
+    stop.hidden = s === "idle";
+    status.textContent = s === "playing" ? "Reading aloud" : s === "paused" ? "Paused" : "";
+  };
+  const reset = () => { synth.cancel(); set("idle"); };
+  play.addEventListener("click", () => {
+    if (state === "playing") { synth.pause(); set("paused"); return; }
+    if (state === "paused") { synth.resume(); set("playing"); return; }
+    synth.cancel();
+    const parts = blocks(), lang = document.documentElement.lang || "en";
+    parts.forEach((t, i) => {
+      const u = new SpeechSynthesisUtterance(t);
+      u.lang = lang;
+      if (i === parts.length - 1) u.onend = () => { if (state !== "idle") set("idle"); };
+      synth.speak(u);
+    });
+    set("playing");
+  });
+  stop.addEventListener("click", reset);
+  window.addEventListener("pagehide", reset);
+  (head.querySelector(".read-time") || h1).after(box);
+}
+
 export function initReveal() {
   initPrint();
+  readTime();
+  mountListen();
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const els = document.querySelectorAll("[data-reveal]");
   const showAll = () => els.forEach((e) => e.classList.add("is-in"));
@@ -191,5 +249,8 @@ export const paperHref = (p) => `paper-${slug(p.title)}.html`;
 /* A paper gets a detail page only when there is something to say beyond the citation (keep in sync with build.py). */
 export const hasDetail = (p) => Boolean(p.abstract || (p.sections || []).length);
 export const roleHref = (e) => `role-${slug(e.org.split("(")[0] + " " + e.role)}.html`;
-export const paperMore = (p) => (hasDetail(p) ? readMore(paperHref(p)) : "");
-export const readMore = (href, label = "Read more") => `<a class="read-more" href="${href}">${label} →</a>`;
+export const paperMore = (p) => (hasDetail(p) ? readMore(paperHref(p), "Read more", p.title) : "");
+/* The accessible name starts with the visible words (WCAG 2.5.3) and adds what the link is about,
+   so a screen-reader links list is not a column of identical "Read more" entries. */
+export const readMore = (href, label = "Read more", about = "") =>
+  `<a class="read-more" href="${href}"${about ? ` aria-label="${esc(`${label}: ${about}`)}"` : ""}>${label} →</a>`;

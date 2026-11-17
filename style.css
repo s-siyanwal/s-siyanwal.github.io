@@ -534,6 +534,10 @@ a.card:hover h3 { color: var(--accent); }
 /* ---------- Subpage chrome ---------- */
 .wrap.narrow { max-width: 720px; }
 .page-head { padding-top: var(--gap); }
+.listen { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; margin: 0 0 1.2rem; }
+.listen .btn { font-size: .78rem; padding: .45rem .8rem; min-height: 32px; }
+.listen-status { font-family: var(--mono); font-size: .78rem; color: var(--ink-faint); }
+.read-time { font-family: var(--mono); font-size: .78rem; color: var(--ink-faint); margin: -.3rem 0 1rem; }
 .page-head h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.06; margin: 0 0 .9rem; }
 .backlink { font-family: var(--mono); font-size: .74rem; text-transform: uppercase; letter-spacing: .04em; text-decoration: none; color: var(--ink-faint); display: inline-block; margin-bottom: 1.4rem; }
 .backlink:hover { color: var(--accent); }
@@ -575,6 +579,10 @@ a.card:hover h3 { color: var(--accent); }
 .pubcard-links { margin-top: auto; padding-top: .7rem; border-top: 1px solid var(--rule); }
 .pubcard-links { display: flex; flex-wrap: wrap; align-items: center; gap: .9rem; }
 .pubcard-links a, .bib-btn, .bib-status { font-family: var(--mono); font-size: .72rem; }
+/* Small text links get a 24 px tall hit area (WCAG 2.5.8; easier for older readers and touch). */
+.read-more, .ids a, .ids .bib-btn, .bib-btn, .pubcard-links a, .footer-links a, .backlink {
+  display: inline-flex; align-items: center; min-height: 24px;
+}
 .bib-btn { background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
 .bib-btn:hover { color: var(--ink); }
 .bib-status { color: var(--ink-soft); }
