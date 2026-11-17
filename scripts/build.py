@@ -665,6 +665,11 @@ def clean_snapshot(doc):
     # The read-aloud control needs JS and speech synthesis, so only an empty slot is saved. It takes up
     # space only under html.tts (set before first paint), so adding the control later shifts nothing.
     doc = re.sub(r'<div class="listen">.*?</span></div>', '<div class="listen-slot"></div>', doc, flags=re.S)
+    # The hero wave field needs WebGL and draws at runtime; its canvas and note are absolutely
+    # positioned, so leaving them out of the saved page shifts nothing when they are added back.
+    doc = re.sub(r'<canvas class="wave-field"[^>]*></canvas>', "", doc)
+    doc = re.sub(r'<p class="field-note">.*?</p>', "", doc, flags=re.S)
+    doc = doc.replace("hero-panel has-field", "hero-panel")
     return "<!DOCTYPE html>\n" + doc if not doc.lstrip().lower().startswith("<!doctype") else doc
 
 
