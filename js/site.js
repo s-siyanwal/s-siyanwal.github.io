@@ -92,9 +92,51 @@ function readTime() {
   h1.after(p);
 }
 
+/* Optional read-aloud with the browser's own speech synthesis. Progressive enhancement: it is added only when the
+   API exists, and build.py strips it from prerendered HTML so no-JS readers never see a dead button. */
+function mountListen() {
+  const synth = window.speechSynthesis, head = document.querySelector(".page-head"), h1 = head && head.querySelector("h1");
+  if (!synth || !window.SpeechSynthesisUtterance || !h1 || head.querySelector(".listen")) return;
+  const skip = "svg, figure, nav, script, style, .backlink, .listen, .read-time, .fig-data, [aria-hidden='true']";
+  const sel = "h1, h2, h3, h4, p, li, dt, dd, th, td";
+  const blocks = () => [...document.querySelectorAll(`main :is(${sel})`)]
+    .filter((el) => !el.closest(skip) && !el.querySelector(sel))
+    .map((el) => el.textContent.replace(/\s+/g, " ").trim()).filter(Boolean);
+  const box = document.createElement("div");
+  box.className = "listen";
+  box.innerHTML = '<button type="button" class="btn listen-play">Listen to this page</button>' +
+    '<button type="button" class="btn listen-stop" hidden>Stop</button><span class="listen-status" role="status"></span>';
+  const [play, stop, status] = box.children;
+  let state = "idle";
+  const set = (s) => {
+    state = s;
+    play.textContent = s === "playing" ? "Pause" : s === "paused" ? "Resume" : "Listen to this page";
+    stop.hidden = s === "idle";
+    status.textContent = s === "playing" ? "Reading aloud" : s === "paused" ? "Paused" : "";
+  };
+  const reset = () => { synth.cancel(); set("idle"); };
+  play.addEventListener("click", () => {
+    if (state === "playing") { synth.pause(); set("paused"); return; }
+    if (state === "paused") { synth.resume(); set("playing"); return; }
+    synth.cancel();
+    const parts = blocks(), lang = document.documentElement.lang || "en";
+    parts.forEach((t, i) => {
+      const u = new SpeechSynthesisUtterance(t);
+      u.lang = lang;
+      if (i === parts.length - 1) u.onend = () => { if (state !== "idle") set("idle"); };
+      synth.speak(u);
+    });
+    set("playing");
+  });
+  stop.addEventListener("click", reset);
+  window.addEventListener("pagehide", reset);
+  (head.querySelector(".read-time") || h1).after(box);
+}
+
 export function initReveal() {
   initPrint();
   readTime();
+  mountListen();
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const els = document.querySelectorAll("[data-reveal]");
   const showAll = () => els.forEach((e) => e.classList.add("is-in"));

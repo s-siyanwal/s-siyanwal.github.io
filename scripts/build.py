@@ -654,6 +654,8 @@ def clean_snapshot(doc):
     doc = re.sub(r'(<html[^>]*?) class="js"', r"\1", doc, count=1)
     doc = re.sub(r'\s*\bis-in\b', "", doc)
     doc = doc.replace(' class=""', "")
+    # The read-aloud control needs JS and speech synthesis; it is added at runtime only.
+    doc = re.sub(r'<div class="listen">.*?</span></div>', "", doc, flags=re.S)
     return "<!DOCTYPE html>\n" + doc if not doc.lstrip().lower().startswith("<!doctype") else doc
 
 
