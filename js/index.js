@@ -128,7 +128,7 @@ import { mountCircuit } from "./circuit.js";
         ${(e.tags || []).length ? `<div class="xp-tags">${tags(e.tags)}</div>` : ""}
         <span class="xp-toggle"><span class="chev" aria-hidden="true">▸</span> Details</span>
       </summary>
-      <div class="xp-detail"><ul>${(e.points || []).map((t) => `<li>${esc(t)}</li>`).join("")}</ul>${readMore(roleHref(e), "Full role page")}</div>
+      <div class="xp-detail"><ul>${(e.points || []).map((t) => `<li>${esc(t)}</li>`).join("")}</ul>${readMore(roleHref(e), "Full role page", `${e.role || ""}, ${e.org || ""}`)}</div>
     </details>`;
   }
 })();

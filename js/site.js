@@ -249,5 +249,8 @@ export const paperHref = (p) => `paper-${slug(p.title)}.html`;
 /* A paper gets a detail page only when there is something to say beyond the citation (keep in sync with build.py). */
 export const hasDetail = (p) => Boolean(p.abstract || (p.sections || []).length);
 export const roleHref = (e) => `role-${slug(e.org.split("(")[0] + " " + e.role)}.html`;
-export const paperMore = (p) => (hasDetail(p) ? readMore(paperHref(p)) : "");
-export const readMore = (href, label = "Read more") => `<a class="read-more" href="${href}">${label} →</a>`;
+export const paperMore = (p) => (hasDetail(p) ? readMore(paperHref(p), "Read more", p.title) : "");
+/* The accessible name starts with the visible words (WCAG 2.5.3) and adds what the link is about,
+   so a screen-reader links list is not a column of identical "Read more" entries. */
+export const readMore = (href, label = "Read more", about = "") =>
+  `<a class="read-more" href="${href}"${about ? ` aria-label="${esc(`${label}: ${about}`)}"` : ""}>${label} →</a>`;
