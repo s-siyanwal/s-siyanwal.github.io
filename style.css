@@ -645,7 +645,7 @@ a.card:hover h3 { color: var(--accent); }
 .th-nmr { --th: var(--th-nmr); }
 .th-weather { --th: var(--th-weather); }
 .th-image { --th: var(--th-image); }
-.th-qkd { --th: var(--th-qkd); }
+.th-qkd, .th-crypto { --th: var(--th-qkd); }
 .th-fpga { --th: var(--th-fpga); }
 .th-vqls { --th: var(--th-vqls); }
 .th-tensor { --th: var(--th-tensor); }
@@ -672,6 +672,7 @@ a.card:hover h3 { color: var(--accent); }
 .fg-hbox { fill: var(--panel-solid); stroke: var(--th); stroke-width: 2; }
 .fg-fill { fill: var(--th); }
 .fg-arrow { fill: var(--ink-faint); }
+.fg-bar { fill: var(--ink-faint); opacity: .5; }
 .fg-grid { stroke: var(--ink-faint); stroke-opacity: .3; stroke-width: 1; }
 
 /* ---------- About portrait ---------- */
