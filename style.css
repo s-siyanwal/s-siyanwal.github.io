@@ -534,8 +534,10 @@ a.card:hover h3 { color: var(--accent); }
 /* ---------- Subpage chrome ---------- */
 .wrap.narrow { max-width: 720px; }
 .page-head { padding-top: var(--gap); }
-.listen { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; margin: 0 0 1.2rem; }
-.listen .btn { font-size: .78rem; padding: .45rem .8rem; min-height: 32px; }
+.listen { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; margin: 0 0 1.2rem; min-height: 34px; }
+.listen-slot, .listen .btn[hidden] { display: none; }
+html.tts .listen-slot { display: block; height: 34px; margin: 0 0 1.2rem; }
+.listen .btn { font-size: .78rem; padding: 0 .8rem; height: 34px; display: inline-flex; align-items: center; }
 .listen-status { font-family: var(--mono); font-size: .78rem; color: var(--ink-faint); }
 .read-time { font-family: var(--mono); font-size: .78rem; color: var(--ink-faint); margin: -.3rem 0 1rem; }
 .page-head h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.06; margin: 0 0 .9rem; }
@@ -754,3 +756,7 @@ a.card:hover h3 { color: var(--accent); }
 
 /* Detail-page meta lines (venue, status, supervisor) can be long: let them wrap on phones. */
 .page-head .note-meta { white-space: normal; overflow-wrap: anywhere; }
+
+/* <picture> wrapper for the WebP portrait: let the <img> keep its own place in the layout. */
+.portrait-pic { display: contents; }
+.portrait-pic > source { display: none; }

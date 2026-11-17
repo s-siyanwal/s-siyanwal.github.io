@@ -198,6 +198,9 @@ Change colors/fonts via the CSS variables at the top of `style.css`.
 `Notes` is a small, secondary section for personal, non-research writing
 (habits, essays, creative pieces). It appears only as the last item in the top
 bar and as a footer link; it is never featured on the homepage.
+While no note is published (every file is `draft: true`), the Notes links are
+hidden and `notes.html` is left out of the sitemap; they come back on their own
+with the first published note.
 
 1. Create `notes/<slug>.md` (the slug becomes the URL: `note-<slug>.html`).
 2. Start it with front matter:

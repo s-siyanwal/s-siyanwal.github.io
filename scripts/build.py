@@ -616,7 +616,8 @@ def assemble(data, site):
         f = OUT / page
         f.write_text(mark_built(set_head(f.read_text(encoding="utf-8"), block)), encoding="utf-8")
 
-    written = list(PAGES) + build_notes(site, name) + build_details(data, site, name)
+    notes = build_notes(site, name)
+    written = list(PAGES) + notes + build_details(data, site, name)
     tmpl = (ROOT / "project.html").read_text(encoding="utf-8")
     for pr in data.get("projects", []):
         pid = pr["id"]
@@ -638,9 +639,15 @@ def assemble(data, site):
     (OUT / "404.html").write_text(not_found(data, site), encoding="utf-8")
     (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {site}/sitemap.xml\n",
                                     encoding="utf-8")
+    if not notes:
+        # No published notes yet: keep notes.html reachable, but drop it from the menus (site.js reads
+        # data-notes) and from the sitemap, so readers are not sent to an empty page.
+        for f in OUT.glob("*.html"):
+            f.write_text(f.read_text(encoding="utf-8").replace('<html lang="en"', '<html lang="en" data-notes="0"', 1),
+                         encoding="utf-8")
     urls = "\n".join(
         f"  <url><loc>{esc(site + '/' + ('' if w == 'index.html' else w))}</loc></url>"
-        for w in written)
+        for w in written if notes or w != "notes.html")
     (OUT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -651,11 +658,13 @@ def assemble(data, site):
 def clean_snapshot(doc):
     # The browser added class="js" (reveal gating) and is-in markers at runtime.
     # Strip them so the saved page is fully visible without JS; the live JS re-adds them.
-    doc = re.sub(r'(<html[^>]*?) class="js"', r"\1", doc, count=1)
+    # Runtime-only <html> classes: js (reveal gating) and tts (speech synthesis available).
+    doc = re.sub(r'(<html[^>]*?) class="(?:js|tts)(?: (?:js|tts))?"', r"\1", doc, count=1)
     doc = re.sub(r'\s*\bis-in\b', "", doc)
     doc = doc.replace(' class=""', "")
-    # The read-aloud control needs JS and speech synthesis; it is added at runtime only.
-    doc = re.sub(r'<div class="listen">.*?</span></div>', "", doc, flags=re.S)
+    # The read-aloud control needs JS and speech synthesis, so only an empty slot is saved. It takes up
+    # space only under html.tts (set before first paint), so adding the control later shifts nothing.
+    doc = re.sub(r'<div class="listen">.*?</span></div>', '<div class="listen-slot"></div>', doc, flags=re.S)
     return "<!DOCTYPE html>\n" + doc if not doc.lstrip().lower().startswith("<!doctype") else doc
 
 

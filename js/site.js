@@ -33,7 +33,7 @@ export function mountChrome(data, active) {
       ${item("publications.html", "Publications", "pubs")}
       ${item("about.html", "About", "about")}
       ${cv ? `<a class="topbar-cv" href="${esc(cv)}" target="_blank" rel="noopener">CV ↓</a>` : ""}
-      <a class="topbar-notes" href="notes.html"${active === "notes" ? ' aria-current="page"' : ""}>Notes</a>
+      ${notesOn() ? `<a class="topbar-notes" href="notes.html"${active === "notes" ? ' aria-current="page"' : ""}>Notes</a>` : ""}
     </nav>
     <button type="button" class="theme-toggle"></button>`;
   mountThemeToggle(bar.querySelector(".theme-toggle"));
@@ -47,8 +47,9 @@ function mountThemeToggle(btn) {
   try { cur = localStorage.getItem("theme") || "auto"; } catch (e) { /* storage blocked */ }
   if (!THEMES.includes(cur)) cur = "auto";
   const paint = () => {
-    btn.textContent = cur[0].toUpperCase() + cur.slice(1);
-    btn.setAttribute("aria-label", `Colour theme: ${cur}. Switch theme`);
+    // Say what the button is, not just its state: "Auto" alone meant little to first-time readers.
+    btn.textContent = `Theme: ${cur[0].toUpperCase() + cur.slice(1)}`;
+    btn.setAttribute("aria-label", `Theme: ${cur}. Switch colour theme`);
   };
   paint();
   btn.addEventListener("click", () => {
@@ -72,11 +73,14 @@ export function mountFooter(data) {
         <p class="footer-name">${esc(p.name)}</p>
         <p class="footer-loc">${esc(p.location || "")}</p>
       </div>
-      <div class="footer-links">${links}<a class="footer-notes" href="notes.html">Notes</a></div>
+      <div class="footer-links">${links}${notesOn() ? '<a class="footer-notes" href="notes.html">Notes</a>' : ""}</div>
     </div></div>`;
 }
 
 /* ---------- Scroll reveal (respects reduced motion) ---------- */
+/* The build sets data-notes="0" on <html> while no note is published, so the menus skip an empty page. */
+const notesOn = () => document.documentElement.dataset.notes !== "0";
+
 /* Reading time for long single-topic pages (plain words in <main>, ~200 wpm); list pages are skipped.
    Called from initReveal so it runs after every page render; prerendering bakes it in for no-JS readers. */
 function readTime() {
@@ -130,7 +134,8 @@ function mountListen() {
   });
   stop.addEventListener("click", reset);
   window.addEventListener("pagehide", reset);
-  (head.querySelector(".read-time") || h1).after(box);
+  const slot = head.querySelector(".listen-slot");
+  if (slot) slot.replaceWith(box); else (head.querySelector(".read-time") || h1).after(box);
 }
 
 export function initReveal() {
