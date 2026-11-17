@@ -143,12 +143,89 @@ function qkd(uid) {
       box(110, 282, 70, 36, "Alice") + box(312, 282, 96, 36, "Charlie", "fg-hbox") + box(520, 282, 70, 36, "Bob"));
 }
 
+/* Block-cipher attack (from the write-up's Approach/Attack): Grover key search with a known plaintext–ciphertext oracle
+   built from the cipher circuit (Galois-field S-box). Amplitude bars are illustrative. */
+function crypto() {
+  const wires = [62, 86, 110].map((y) => `<line class="fg-faint" x1="44" y1="${y}" x2="600" y2="${y}"/><text class="fg-s" x="40" y="${y + 5}" text-anchor="end">|0⟩</text>`).join("");
+  const meter = `<rect class="fg-box" x="532" y="56" width="56" height="60" rx="4"/><path class="fg-ln" d="M542 100 A18 18 0 0 1 578 100"/>` + arrow(560, 104, 574, 76, "fg-ln");
+  const zoom = `<path class="fg-faint" stroke-dasharray="4 4" d="M150 126 L24 198 M340 126 L616 198"/>`;
+  const bars = (x0, hs) => hs.map((h, i) => `<rect class="${h > 20 ? "fg-fill" : "fg-bar"}" x="${x0 + i * 20}" y="${342 - h}" width="12" height="${h}"/>`).join("");
+  return `<text class="fg-s" x="44" y="24">key register |k⟩</text>` + wires +
+    box(64, 50, 44, 72, "H", "fg-box") +
+    `<path class="fg-ln" d="M146 44 V34 H504 V44"/><text class="fg-s" x="325" y="24" text-anchor="middle">repeat ~√N times</text>` +
+    box(150, 50, 190, 72, ["oracle", "Enc_k(P) = C ?"], "fg-hbox") +
+    box(368, 50, 132, 72, ["diffusion", "amplify"], "fg-hbox") + meter +
+    `<text class="fg-s" x="560" y="140" text-anchor="middle">key</text>` + zoom +
+    `<text class="fg-s" x="325" y="190" text-anchor="middle">inside the oracle</text>` +
+    box(24, 200, 196, 56, ["encrypt P with k", "Galois-field S-box"]) +
+    box(232, 200, 196, 56, ["compare with C", "phase flip if equal"]) +
+    box(440, 200, 176, 56, ["uncompute", "encryption"]) +
+    arrow(220, 228, 232, 228) + arrow(428, 228, 440, 228) +
+    bars(40, Array(11).fill(14)) + arrow(268, 330, 360, 330) +
+    bars(380, [5, 5, 5, 5, 5, 46, 5, 5, 5, 5, 5]) +
+    `<text class="fg-s" x="140" y="358" text-anchor="middle">uniform start</text>` +
+    `<text class="fg-s" x="480" y="358" text-anchor="middle">after amplification</text>`;
+}
+
+/* VQLS forecasting (from the write-up's Approach): prices → Hankel-like matrix → Pauli basis; ansatz, Hadamard-test
+   cost and COBYLA form the hybrid loop; a SWAP test against recent data gives the forecast. Price line is illustrative. */
+function vqls() {
+  const px = [0, .35, .2, .55, .45, .7, .6, .9, .75, 1].map((v, i) => `${i ? "L" : "M"}${28 + i * 15} ${78 - v * 44}`).join("");
+  const brk = (x, d) => `<path class="fg-ln" d="M${x + d * 8} 30 H${x} V84 H${x + d * 8}"/>`;
+  const loopBack = `<path class="fg-faint" d="M532 216 V244 H180"/>` + arrow(180, 244, 180, 218);
+  return `<path class="fg-hue" d="${px}"/>` +
+    `<text class="fg-s" x="94" y="108" text-anchor="middle">closing prices</text>` +
+    arrow(172, 57, 214, 57) + brk(222, 1) + brk(298, -1) +
+    `<text class="fg-t" x="260" y="52" text-anchor="middle">x₁  x₂</text><text class="fg-t" x="260" y="76" text-anchor="middle">x₂  x₃</text>` +
+    `<text class="fg-s" x="260" y="108" text-anchor="middle">Hankel-like matrix A</text>` +
+    arrow(310, 57, 376, 57) + box(380, 32, 236, 50, "Pauli basis: A = Σ cₗPₗ") +
+    box(24, 160, 170, 56, ["ansatz", "|x(θ)⟩"], "fg-hbox") +
+    box(236, 160, 170, 56, ["Hadamard tests", "cost C(θ)"], "fg-hbox") +
+    box(448, 160, 168, 56, ["COBYLA", "update θ"]) +
+    arrow(194, 188, 236, 188) + arrow(406, 188, 448, 188) + arrow(470, 84, 345, 158) + loopBack +
+    `<text class="fg-s" x="356" y="262" text-anchor="middle">classical optimisation loop</text>` +
+    arrow(60, 216, 60, 284) +
+    box(24, 286, 250, 56, ["SWAP test", "solution · recent data"], "fg-hbox") +
+    box(366, 286, 250, 56, "next-day forecast") + arrow(274, 314, 366, 314);
+}
+
+/* TensNet (from the write-up's Approach): grid field → SVD truncation → MPS; each step applies MPOs,
+   solves the pressure Poisson equation with two-site DMRG, obstacles enter as MPS by cross-approximation. */
+function tensor() {
+  const grid = Array.from({ length: 9 }, (_, i) => `<line class="fg-grid" x1="${44 + i * 20}" y1="40" x2="${44 + i * 20}" y2="140"/>`).join("") +
+    Array.from({ length: 4 }, (_, i) => `<line class="fg-grid" x1="24" y1="${60 + i * 20}" x2="224" y2="${60 + i * 20}"/>`).join("");
+  const stream = [-34, -18, 18, 34].map((d) => {
+    const bend = d > 0 ? 1 : -1, near = Math.abs(d) < 20;
+    return `<path class="fg-faint" d="M28 ${90 + d} C ${64} ${90 + d}, ${72} ${90 + d + bend * (near ? 12 : 5)}, 84 ${90 + d + bend * (near ? 12 : 5)} S ${104} ${90 + d}, 220 ${90 + d}"/>`;
+  }).join("");
+  const xs = [340, 394, 448, 502, 556, 610];
+  const mps = xs.slice(0, -1).map((x, i) => `<line class="fg-hue" x1="${x}" y1="90" x2="${xs[i + 1]}" y2="90"/>`).join("") +
+    xs.map((x) => `<line class="fg-ln" x1="${x}" y1="90" x2="${x}" y2="120"/><circle class="fg-hbox" cx="${x}" cy="90" r="13"/>`).join("") +
+    `<text class="fg-s" x="475" y="80" text-anchor="middle">D</text>` +
+    `<text class="fg-s" x="475" y="40" text-anchor="middle">matrix product state</text>`;
+  return `<rect class="fg-box" x="24" y="40" width="200" height="100"/>` + grid + stream +
+    `<circle class="fg-hbox" cx="84" cy="90" r="13"/>` +
+    `<text class="fg-s" x="124" y="166" text-anchor="middle">velocity field on a grid</text>` +
+    arrow(236, 90, 316, 90) +
+    `<text class="fg-s" x="276" y="78" text-anchor="middle">SVD</text>` +
+    `<text class="fg-s" x="276" y="112" text-anchor="middle">D ≤ D_max</text>` + mps +
+    box(24, 232, 180, 56, ["obstacle as MPS", "(cross-approx.)"]) +
+    box(232, 232, 180, 56, ["two-site DMRG", "pressure Poisson"], "fg-hbox") +
+    box(440, 232, 176, 56, ["corrected", "velocity (MPS)"]) +
+    arrow(204, 260, 232, 260) + arrow(412, 260, 440, 260) +
+    arrow(420, 128, 340, 230) + `<text class="fg-s" x="362" y="186" text-anchor="end">MPO operators</text>` +
+    arrow(560, 230, 560, 132) + `<text class="fg-s" x="552" y="186" text-anchor="end">next step</text>`;
+}
+
 const FIGS = {
   nmr: [nmr, "Schematic. The SLOCC classes of three-qubit pure states that the ANN distinguishes, and the reduction from 128 real features to 18 canonical-form inputs, ranked by ANOVA."],
   weather: [weather, "Schematic. Illustrative temperature series with a classical baseline and a variational-circuit forecast; not data from the paper."],
   image: [image, "Circuit resources of four quantum image encodings for 16×16 images: qubit count against circuit depth on a log scale. Data from Tables 1–2 of the J. Supercomputing paper.", IMAGE_TABLE],
   fpga: [fpga, "Schematic. A variational quantum circuit (VQC) run as an FPGA kernel with HBM, for edge inference."],
   qkd: [qkd, "Schematic. Protocol layouts for DPS, COW and twin-field QKD studied at TCG CREST."],
+  crypto: [crypto, "Schematic. Grover key search on the scaled-down cipher: the key register starts in uniform superposition (H); the oracle encrypts the known plaintext P under each candidate key k with the cipher circuit (including its Galois-field S-box), marks the key whose output equals the known ciphertext C, and uncomputes; diffusion amplifies the marked key, and after about √N rounds a measurement returns it. The bars are illustrative, not data."],
+  vqls: [vqls, "Schematic. A Hankel-like trajectory matrix built from daily closing prices is decomposed into a Pauli basis. Quantum circuits (outlined in colour) prepare the ansatz state and evaluate the cost with Hadamard tests; COBYLA, a classical optimiser, updates the parameter. A SWAP test of the solution state against recent market data gives the next-day forecast. The price line is illustrative, not data."],
+  tensor: [tensor, "Schematic. A velocity field on a grid (here around a cylinder) is compressed into a matrix product state by SVD truncation to bond dimension D ≤ D_max. Each pressure-correction step applies operators as MPOs, solves the pressure Poisson equation with two-site DMRG, and gives the corrected velocity for the next step; obstacles enter as MPS built by cross-approximation."],
 };
 
 const BY_PROJECT = {
@@ -156,6 +233,9 @@ const BY_PROJECT = {
   "vqc-fpga": ["weather", "fpga"],
   "qir-qnn": ["image"],
   "qkd-testbeds": ["qkd"],
+  "tensnet": ["tensor"],
+  "vqls-forecasting": ["vqls"],
+  "qcrypto-circuits": ["crypto"],
 };
 
 export function figuresFor(projectId) {

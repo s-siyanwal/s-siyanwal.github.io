@@ -47,7 +47,7 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "_site"
 DEFAULT_SITE_URL = "https://s-siyanwal.github.io"
 
-COPY = ["index.html", "project.html", "publications.html", "about.html", "notes.html", "detail.html",
+COPY = ["index.html", "project.html", "publications.html", "about.html", "notes.html",
         "style.css", ".nojekyll", "js", "data", "assets"]
 PAGES = ["index.html", "publications.html", "about.html", "notes.html"]
 
@@ -416,8 +416,19 @@ def _month(s):
     return int(m.group(2)) + mon / 12
 
 
+def _org_short(org):
+    """Short organisation name for labels: an acronym in brackets, else the part after the last comma."""
+    m = re.search(r"\(([A-Z][A-Za-z-]{1,10})\)", org)
+    if m:
+        return m.group(1)
+    base = re.sub(r"\s*\(.*?\)", "", org).strip()
+    return base.split(",")[-1].strip() if "," in base else base.split()[0]
+
+
 def timeline_svg(roles, current):
-    """Self-made timeline of all roles from their listed periods, this one highlighted."""
+    """Self-made, labelled timeline of all roles from their listed periods. Each label sits above its
+    bar so the figure fits a phone without sideways scrolling; this role is marked in words as well
+    as colour, so the figure does not rely on colour alone."""
     spans = []
     for e in roles:
         parts = re.split(r"\s*[–-]\s*", e.get("period", ""))
@@ -427,22 +438,28 @@ def timeline_svg(roles, current):
         return ""
     lo = min(s[1] for s in spans)
     hi = max(s[2] for s in spans)
-    W, row = 600, 26
-    sx = lambda v: 8 + (v - lo) / max(hi - lo, 0.1) * (W - 16)
-    bars = []
+    W, row, pad = 440, 40, 8
+    sx = lambda v: pad + (v - lo) / max(hi - lo, 0.1) * (W - 2 * pad)
+    rows = []
     for i, (e, a, b) in enumerate(spans):
-        cls = "tl-bar is-this" if e is current else "tl-bar"
-        y = 8 + i * row
-        bars.append(f'<rect x="{sx(a):.1f}" y="{y}" width="{max(sx(b) - sx(a), 3):.1f}" height="14" rx="3" class="{cls}">'
-                    f'<title>{esc(e["role"])} · {esc(e["period"])}</title></rect>')
-    ys = range(int(lo), int(hi) + 1)
-    ticks = "".join(f'<text x="{sx(y):.1f}" y="{8 + len(spans) * row + 12}" class="tl-tick" text-anchor="middle">{y}</text>'
-                    for y in ys if lo <= y <= hi)
-    h = 8 + len(spans) * row + 18
-    return (f'<figure class="detail-fig"><svg viewBox="0 0 {W} {h}" role="img" aria-label="Timeline of roles">'
-            + "".join(bars) + ticks +
-            '</svg><figcaption>Timeline of listed roles (from the periods on this site); this role highlighted.</figcaption></figure>')
-
+        this = e is current
+        y = 6 + i * row
+        role = e["role"].split("—")[0].strip()
+        label = f"{role} · {_org_short(e['org'])}" + (" — this role" if this else "")
+        rows.append(
+            f'<text x="{pad}" y="{y + 12}" class="tl-label{" is-this" if this else ""}">{esc(label)}</text>'
+            f'<rect x="{sx(a):.1f}" y="{y + 18}" width="{max(sx(b) - sx(a), 3):.1f}" height="10" rx="3" class="tl-bar{" is-this" if this else ""}">'
+            f'<title>{esc(e["role"])}, {esc(e["org"])} · {esc(e["period"])}</title></rect>')
+    base_y = 6 + len(spans) * row + 10
+    ticks = "".join(f'<line x1="{sx(y):.1f}" x2="{sx(y):.1f}" y1="4" y2="{base_y - 12}" class="tl-grid"/>'
+                    f'<text x="{sx(y):.1f}" y="{base_y}" class="tl-tick" text-anchor="middle">{y}</text>'
+                    for y in range(int(lo) + (lo % 1 > 0), int(hi) + 1))
+    h = base_y + 6
+    desc = "; ".join(f'{e["role"]}, {_org_short(e["org"])}, {e["period"]}' for e, _, _ in spans)
+    return (f'<figure class="detail-fig tl-fig"><svg viewBox="0 0 {W} {h}" role="img" aria-labelledby="tl-t tl-d">'
+            f'<title id="tl-t">Timeline of roles</title><desc id="tl-d">{esc(desc)}</desc>'
+            + ticks + "".join(rows) +
+            '</svg><figcaption>Timeline of listed roles (from the periods on this site); this role is marked.</figcaption></figure>')
 
 def _sec(h, body):
     return f'<section class="prose-sec"><h2>{esc(h)}</h2>{body}</section>'
