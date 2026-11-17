@@ -76,6 +76,8 @@ js/
   index.js  project.js  publications.js  about.js
 data/content.json     ★ ALL CONTENT
 assets/               CV PDF (generated from content.json by scripts/build.py)
+lab/                  Lab edition: an experimental parallel design at /lab/ (noindex),
+                      rendered from the same data/content.json (lab.js, field.js, lab.css)
 inbox/                ← drop files here to update
 scripts/ingest.py     Parser/merger (provider-agnostic)
 scripts/build.py      Prerenders the site into _site/ (run by pages.yml)
