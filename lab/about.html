@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>About — Shivanshu Siyanwal (Lab edition)</title>
+<meta name="description" content="Research statement, interests, education, skills and recognition of Shivanshu Siyanwal."/>
+<meta name="robots" content="noindex"/>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml"/>
+<link rel="preload" href="../assets/fonts/instrument-serif.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href="../assets/fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin/>
+<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}try{if(!window.__PRERENDER__&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("lab-anim")}catch(e){}</script>
+<link rel="stylesheet" href="lab.css"/>
+<script src="vendor/gsap.min.js" defer></script>
+<script src="vendor/ScrollTrigger.min.js" defer></script>
+<script src="vendor/lenis.min.js" defer></script>
+<script type="module" src="about.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="curtain" aria-hidden="true"></div>
+<header class="bar" id="bar"></header>
+<main id="main">
+  <section class="page-hero" id="top" aria-labelledby="ab-h">
+    <p class="micro">About</p>
+    <h1 id="ab-h" data-split>Research <em>statement</em></h1>
+    <p class="page-lede" id="ab-lede"></p>
+  </section>
+  <section class="block prose" id="statement" aria-labelledby="st-h">
+    <h2 id="st-h" class="sr">Statement</h2>
+    <div class="statement" id="statement-body"></div>
+  </section>
+  <section class="block" id="interests" aria-labelledby="in-h">
+    <p class="micro">Interests</p>
+    <h2 id="in-h" data-split>What I keep <em>returning</em> to</h2>
+    <ul class="interests" id="interest-list"></ul>
+    <p class="looking" id="looking"></p>
+  </section>
+  <section class="block" id="education" aria-labelledby="ed-h">
+    <p class="micro">Education</p>
+    <h2 id="ed-h" data-split><em>Training</em></h2>
+    <ol class="edu" id="edu-list"></ol>
+  </section>
+  <section class="block" id="tools" aria-labelledby="tl-h">
+    <p class="micro">Instruments</p>
+    <h2 id="tl-h" data-split>Tools I <em>reach for</em></h2>
+    <dl class="tools" id="tools-list"></dl>
+  </section>
+  <section class="block" id="recognition" aria-labelledby="rc-h">
+    <p class="micro">Recognition</p>
+    <h2 id="rc-h" data-split>Awards &amp; <em>fellowships</em></h2>
+    <ul class="awards" id="award-list"></ul>
+  </section>
+</main>
+<footer class="foot" id="foot"></footer>
+</body>
+</html>

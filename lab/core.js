@@ -1,0 +1,297 @@
+/* Lab edition core: shared by every lab page.
+   - data from ../data/content.json (the same single source of truth as the classic site)
+   - chrome: top bar, footer, "On this page" navigator with a three.js Bloch sphere
+   - motion: Lenis smooth scroll driving GSAP ScrollTrigger; word-split heading reveals, scrubbed text,
+     count-ups, a magnetic kinetic name, page-to-page curtain transitions, the three.js field
+   Fail-safe: every page is prerendered and complete without JS; nothing is hidden by CSS alone; under
+   prefers-reduced-motion there is no Lenis, no scrubbing, no curtain and no field (native scroll, still
+   content); a 2.5 s timeout and a beforeprint handler force everything visible. */
+import { esc } from "../js/site.js";
+
+export const root = document.documentElement;
+export const $ = (id) => document.getElementById(id);
+export const PRERENDER = Boolean(window.__PRERENDER__);
+export const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const gsap = window.gsap, ScrollTrigger = window.ScrollTrigger;
+export const MOTION = !PRERENDER && !REDUCE && Boolean(gsap && ScrollTrigger);
+export const DESKTOP = window.matchMedia("(min-width: 900px) and (pointer: fine)").matches;
+export { esc };
+
+root.classList.add("js");
+
+/* ---------------------------------------------------------------- data */
+export async function loadData() {
+  const res = await fetch("../data/content.json", { cache: "no-cache" });
+  if (!res.ok) throw new Error(`content.json: ${res.status}`);
+  return res.json();
+}
+
+/* ---------------------------------------------------------------- chrome */
+const NAV = [["index.html#work", "Work", "work"], ["about.html", "About", "about"], ["path.html", "Path", "path"], ["papers.html", "Papers", "papers"]];
+
+export function chrome(data, active) {
+  const p = data.profile || {};
+  const cv = (p.links || {}).cv_pdf;
+  $("bar").innerHTML = `
+    <a class="mark" href="index.html">${esc(p.name || "")}</a>
+    <nav class="bar-nav" aria-label="Lab edition">${NAV.map(([href, label, key], i) =>
+      `<a href="${href}"${key === active ? ' aria-current="page"' : ""}>${label}<span class="num">${String(i + 1).padStart(2, "0")}</span></a>`).join("")}
+      ${cv ? `<a href="../${esc(cv)}" target="_blank" rel="noopener">CV<span class="num">↓</span></a>` : ""}</nav>
+    <div class="bar-tools">
+      <button type="button" class="field-toggle" hidden>Pause field</button>
+      <button type="button" class="theme-toggle">Theme: Auto</button>
+      <a class="classic" href="../">Classic site</a>
+    </div>`;
+  const links = [];
+  if (p.email) links.push([`mailto:${p.email}`, "Email"]);
+  (p.profiles || []).filter((x) => x.url && !x.url.startsWith("mailto:")).forEach((x) => links.push([x.url, x.label]));
+  $("foot").innerHTML = `
+    <p class="foot-big" data-split>Still <em>measuring.</em></p>
+    <div class="foot-row">
+      <p>${esc([p.name, p.location].filter(Boolean).join(" · "))}</p>
+      <ul class="foot-links">${links.map(([h, l]) => `<li><a href="${esc(h)}"${h.startsWith("http") ? ' target="_blank" rel="noopener"' : ""}>${esc(l)}</a></li>`).join("")}</ul>
+      <p><a href="#top" data-top>Return to |0⟩ ↑</a> · <a href="../">Classic site</a></p>
+    </div>`;
+  themeToggle(document.querySelector(".theme-toggle"));
+}
+
+function themeToggle(btn) {
+  const order = ["auto", "light", "dark"];
+  let cur = "auto";
+  try { cur = localStorage.getItem("theme") || "auto"; } catch (e) { /* storage blocked */ }
+  if (!order.includes(cur)) cur = "auto";
+  const paint = () => { btn.textContent = `Theme: ${cur[0].toUpperCase()}${cur.slice(1)}`; btn.setAttribute("aria-label", `Theme: ${cur}. Switch colour theme`); };
+  btn.addEventListener("click", () => {
+    cur = order[(order.indexOf(cur) + 1) % 3];
+    if (cur === "auto") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", cur);
+    try { cur === "auto" ? localStorage.removeItem("theme") : localStorage.setItem("theme", cur); } catch (e) { /* blocked */ }
+    paint();
+  });
+  paint();
+}
+
+/* "On this page": section links from every <section id> with an <h2>; the sphere is added later. */
+function pageNav() {
+  const secs = [...document.querySelectorAll("main section[id]:not([hidden])")].map((s) => [s, s.querySelector("h2")]).filter(([, h]) => h);
+  if (secs.length < 2) { document.querySelectorAll(".page-nav").forEach((n) => n.remove()); return null; }
+  // Always rebuilt from the live page, so a prerendered copy can never list a section that is now hidden.
+  document.querySelectorAll(".page-nav").forEach((n) => n.remove());
+  const nav = document.createElement("nav");
+  nav.className = "page-nav";
+  nav.setAttribute("aria-label", "On this page");
+  nav.innerHTML = `<div class="bn-host"></div><ol>${secs.map(([s, h]) => `<li><a href="#${s.id}">${esc(h.textContent.trim())}</a></li>`).join("")}</ol>`;
+  document.body.append(nav);
+  const links = [...nav.querySelectorAll("a")];
+  const mark = () => {
+    let cur = 0;
+    secs.forEach(([s], i) => { if (s.getBoundingClientRect().top < window.innerHeight * 0.45) cur = i; });
+    links.forEach((a, i) => (i === cur ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current")));
+  };
+  window.addEventListener("scroll", mark, { passive: true });
+  mark();
+  return nav;
+}
+
+/* ---------------------------------------------------------------- text splitting */
+/* Wraps each word of el (keeping <em> etc.) in .wm > .wi masks; the text stays readable to assistive tech. */
+export function splitWords(el) {
+  if (!el || el.dataset.splitDone) return [];
+  const walk = (node) => {
+    [...node.childNodes].forEach((n) => {
+      if (n.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach((tok) => {
+          if (!tok) return;
+          if (/^\s+$/.test(tok)) { frag.append(document.createTextNode(tok)); return; }
+          const m = document.createElement("span"); m.className = "wm";
+          const i = document.createElement("span"); i.className = "wi"; i.textContent = tok;
+          m.append(i); frag.append(m);
+        });
+        n.replaceWith(frag);
+      } else if (n.nodeType === 1 && !n.classList.contains("wm")) walk(n);
+    });
+  };
+  walk(el);
+  el.dataset.splitDone = "1";
+  return [...el.querySelectorAll(".wi")];
+}
+
+/* Splits a name into letters for the kinetic hero; screen readers get the plain name. */
+export function splitChars(el, text) {
+  el.innerHTML = `<span class="sr">${esc(text)}</span><span aria-hidden="true">${String(text).split(" ").map((w) =>
+    `<span class="w">${[...w].map((c) => `<span class="ch"><span class="chi">${esc(c)}</span></span>`).join("")}</span>`).join(" ")}</span>`;
+  return [...el.querySelectorAll(".chi")];
+}
+
+/* ---------------------------------------------------------------- motion */
+let lenis = null;
+export const scrollState = { progress: () => {
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  return max > 0 ? window.scrollY / max : 0;
+}, velocity: () => (lenis ? lenis.velocity : 0) };
+
+function smoothScroll() {
+  if (!MOTION || !window.Lenis) return;
+  lenis = new window.Lenis({ lerp: 0.085, wheelMultiplier: 0.9, smoothWheel: true });
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.add((t) => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+}
+
+/* In-page anchors scroll smoothly (Lenis) and move focus to the target for keyboard and screen-reader users. */
+function anchors() {
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("a[href]");
+    if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const url = new URL(a.href, location.href);
+    if (url.pathname !== location.pathname || !url.hash) return;
+    const target = url.hash === "#top" ? document.body : document.querySelector(decodeURIComponent(url.hash));
+    if (!target) return;
+    e.preventDefault();
+    if (lenis) lenis.scrollTo(url.hash === "#top" ? 0 : target, { offset: -72, duration: 1.4 });
+    else target.scrollIntoView({ behavior: REDUCE ? "auto" : "smooth" });
+    history.replaceState(null, "", url.hash === "#top" ? location.pathname : url.hash);
+    const focusEl = url.hash === "#top" ? document.querySelector(".mark") : target;
+    if (focusEl) { if (!focusEl.hasAttribute("tabindex") && !/^(A|BUTTON)$/.test(focusEl.tagName)) focusEl.setAttribute("tabindex", "-1"); focusEl.focus({ preventScroll: true }); }
+  });
+}
+
+/* Page-to-page curtain: CSS slides it away on arrival (so a JS failure can never leave it covering the page);
+   GSAP draws it back in before following a link to another lab page. */
+function transitions() {
+  const curtain = document.querySelector(".curtain");
+  if (!curtain) return;
+  window.addEventListener("pageshow", (e) => { if (e.persisted) gsap && gsap.set(curtain, { yPercent: -100 }); });
+  if (!MOTION) return;
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("a[href]");
+    if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target === "_blank" || a.hasAttribute("download")) return;
+    const url = new URL(a.href, location.href);
+    if (url.origin !== location.origin || !/\/lab\//.test(url.pathname) || url.pathname === location.pathname) return;
+    e.preventDefault();
+    curtain.classList.add("is-leaving");
+    gsap.fromTo(curtain, { yPercent: 100 }, { yPercent: 0, duration: 0.6, ease: "expo.inOut", onComplete: () => { location.href = url.href; } });
+  });
+}
+
+/* Reveal tweens are tracked so the failsafe can finish them: [{ el, tween }], plus the elements whose tween started. */
+const pending = [];
+const started = new WeakSet();
+function revealAll() {
+  pending.splice(0).forEach(({ tween }) => { if (tween.scrollTrigger) tween.scrollTrigger.kill(); tween.progress(1).kill(); });
+  if (gsap) gsap.set("[data-rv], .wi", { clearProps: "transform,opacity" });
+  document.querySelectorAll("[data-rv]").forEach((el) => el.classList.add("is-in"));
+}
+/* True if something on screen is still waiting for a scroll trigger that never fired. */
+function stalled() {
+  return pending.some(({ el }) => {
+    if (started.has(el)) return false;
+    const r = el.getBoundingClientRect();
+    return r.bottom > 0 && r.top < window.innerHeight && r.width > 0;
+  });
+}
+const track = (el, tween) => { pending.push({ el, tween }); return tween; };
+
+function reveals() {
+  if (!MOTION) { revealAll(); return; }
+  gsap.registerPlugin(ScrollTrigger);
+  document.querySelectorAll("[data-split]").forEach((el) => {
+    const words = splitWords(el);
+    track(el, gsap.from(words, { yPercent: 115, rotate: 3, duration: 1.15, ease: "expo.out", stagger: 0.045,
+      scrollTrigger: { trigger: el, start: "top 88%", once: true }, onStart: () => started.add(el) }));
+  });
+  document.querySelectorAll("[data-rv]").forEach((el) => {
+    track(el, gsap.from(el, { y: 46, opacity: 0, duration: 1.1, ease: "power3.out",
+      scrollTrigger: { trigger: el, start: "top 90%", once: true }, onStart: () => started.add(el), onComplete: () => el.classList.add("is-in") }));
+  });
+  document.querySelectorAll("[data-scrub]").forEach((el) => {
+    const words = splitWords(el);
+    gsap.fromTo(words, { opacity: 0.55 }, { opacity: 1, ease: "none", stagger: 0.08,
+      scrollTrigger: { trigger: el, start: "top 80%", end: "bottom 45%", scrub: 0.6 } });
+  });
+  document.querySelectorAll("[data-count]").forEach((el) => {
+    const n = parseFloat(el.dataset.count);
+    if (!Number.isFinite(n)) return;
+    const obj = { v: 0 };
+    gsap.to(obj, { v: n, duration: 1.6, ease: "power2.out", onUpdate: () => { el.textContent = Math.round(obj.v); },
+      scrollTrigger: { trigger: el, start: "top 92%", once: true }, onComplete: () => { el.textContent = el.dataset.final || String(n); } });
+  });
+  document.querySelectorAll("[data-draw]").forEach((el) => {
+    gsap.fromTo(el, { scaleY: 0 }, { scaleY: 1, ease: "none", transformOrigin: "top center",
+      scrollTrigger: { trigger: el.parentElement, start: "top 70%", end: "bottom 60%", scrub: 0.4 } });
+  });
+  document.querySelectorAll("[data-parallax]").forEach((el) => {
+    gsap.to(el, { yPercent: parseFloat(el.dataset.parallax) || -12, ease: "none",
+      scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true } });
+  });
+  setTimeout(() => ScrollTrigger.refresh(), 400);
+}
+
+/* Kinetic name: letters rise in, then lean away from the pointer on springs (GSAP quickTo). */
+export function kineticName(el, text) {
+  const chars = splitChars(el, text);
+  if (!MOTION) return;
+  gsap.from(chars, { yPercent: 120, rotate: 10, opacity: 0, duration: 1.3, ease: "expo.out", stagger: 0.035, delay: 0.25 });
+  if (!DESKTOP) return;
+  const movers = chars.map((c) => ({ el: c, x: gsap.quickTo(c, "x", { duration: 0.7, ease: "elastic.out(1, 0.45)" }),
+    y: gsap.quickTo(c, "y", { duration: 0.7, ease: "elastic.out(1, 0.45)" }), r: gsap.quickTo(c, "rotation", { duration: 0.8, ease: "power3.out" }) }));
+  const R = 170, PUSH = 52;
+  window.addEventListener("pointermove", (e) => {
+    for (const m of movers) {
+      const b = m.el.parentElement.getBoundingClientRect();
+      const dx = b.left + b.width / 2 - e.clientX, dy = b.top + b.height / 2 - e.clientY, d = Math.hypot(dx, dy) || 1;
+      const f = d < R ? (1 - d / R) ** 2 * PUSH : 0;
+      m.x((dx / d) * f); m.y((dy / d) * f); m.r((dx / d) * f * 0.25);
+    }
+  }, { passive: true });
+}
+
+/* ---------------------------------------------------------------- boot */
+export async function boot({ page, render, fieldMode = 0 }) {
+  const failsafe = setTimeout(revealAll, 2500);
+  window.addEventListener("beforeprint", revealAll);
+  let data;
+  try { data = await loadData(); } catch (e) {
+    console.error(e);
+    $("main").insertAdjacentHTML("afterbegin", '<p class="err">Could not load content. Serve the site over HTTP (see README).</p>');
+    revealAll(); return;
+  }
+  chrome(data, page);
+  const out = (await render(data)) || {};
+  const nav = pageNav();
+  root.dataset.labReady = "1";
+  if (PRERENDER) { clearTimeout(failsafe); return; }
+
+  smoothScroll();
+  anchors();
+  transitions();
+  reveals();
+  clearTimeout(failsafe);
+  // Failsafe (2.5 s): if anything on screen is still hidden because its scroll trigger never fired, show everything.
+  setTimeout(() => { if (stalled()) revealAll(); }, 2500);
+  if (out.after) out.after({ lenis, gsap, ScrollTrigger });
+  if (location.hash) { const t = document.querySelector(decodeURIComponent(location.hash)); if (t) setTimeout(() => (lenis ? lenis.scrollTo(t, { offset: -72, immediate: true }) : t.scrollIntoView()), 60); }
+
+  // three.js only where it adds something and costs nothing important: desktop, motion allowed, page idle.
+  if (MOTION && DESKTOP) {
+    const go = async () => {
+      try {
+        const [{ mountField }, { mountSphere }] = await Promise.all([import("./field3d.js"), import("./sphere3d.js")]);
+        const field = mountField({ mode: out.fieldMode ?? fieldMode, toggle: document.querySelector(".field-toggle"),
+          getScroll: scrollState.progress, getVelocity: scrollState.velocity });
+        if (field && out.kickers) document.querySelectorAll(out.kickers).forEach((el) => el.addEventListener("pointerenter", () => {
+          const r = el.getBoundingClientRect(); field.kick(r.left + r.width / 2, r.top + r.height / 2);
+        }));
+        const host = nav && nav.querySelector(".bn-host");
+        if (host && window.matchMedia("(min-width: 1380px)").matches) {
+          const sphere = mountSphere(host, { getProgress: scrollState.progress, getVelocity: scrollState.velocity });
+          if (sphere && lenis) lenis.on("scroll", sphere.update);
+        }
+      } catch (e) { console.warn("lab field unavailable", e); }
+    };
+    "requestIdleCallback" in window ? requestIdleCallback(go, { timeout: 1500 }) : setTimeout(go, 300);
+  }
+}
+
+/* Plain text or a list of paragraphs, as stored in content.json. */
+export const paras = (v) => (Array.isArray(v) ? v : v ? [v] : []).map((t) => `<p>${esc(t)}</p>`).join("");
