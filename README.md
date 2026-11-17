@@ -76,8 +76,14 @@ js/
   index.js  project.js  publications.js  about.js
 data/content.json     ★ ALL CONTENT
 assets/               CV PDF (generated from content.json by scripts/build.py)
-lab/                  Lab edition: an experimental parallel design at /lab/ (noindex),
-                      rendered from the same data/content.json (lab.js, field.js, lab.css)
+lab/                  Lab edition: an experimental parallel design at /lab/ (noindex, not in the
+                      sitemap), rendered from the same data/content.json. Pages: index, about, path,
+                      papers, and project-<id>.html per project (built from lab/project.html).
+                      core.js (data, nav, Lenis + GSAP ScrollTrigger motion, page curtain),
+                      field3d.js (three.js shader background, one physics mode per thread),
+                      sphere3d.js (three.js Bloch sphere in the page navigator), lab.css.
+lab/vendor/           Pinned copies of three.js r160, GSAP 3.12.5 + ScrollTrigger, Lenis 1.1.13
+                      (licences in lab/vendor/LICENSES.md). No CDN, no build step.
 inbox/                ← drop files here to update
 scripts/ingest.py     Parser/merger (provider-agnostic)
 scripts/build.py      Prerenders the site into _site/ (run by pages.yml)

@@ -617,7 +617,7 @@ def assemble(data, site):
         f.write_text(mark_built(set_head(f.read_text(encoding="utf-8"), block)), encoding="utf-8")
 
     notes = build_notes(site, name)
-    written = list(PAGES) + notes + build_details(data, site, name) + ["lab/index.html"]
+    written = list(PAGES) + notes + build_details(data, site, name) + build_lab(data)
     tmpl = (ROOT / "project.html").read_text(encoding="utf-8")
     for pr in data.get("projects", []):
         pid = pr["id"]
@@ -656,12 +656,29 @@ def assemble(data, site):
     return written
 
 
+LAB_PAGES = ["lab/index.html", "lab/about.html", "lab/path.html", "lab/papers.html"]
+
+
+def build_lab(data):
+    """The lab edition (an experimental parallel design, noindex): its fixed pages, plus one breakdown page per
+    project, lab/project-<id>.html, made from the lab/project.html template. All are prerendered like the rest."""
+    written = list(LAB_PAGES)
+    tmpl = (ROOT / "lab" / "project.html").read_text(encoding="utf-8")
+    assert tmpl.count('data-project=""') == 1, "lab/project.html needs one data-project=\"\" placeholder"
+    for pr in data.get("projects", []):
+        fname = f"lab/project-{pr['id']}.html"
+        (OUT / fname).write_text(tmpl.replace('data-project=""', f'data-project="{esc(pr["id"])}"', 1), encoding="utf-8")
+        written.append(fname)
+    return written
+
+
 def clean_snapshot(doc):
     # The browser added class="js" (reveal gating) and is-in markers at runtime.
     # Strip them so the saved page is fully visible without JS; the live JS re-adds them.
     # Runtime-only <html> classes: js (reveal gating) and tts (speech synthesis available).
     doc = re.sub(r'(<html[^>]*?) class="(?:js|tts)(?: (?:js|tts))?"', r"\1", doc, count=1)
     doc = re.sub(r'\s*\bis-in\b', "", doc)
+    doc = doc.replace(' data-lab-ready="1"', "")
     doc = doc.replace(' class=""', "")
     # The read-aloud control needs JS and speech synthesis, so only an empty slot is saved. It takes up
     # space only under html.tts (set before first paint), so adding the control later shifts nothing.

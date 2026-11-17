@@ -4,96 +4,70 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Shivanshu Siyanwal — Lab edition</title>
-<meta name="description" content="Shivanshu Siyanwal — quantum information and quantum machine learning. An experimental edition of the research portfolio."/>
+<meta name="description" content="Shivanshu Siyanwal — quantum information and quantum machine learning. Lab edition."/>
 <meta name="robots" content="noindex"/>
 <link rel="icon" href="../favicon.svg" type="image/svg+xml"/>
 <link rel="preload" href="../assets/fonts/instrument-serif.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin/>
-<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<link rel="preload" href="../assets/fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin/>
+<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}try{if(!window.__PRERENDER__&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("lab-anim")}catch(e){}</script>
 <link rel="stylesheet" href="lab.css"/>
+<script src="vendor/gsap.min.js" defer></script>
+<script src="vendor/ScrollTrigger.min.js" defer></script>
+<script src="vendor/lenis.min.js" defer></script>
+<script type="module" src="home.js"></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="bar">
-  <a class="mark" href="#top" id="mark">Shivanshu Siyanwal</a>
-  <nav class="bar-nav" aria-label="Sections">
-    <a href="#work">Work <span class="num">02</span></a>
-    <a href="#path">Path <span class="num">04</span></a>
-    <a href="#contact">Contact <span class="num">06</span></a>
-  </nav>
-  <div class="bar-tools">
-    <button type="button" class="field-toggle" hidden>Pause field</button>
-    <button type="button" class="theme-toggle">Theme: Auto</button>
-    <a class="classic" href="../">Classic site</a>
-  </div>
-</header>
-
+<div class="curtain" aria-hidden="true"></div>
+<header class="bar" id="bar"></header>
 <main id="main">
-  <section class="hero" id="top" aria-labelledby="hero-name">
-    <p class="micro" id="hero-kicker"></p>
-    <h1 class="hero-name" id="hero-name">Shivanshu Siyanwal</h1>
-    <p class="hero-plus" id="hero-plus"></p>
-    <p class="hero-tagline" id="hero-tagline"></p>
-    <p class="hero-now" id="hero-now"></p>
-    <div class="hero-foot">
-      <a class="cue" href="#question">Follow the signal <span aria-hidden="true">↓</span></a>
-      <p class="hint" id="field-hint" hidden>Move the pointer through the field to disturb it.</p>
-    </div>
+  <section class="hero" id="top" aria-labelledby="h-name">
+    <p class="micro kicker" id="h-kicker"></p>
+    <h1 class="hero-name" id="h-name"></h1>
+    <p class="hero-plus" id="h-title"></p>
+    <p class="hero-tag" id="h-tagline"></p>
+    <p class="hero-now" id="h-now"></p>
+    <div class="hero-cta" id="h-cta"></div>
+    <a class="cue" href="#question">Follow the signal <span aria-hidden="true">↓</span></a>
   </section>
-
   <section class="question" id="question" aria-labelledby="q-h">
     <h2 class="sr" id="q-h">The question</h2>
-    <p class="micro" id="q-label" aria-hidden="true">01 · The question</p>
-    <p class="kinetic" id="q-text"></p>
+    <p class="micro" aria-hidden="true">01 · The question</p>
+    <p class="kinetic" id="q-text" data-scrub></p>
   </section>
-
-  <section class="block" id="work" aria-labelledby="work-h">
-    <header class="block-head">
-      <p class="micro">02 · Selected work</p>
-      <h2 id="work-h">Research <em>threads</em></h2>
-    </header>
-    <ol class="works" id="works"></ol>
-    <p class="more"><a href="../publications.html">Full bibliography, posters and talks <span aria-hidden="true">→</span></a></p>
+  <section class="work" id="work" aria-labelledby="work-h">
+    <div class="work-head">
+      <p class="micro">02 · Work</p>
+      <h2 id="work-h" data-split>Research <em>threads</em></h2>
+      <p class="work-hint" id="work-hint">Each thread opens a full breakdown.</p>
+    </div>
+    <div class="hz"><ol class="hz-track" id="work-track"></ol></div>
   </section>
-
-  <section class="block" id="notes" aria-labelledby="notes-h">
-    <header class="block-head">
-      <p class="micro">03 · Alongside</p>
-      <h2 id="notes-h">Talks, posters &amp; <em>recognition</em></h2>
-    </header>
-    <ul class="notes" id="notes-list"></ul>
+  <section class="block" id="glance" aria-labelledby="glance-h">
+    <p class="micro">03 · At a glance</p>
+    <h2 id="glance-h" data-split>In <em>numbers</em></h2>
+    <ul class="nums" id="nums"></ul>
   </section>
-
-  <section class="block" id="path" aria-labelledby="path-h">
-    <header class="block-head">
-      <p class="micro">04 · Path</p>
-      <h2 id="path-h">From physics to <em>hardware</em></h2>
-    </header>
-    <ol class="worldline" id="worldline"></ol>
+  <section class="block" id="path-teaser" aria-labelledby="path-h">
+    <p class="micro">04 · Path</p>
+    <h2 id="path-h" data-split>From physics to <em>hardware</em></h2>
+    <ol class="mini-path" id="mini-path"></ol>
+    <p class="more"><a href="path.html">The full path <span aria-hidden="true">→</span></a></p>
   </section>
-
-  <section class="block" id="tools" aria-labelledby="tools-h">
-    <header class="block-head">
-      <p class="micro">05 · Instruments</p>
-      <h2 id="tools-h">Tools I <em>reach for</em></h2>
-    </header>
-    <dl class="tools" id="tools-list"></dl>
+  <section class="block" id="papers-teaser" aria-labelledby="pap-h">
+    <p class="micro">05 · Papers</p>
+    <h2 id="pap-h" data-split>Selected <em>papers</em></h2>
+    <ol class="cites" id="cites"></ol>
+    <p class="more"><a href="papers.html">All papers, posters and talks <span aria-hidden="true">→</span></a></p>
   </section>
-
   <section class="block contact" id="contact" aria-labelledby="contact-h">
-    <header class="block-head">
-      <p class="micro">06 · Contact</p>
-      <h2 id="contact-h">Say <em>hello</em></h2>
-    </header>
+    <p class="micro">06 · Contact</p>
+    <h2 id="contact-h" data-split>Say <em>hello</em></h2>
     <p class="avail" id="avail"></p>
     <ul class="links" id="links"></ul>
   </section>
 </main>
-
-<footer class="foot">
-  <p id="foot-name"></p>
-  <p><a href="#top">Return to |0⟩ <span aria-hidden="true">↑</span></a> · <a href="../">Classic site</a></p>
-</footer>
-<script type="module" src="lab.js"></script>
+<footer class="foot" id="foot"></footer>
 </body>
 </html>
