@@ -143,12 +143,41 @@ function qkd(uid) {
       box(110, 282, 70, 36, "Alice") + box(312, 282, 96, 36, "Charlie", "fg-hbox") + box(520, 282, 70, 36, "Bob"));
 }
 
+/* TensNet (from the write-up's Approach): grid field → SVD truncation → MPS; each step applies MPOs,
+   solves the pressure Poisson equation with two-site DMRG, obstacles enter as MPS by cross-approximation. */
+function tensor() {
+  const grid = Array.from({ length: 9 }, (_, i) => `<line class="fg-grid" x1="${44 + i * 20}" y1="40" x2="${44 + i * 20}" y2="140"/>`).join("") +
+    Array.from({ length: 4 }, (_, i) => `<line class="fg-grid" x1="24" y1="${60 + i * 20}" x2="224" y2="${60 + i * 20}"/>`).join("");
+  const stream = [-34, -18, 18, 34].map((d) => {
+    const bend = d > 0 ? 1 : -1, near = Math.abs(d) < 20;
+    return `<path class="fg-faint" d="M28 ${90 + d} C ${64} ${90 + d}, ${72} ${90 + d + bend * (near ? 12 : 5)}, 84 ${90 + d + bend * (near ? 12 : 5)} S ${104} ${90 + d}, 220 ${90 + d}"/>`;
+  }).join("");
+  const xs = [340, 394, 448, 502, 556, 610];
+  const mps = xs.slice(0, -1).map((x, i) => `<line class="fg-hue" x1="${x}" y1="90" x2="${xs[i + 1]}" y2="90"/>`).join("") +
+    xs.map((x) => `<line class="fg-ln" x1="${x}" y1="90" x2="${x}" y2="120"/><circle class="fg-hbox" cx="${x}" cy="90" r="13"/>`).join("") +
+    `<text class="fg-s" x="475" y="80" text-anchor="middle">D</text>` +
+    `<text class="fg-s" x="475" y="40" text-anchor="middle">matrix product state</text>`;
+  return `<rect class="fg-box" x="24" y="40" width="200" height="100"/>` + grid + stream +
+    `<circle class="fg-hbox" cx="84" cy="90" r="13"/>` +
+    `<text class="fg-s" x="124" y="166" text-anchor="middle">velocity field on a grid</text>` +
+    arrow(236, 90, 316, 90) +
+    `<text class="fg-s" x="276" y="78" text-anchor="middle">SVD</text>` +
+    `<text class="fg-s" x="276" y="112" text-anchor="middle">D ≤ D_max</text>` + mps +
+    box(24, 232, 180, 56, ["obstacle as MPS", "(cross-approx.)"]) +
+    box(232, 232, 180, 56, ["two-site DMRG", "pressure Poisson"], "fg-hbox") +
+    box(440, 232, 176, 56, ["corrected", "velocity (MPS)"]) +
+    arrow(204, 260, 232, 260) + arrow(412, 260, 440, 260) +
+    arrow(420, 128, 340, 230) + `<text class="fg-s" x="362" y="186" text-anchor="end">MPO operators</text>` +
+    arrow(560, 230, 560, 132) + `<text class="fg-s" x="552" y="186" text-anchor="end">next step</text>`;
+}
+
 const FIGS = {
   nmr: [nmr, "Schematic. The SLOCC classes of three-qubit pure states that the ANN distinguishes, and the reduction from 128 real features to 18 canonical-form inputs, ranked by ANOVA."],
   weather: [weather, "Schematic. Illustrative temperature series with a classical baseline and a variational-circuit forecast; not data from the paper."],
   image: [image, "Circuit resources of four quantum image encodings for 16×16 images: qubit count against circuit depth on a log scale. Data from Tables 1–2 of the J. Supercomputing paper.", IMAGE_TABLE],
   fpga: [fpga, "Schematic. A variational quantum circuit (VQC) run as an FPGA kernel with HBM, for edge inference."],
   qkd: [qkd, "Schematic. Protocol layouts for DPS, COW and twin-field QKD studied at TCG CREST."],
+  tensor: [tensor, "Schematic. A velocity field on a grid (here around a cylinder) is compressed into a matrix product state by SVD truncation to bond dimension D ≤ D_max. Each pressure-correction step applies operators as MPOs, solves the pressure Poisson equation with two-site DMRG, and gives the corrected velocity for the next step; obstacles enter as MPS built by cross-approximation."],
 };
 
 const BY_PROJECT = {
@@ -156,6 +185,7 @@ const BY_PROJECT = {
   "vqc-fpga": ["weather", "fpga"],
   "qir-qnn": ["image"],
   "qkd-testbeds": ["qkd"],
+  "tensnet": ["tensor"],
 };
 
 export function figuresFor(projectId) {

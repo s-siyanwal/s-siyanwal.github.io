@@ -672,6 +672,7 @@ a.card:hover h3 { color: var(--accent); }
 .fg-hbox { fill: var(--panel-solid); stroke: var(--th); stroke-width: 2; }
 .fg-fill { fill: var(--th); }
 .fg-arrow { fill: var(--ink-faint); }
+.fg-grid { stroke: var(--ink-faint); stroke-opacity: .3; stroke-width: 1; }
 
 /* ---------- About portrait ---------- */
 .portrait--about { float: left; width: min(220px, 40%); height: auto; aspect-ratio: 4 / 5; margin: .3rem 1.4rem .8rem 0; }
