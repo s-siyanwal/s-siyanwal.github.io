@@ -26,17 +26,36 @@ export async function loadData() {
   return res.json();
 }
 
+/* Optional data files (links.json: artifacts and proofs; journey.json: photos and videos). A missing or broken file
+   only hides the features that use it. */
+async function loadOptional(name) {
+  try { const r = await fetch(`../data/${name}`, { cache: "no-cache" }); return r.ok ? await r.json() : {}; } catch (e) { return {}; }
+}
+export const extras = { links: {}, journey: {} };
+
+/* A link stored in links.json: an https URL, or a repo path such as assets/docs/x.pdf (made relative to /lab/). */
+export const hrefOf = (v) => (!v ? "" : /^(https?:|mailto:)/.test(v) ? v : `../${String(v).replace(/^\/+/, "")}`);
+
 /* ---------------------------------------------------------------- chrome */
-const NAV = [["index.html#work", "Work", "work"], ["about.html", "About", "about"], ["path.html", "Path", "path"], ["papers.html", "Papers", "papers"]];
+const NAV = [["index.html#work", "Work", "work"], ["about.html", "About", "about"], ["path.html", "Path", "path"], ["papers.html", "Papers", "papers"],
+  ["cv.html", "CV", "cv"], ["personal.html", "Personal", "personal"]];
+
+/* Footer sign-offs: one per page, chosen from the page name so it is stable between visits and in the prerendered HTML. */
+export const SIGNOFFS = [["Still", "measuring."], ["Still", "initializing."], ["Still", "optimizing."], ["Still", "entangled."],
+  ["Awaiting", "collapse."], ["Still", "in superposition."], ["Still", "converging."]];
+const PAGE_SIGNOFF = { work: 0, about: 1, path: 2, papers: 3, cv: 4, personal: 5 };
+function signoff(page) {
+  if (page in PAGE_SIGNOFF) return SIGNOFFS[PAGE_SIGNOFF[page]];
+  let h = 0; for (const c of location.pathname) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return SIGNOFFS[h % SIGNOFFS.length];
+}
 
 export function chrome(data, active) {
   const p = data.profile || {};
-  const cv = (p.links || {}).cv_pdf;
   $("bar").innerHTML = `
     <a class="mark" href="index.html">${esc(p.name || "")}</a>
     <nav class="bar-nav" aria-label="Lab edition">${NAV.map(([href, label, key], i) =>
-      `<a href="${href}"${key === active ? ' aria-current="page"' : ""}>${label}<span class="num">${String(i + 1).padStart(2, "0")}</span></a>`).join("")}
-      ${cv ? `<a href="../${esc(cv)}" target="_blank" rel="noopener">CV<span class="num">↓</span></a>` : ""}</nav>
+      `<a href="${href}"${key === active ? ' aria-current="page"' : ""}>${label}<span class="num">${String(i + 1).padStart(2, "0")}</span></a>`).join("")}</nav>
     <div class="bar-tools">
       <button type="button" class="field-toggle" hidden>Pause field</button>
       <button type="button" class="theme-toggle">Theme: Auto</button>
@@ -45,14 +64,37 @@ export function chrome(data, active) {
   const links = [];
   if (p.email) links.push([`mailto:${p.email}`, "Email"]);
   (p.profiles || []).filter((x) => x.url && !x.url.startsWith("mailto:")).forEach((x) => links.push([x.url, x.label]));
+  const [lead, word] = signoff(active);
   $("foot").innerHTML = `
-    <p class="foot-big" data-split>Still <em>measuring.</em></p>
+    <p class="foot-big" data-split>${lead} <em>${word}</em></p>
     <div class="foot-row">
       <p>${esc([p.name, p.location].filter(Boolean).join(" · "))}</p>
       <ul class="foot-links">${links.map(([h, l]) => `<li><a href="${esc(h)}"${h.startsWith("http") ? ' target="_blank" rel="noopener"' : ""}>${esc(l)}</a></li>`).join("")}</ul>
       <p><a href="#top" data-top>Return to |0⟩ ↑</a> · <a href="../">Classic site</a></p>
     </div>`;
   themeToggle(document.querySelector(".theme-toggle"));
+  replayControl(active);
+}
+
+/* "Replay intro" sits in a corner of every lab page. On the home page it replays in place (intro/ handles it);
+   elsewhere it opens the home page with ?intro=1. */
+function replayControl(active) {
+  document.querySelectorAll(".replay-intro").forEach((n) => n.remove());
+  const a = document.createElement("a");
+  a.className = "replay-intro";
+  a.href = "index.html?intro=1";
+  a.textContent = "Replay intro";
+  a.addEventListener("click", (e) => {
+    if (active === "work" && window.__intro && typeof window.__intro.replay === "function") { e.preventDefault(); window.__intro.replay(); }
+  });
+  tools().append(a);
+}
+
+/* Fixed page controls (Replay intro, Contents) live in one complementary landmark. */
+function tools() {
+  let t = document.querySelector(".page-tools");
+  if (!t) { t = document.createElement("aside"); t.className = "page-tools"; t.setAttribute("aria-label", "Page tools"); document.body.append(t); }
+  return t;
 }
 
 function themeToggle(btn) {
@@ -70,22 +112,72 @@ function themeToggle(btn) {
   paint();
 }
 
-/* "On this page": section links from every <section id> with an <h2>; the sphere is added later. */
+/* "On this page": a table of contents built from the live page. Top level: every visible <section id> with an <h2>;
+   second level: the <h3>s inside it (given ids here). Scroll-spy marks the current section and sub-section, groups
+   open as you reach them and can be opened by hand. Wide screens: fixed panel with the three.js Bloch sphere.
+   Narrower: a "Contents" button opens the same list as a drawer. */
+const slugify = (t) => String(t || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48);
 function pageNav() {
+  document.querySelectorAll(".page-nav, .toc-toggle").forEach((n) => n.remove());
+  document.body.classList.remove("has-toc");
   const secs = [...document.querySelectorAll("main section[id]:not([hidden])")].map((s) => [s, s.querySelector("h2")]).filter(([, h]) => h);
-  if (secs.length < 2) { document.querySelectorAll(".page-nav").forEach((n) => n.remove()); return null; }
-  // Always rebuilt from the live page, so a prerendered copy can never list a section that is now hidden.
-  document.querySelectorAll(".page-nav").forEach((n) => n.remove());
+  if (secs.length < 2) return null;
+  const groups = secs.map(([s, h]) => {
+    const subs = [...s.querySelectorAll("h3")].filter((h3) => h3.offsetParent !== null || PRERENDER).slice(0, 12).map((h3) => {
+      if (!h3.id) h3.id = `${s.id}-${slugify(h3.textContent)}`;
+      return h3;
+    });
+    return { s, h, subs };
+  });
   const nav = document.createElement("nav");
   nav.className = "page-nav";
+  nav.id = "page-nav";
   nav.setAttribute("aria-label", "On this page");
-  nav.innerHTML = `<div class="bn-host"></div><ol>${secs.map(([s, h]) => `<li><a href="#${s.id}">${esc(h.textContent.trim())}</a></li>`).join("")}</ol>`;
+  nav.innerHTML = `<div class="bn-host"></div><p class="toc-title">On this page</p><ol>${groups.map((g, i) => `<li class="toc-group"${g.s.dataset.view ? ` data-view="${g.s.dataset.view}"` : ""}>
+      <div class="toc-row"><a href="#${g.s.id}" data-i="${i}">${esc(g.h.textContent.trim())}</a>${g.subs.length ? `<button type="button" class="toc-more" aria-expanded="false" aria-controls="toc-sub-${i}"><span class="sr">Show sub-sections of ${esc(g.h.textContent.trim())}</span></button>` : ""}</div>
+      ${g.subs.length ? `<ol class="toc-sub" id="toc-sub-${i}" hidden>${g.subs.map((h3) => `<li><a href="#${h3.id}">${esc(h3.textContent.trim())}</a></li>`).join("")}</ol>` : ""}</li>`).join("")}</ol>`;
   document.body.append(nav);
-  const links = [...nav.querySelectorAll("a")];
+  document.body.classList.add("has-toc");
+
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "toc-toggle";
+  btn.setAttribute("aria-expanded", "false");
+  btn.setAttribute("aria-controls", "page-nav");
+  btn.textContent = "Contents";
+  tools().append(btn);
+  const close = (refocus) => { nav.classList.remove("is-open"); btn.setAttribute("aria-expanded", "false"); if (refocus) btn.focus(); };
+  btn.addEventListener("click", () => {
+    const open = !nav.classList.contains("is-open");
+    nav.classList.toggle("is-open", open);
+    btn.setAttribute("aria-expanded", String(open));
+    if (open) { const f = nav.querySelector("a"); if (f) f.focus(); }
+  });
+  nav.addEventListener("keydown", (e) => { if (e.key === "Escape" && nav.classList.contains("is-open")) close(true); });
+  nav.addEventListener("click", (e) => { if (e.target.closest("a") && nav.classList.contains("is-open")) close(false); });
+
+  const setOpen = (li, open) => {
+    const b = li.querySelector(".toc-more"), sub = li.querySelector(".toc-sub");
+    if (!b || !sub) return;
+    b.setAttribute("aria-expanded", String(open)); sub.hidden = !open;
+  };
+  nav.querySelectorAll(".toc-more").forEach((b) => b.addEventListener("click", () => {
+    const li = b.closest(".toc-group"); li.dataset.manual = "1"; setOpen(li, b.getAttribute("aria-expanded") !== "true");
+  }));
+  const items = [...nav.querySelectorAll(".toc-group")];
+  const subLinks = [...nav.querySelectorAll(".toc-sub a")];
   const mark = () => {
+    const line = window.innerHeight * 0.4;
     let cur = 0;
-    secs.forEach(([s], i) => { if (s.getBoundingClientRect().top < window.innerHeight * 0.45) cur = i; });
-    links.forEach((a, i) => (i === cur ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current")));
+    groups.forEach((g, i) => { if (g.s.offsetParent !== null && g.s.getBoundingClientRect().top < line) cur = i; });
+    items.forEach((li, i) => {
+      const a = li.querySelector(".toc-row a");
+      i === cur ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current");
+      if (!li.dataset.manual) setOpen(li, i === cur);
+    });
+    let subCur = null;
+    groups[cur].subs.forEach((h3) => { if (h3.getBoundingClientRect().top < line) subCur = h3.id; });
+    subLinks.forEach((a) => (a.getAttribute("href") === `#${subCur}` ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current")));
   };
   window.addEventListener("scroll", mark, { passive: true });
   mark();
@@ -231,17 +323,23 @@ function reveals() {
 export function kineticName(el, text) {
   const chars = splitChars(el, text);
   if (!MOTION) return;
-  gsap.from(chars, { yPercent: 120, rotate: 10, opacity: 0, duration: 1.3, ease: "expo.out", stagger: 0.035, delay: 0.25 });
+  // When the Big Bang intro plays, its particles settle exactly onto these letters, so they must already be in place.
+  if (!root.classList.contains("intro-on")) {
+    gsap.from(chars, { yPercent: 120, rotate: 10, opacity: 0, duration: 1.3, ease: "expo.out", stagger: 0.035, delay: 0.25 });
+  }
   if (!DESKTOP) return;
-  const movers = chars.map((c) => ({ el: c, x: gsap.quickTo(c, "x", { duration: 0.7, ease: "elastic.out(1, 0.45)" }),
-    y: gsap.quickTo(c, "y", { duration: 0.7, ease: "elastic.out(1, 0.45)" }), r: gsap.quickTo(c, "rotation", { duration: 0.8, ease: "power3.out" }) }));
-  const R = 170, PUSH = 52;
+  // Each letter leans away from the pointer but never leaves its own frame (its .ch cell): the push is clamped to a
+  // small fraction of the cell, so neighbouring letters can never overlap.
+  const movers = chars.map((c) => ({ el: c, x: gsap.quickTo(c, "x", { duration: 0.6, ease: "elastic.out(1, 0.5)" }),
+    y: gsap.quickTo(c, "y", { duration: 0.6, ease: "elastic.out(1, 0.5)" }), r: gsap.quickTo(c, "rotation", { duration: 0.7, ease: "power3.out" }) }));
+  const R = 190;
   window.addEventListener("pointermove", (e) => {
+    if (root.classList.contains("intro-on")) return;              // letters hold still under the intro overlay
     for (const m of movers) {
       const b = m.el.parentElement.getBoundingClientRect();
       const dx = b.left + b.width / 2 - e.clientX, dy = b.top + b.height / 2 - e.clientY, d = Math.hypot(dx, dy) || 1;
-      const f = d < R ? (1 - d / R) ** 2 * PUSH : 0;
-      m.x((dx / d) * f); m.y((dy / d) * f); m.r((dx / d) * f * 0.25);
+      const f = d < R ? (1 - d / R) ** 2 : 0;
+      m.x((dx / d) * f * b.width * 0.09); m.y((dy / d) * f * b.height * 0.06); m.r((dx / d) * f * 4);
     }
   }, { passive: true });
 }
@@ -251,7 +349,10 @@ export async function boot({ page, render, fieldMode = 0 }) {
   const failsafe = setTimeout(revealAll, 2500);
   window.addEventListener("beforeprint", revealAll);
   let data;
-  try { data = await loadData(); } catch (e) {
+  try {
+    const [d0, links, journey] = await Promise.all([loadData(), loadOptional("links.json"), loadOptional("journey.json")]);
+    data = d0; extras.links = links || {}; extras.journey = journey || {};
+  } catch (e) {
     console.error(e);
     $("main").insertAdjacentHTML("afterbegin", '<p class="err">Could not load content. Serve the site over HTTP (see README).</p>');
     revealAll(); return;
@@ -263,6 +364,8 @@ export async function boot({ page, render, fieldMode = 0 }) {
   if (PRERENDER) { clearTimeout(failsafe); return; }
 
   smoothScroll();
+  window.__lab = { lenis, gsap, ScrollTrigger };
+  document.dispatchEvent(new CustomEvent("lab:ready"));
   anchors();
   transitions();
   reveals();
