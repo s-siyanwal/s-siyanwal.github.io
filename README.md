@@ -77,11 +77,18 @@ js/
 data/content.json     ★ ALL CONTENT
 assets/               CV PDF (generated from content.json by scripts/build.py)
 lab/                  Lab edition: an experimental parallel design at /lab/ (noindex, not in the
-                      sitemap), rendered from the same data/content.json. Pages: index, about, path,
-                      papers, and project-<id>.html per project (built from lab/project.html).
-                      core.js (data, nav, Lenis + GSAP ScrollTrigger motion, page curtain),
-                      field3d.js (three.js shader background, one physics mode per thread),
-                      sphere3d.js (three.js Bloch sphere in the page navigator), lab.css.
+                      sitemap), rendered from data/content.json + data/links.json + data/journey.json.
+                      Pages: index, about, path, papers, cv, personal, and project-<id>.html per
+                      project (built from lab/project.html, Layman/Expert reading levels).
+                      core.js (data, nav, contents drawer, sign-offs, Lenis + GSAP motion, curtain),
+                      field3d.js (three.js shader background), sphere3d.js (Bloch sphere in the
+                      contents panel), qubit3d.js (home "qubit you can steer"), gallery.js (field
+                      notes lightbox), abstracts/<id>.js (interactive abstract per thread), lab.css.
+intro/                Big Bang intro for the lab home (WebGL, 2D fallback, reduced-motion still);
+                      all tunables in intro/config.js. ?intro=1 forces it.
+cv/cv-template.tex    LaTeX CV template; scripts/cv_tex.py fills it from content.json
+data/links.json       Artifact links per thread and proof links per award (empty = hidden)
+data/journey.json     Photos and videos for the Path stages and the Personal page
 lab/vendor/           Pinned copies of three.js r160, GSAP 3.12.5 + ScrollTrigger, Lenis 1.1.13
                       (licences in lab/vendor/LICENSES.md). No CDN, no build step.
 inbox/                ← drop files here to update
