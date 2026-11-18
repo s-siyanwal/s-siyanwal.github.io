@@ -1,0 +1,81 @@
+% Academic CV template for Shivanshu Siyanwal.
+% The body is generated from data/content.json (and data/links.json for proof links) by scripts/cv_tex.py:
+%   python3 scripts/cv_tex.py            -> writes cv/cv.tex (git-ignored) and, if pdflatex exists, cv/cv.pdf
+% The site build runs the same generator and publishes assets/Shivanshu_Siyanwal_CV.pdf and .tex.
+% Edit the look here; edit the content in data/content.json. Needs only texlive-latex-base,
+% texlive-latex-recommended, texlive-fonts-recommended and lmodern. No phone number is ever included.
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[a4paper,margin=1.9cm,top=1.6cm,bottom=1.8cm]{geometry}
+\usepackage{xcolor}
+\usepackage{array}
+\definecolor{accent}{HTML}{2342B8}
+\usepackage[hidelinks,pdftitle={%%NAME%% -- CV},pdfauthor={%%NAME%%}]{hyperref}
+\usepackage{textcomp}
+
+% Characters that appear in the content.
+\DeclareUnicodeCharacter{00D7}{\ensuremath{\times}}
+\DeclareUnicodeCharacter{00B1}{\ensuremath{\pm}}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\rightarrow}}
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}
+\DeclareUnicodeCharacter{2212}{\ensuremath{-}}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\le}}
+\DeclareUnicodeCharacter{2265}{\ensuremath{\ge}}
+\DeclareUnicodeCharacter{221A}{\ensuremath{\surd}}
+\DeclareUnicodeCharacter{0394}{\ensuremath{\Delta}}
+\DeclareUnicodeCharacter{03BD}{\ensuremath{\nu}}
+\DeclareUnicodeCharacter{03C1}{\ensuremath{\rho}}
+\DeclareUnicodeCharacter{03C0}{\ensuremath{\pi}}
+\DeclareUnicodeCharacter{03B8}{\ensuremath{\theta}}
+\DeclareUnicodeCharacter{03C7}{\ensuremath{\chi}}
+\DeclareUnicodeCharacter{2070}{\textsuperscript{0}}
+\DeclareUnicodeCharacter{00B9}{\textsuperscript{1}}
+\DeclareUnicodeCharacter{00B2}{\textsuperscript{2}}
+\DeclareUnicodeCharacter{00B3}{\textsuperscript{3}}
+\DeclareUnicodeCharacter{2074}{\textsuperscript{4}}
+\DeclareUnicodeCharacter{2075}{\textsuperscript{5}}
+\DeclareUnicodeCharacter{2076}{\textsuperscript{6}}
+\DeclareUnicodeCharacter{2077}{\textsuperscript{7}}
+\DeclareUnicodeCharacter{2078}{\textsuperscript{8}}
+\DeclareUnicodeCharacter{2079}{\textsuperscript{9}}
+\DeclareUnicodeCharacter{207B}{\textsuperscript{\ensuremath{-}}}
+\DeclareUnicodeCharacter{2080}{\textsubscript{0}}
+\DeclareUnicodeCharacter{2081}{\textsubscript{1}}
+\DeclareUnicodeCharacter{2082}{\textsubscript{2}}
+\DeclareUnicodeCharacter{27E9}{\ensuremath{\rangle}}
+\DeclareUnicodeCharacter{27E8}{\ensuremath{\langle}}
+
+\pagestyle{plain}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\renewcommand{\thepage}{\footnotesize %%NAME%% \textperiodcentered{} CV \textperiodcentered{} \arabic{page}}
+
+\newcommand{\cvsection}[1]{%
+  \par\filbreak\vspace{9pt}{\large\scshape\color{accent}#1}\par\nopagebreak\vspace{1pt}%
+  {\color{black!45}\rule{\linewidth}{0.4pt}}\par\nopagebreak\vspace{5pt}}
+\newcommand{\cvsubsection}[1]{\par\vspace{3pt}{\itshape #1}\par\vspace{2pt}}
+% \cventry{title}{dates}{organisation, place}{body}
+\newcommand{\cventry}[4]{%
+  \begin{minipage}[t]{\linewidth}\textbf{#1}\hfill #2\\{\itshape #3}\end{minipage}\par
+  #4\par\vspace{6pt}}
+\newenvironment{cvitems}{\begin{list}{\textbullet}{\setlength{\leftmargin}{1.2em}\setlength{\itemsep}{1pt}%
+  \setlength{\parsep}{0pt}\setlength{\topsep}{2pt}\setlength{\labelwidth}{0.8em}}}{\end{list}}
+% \cvref{key}{citation}
+\newcommand{\cvref}[2]{\par\hangindent=2.7em\hangafter=1\makebox[2.7em][l]{[#1]}#2\par\vspace{3pt}}
+% \cvaward{title}{year}
+\newcommand{\cvaward}[2]{\par\hangindent=1.2em\hangafter=1 #1\hfill #2\par\vspace{2pt}}
+
+\begin{document}
+\begin{center}
+  {\fontsize{22}{26}\selectfont\scshape %%NAME%%}\\[4pt]
+  {\large %%TITLE%%}\\[5pt]
+  {\small %%CONTACT%%}
+\end{center}
+\vspace{2pt}
+
+%%BODY%%
+
+\end{document}
