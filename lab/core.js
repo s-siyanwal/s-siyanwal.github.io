@@ -76,10 +76,13 @@ export function chrome(data, active) {
   replayControl(active);
 }
 
-/* "Replay intro" sits in a corner of every lab page. On the home page it replays in place (intro/ handles it);
-   elsewhere it opens the home page with ?intro=1. */
+/* "Replay intro" sits in a corner of every lab page. On the home page it replays in place (intro/ handles it) and
+   has a companion "Intro sound" switch (off by default; the intro itself shows nothing but "Skip"). Elsewhere it
+   opens the home page with ?intro=1. */
 function replayControl(active) {
-  document.querySelectorAll(".replay-intro").forEach((n) => n.remove());
+  document.querySelectorAll(".replay-tools").forEach((n) => n.remove());
+  const box = document.createElement("div");
+  box.className = "replay-tools";
   const a = document.createElement("a");
   a.className = "replay-intro";
   a.href = "index.html?intro=1";
@@ -87,7 +90,17 @@ function replayControl(active) {
   a.addEventListener("click", (e) => {
     if (active === "work" && window.__intro && typeof window.__intro.replay === "function") { e.preventDefault(); window.__intro.replay(); }
   });
-  tools().append(a);
+  box.append(a);
+  if (active === "work") {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "replay-intro intro-sound";
+    const get = () => { try { return localStorage.getItem("intro-sound") === "on"; } catch (e) { return false; } };
+    const paint = () => { b.textContent = get() ? "Intro sound: on" : "Intro sound: off"; };
+    b.addEventListener("click", () => { try { localStorage.setItem("intro-sound", get() ? "off" : "on"); } catch (e) { /* blocked */ } paint(); });
+    paint();
+    box.append(b);
+  }
+  tools().append(box);
 }
 
 /* Fixed page controls (Replay intro, Contents) live in one complementary landmark. */

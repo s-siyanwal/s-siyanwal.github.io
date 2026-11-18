@@ -368,7 +368,7 @@ h1 em, h2 em, .foot-big em { color: var(--accent); }
     --bg: #fff; --veil: #fff; --ink: #000; --muted: #222; --faint: #333; --accent: #000; --accent-2: #000; --line: #bbb; --line-strong: #888;
     --th-nmr: #000; --th-weather: #000; --th-image: #000; --th-qkd: #000; --th-fpga: #000; --th-vqls: #000; --th-tensor: #000;
   }
-  .lab-field, .curtain, .bar, .page-nav, .cue, .skip, .hero-cta, .filters, .next, .wl-fill, .view-bar, .toc-toggle, .replay-intro, .ab-controls, .row-ctrl, .fn-open, .play, #abstract, .crumbs-pn, .cv-hero .artifacts { display: none !important; }
+  .lab-field, .curtain, .bar, .page-nav, .cue, .skip, .hero-cta, .filters, .next, .wl-fill, .view-bar, .toc-toggle, .replay-tools, .ab-controls, .row-ctrl, .fn-open, .play, #abstract, .crumbs-pn, .cv-hero .artifacts { display: none !important; }
   .pub-row { display: block !important; overflow: visible !important; }
   .worldline-sec.is-horizontal .worldline { display: block; transform: none !important; }
   .worldline-sec.is-horizontal .event { width: auto !important; max-height: none !important; overflow: visible !important; }
@@ -424,8 +424,9 @@ html[data-view="expert"] .toc-group[data-view="layman"], html[data-view="layman"
 }
 
 /* ---------- Replay intro (every page) ---------- */
+.replay-tools { position: fixed; left: max(1rem, env(safe-area-inset-left)); bottom: max(1rem, env(safe-area-inset-bottom)); z-index: 34; display: flex; gap: .4rem; }
 .replay-intro {
-  position: fixed; left: max(1rem, env(safe-area-inset-left)); bottom: max(1rem, env(safe-area-inset-bottom)); z-index: 34;
+  font: inherit; cursor: pointer;
   font-family: var(--mono); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; color: var(--muted);
   display: inline-flex; align-items: center; min-height: 32px; padding: 0 .75rem; border: 1px solid var(--line); border-radius: 999px; background: var(--veil);
 }

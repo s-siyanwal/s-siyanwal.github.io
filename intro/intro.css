@@ -1,32 +1,31 @@
-/* Big Bang intro overlay (home page). html.intro-on is set by the inline gate in the page head before first paint:
-   until the overlay mounts, a plain vacuum cover hides the page; the inline gate removes the class after 4 s if
-   the intro script never starts, so a failure can never leave the page covered. */
-html.intro-on { overflow: hidden; }
-html.intro-on body::after { content: ""; position: fixed; inset: 0; z-index: 99; background: #03050b; }
-html.intro-on .replay-intro, html.intro-on .toc-toggle { visibility: hidden; }
-.intro { position: fixed; inset: 0; z-index: 100; color: #e8edf6; font-family: var(--mono, ui-monospace, monospace); cursor: crosshair; touch-action: none; user-select: none; -webkit-user-select: none; }
-.intro-visual { position: absolute; inset: 0; }
+/* Intro overlay (lab home). html.intro-on is set by the inline gate in the page head before first paint: until the
+   overlay mounts, a plain cover in the intro's background hides the page (true black in the dark theme, paper in
+   the light theme; the same colours as intro/config.js). The gate removes the class after 4 s if the intro script
+   never starts, so a failure can never leave the page covered. Scrolling is held by the intro's own input handlers
+   rather than overflow: hidden, so no scrollbar appears or disappears and the hero never shifts. */
+:root { --intro-bg: #f2efe8; --intro-ink: #15192b; --intro-skip: .64; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --intro-bg: #000; --intro-ink: #fff; --intro-skip: .5; } }
+:root[data-theme="dark"] { --intro-bg: #000; --intro-ink: #fff; --intro-skip: .5; }
+
+html.intro-on body::after { content: ""; position: fixed; inset: 0; z-index: 99; background: var(--intro-bg); }
+html.intro-live body::after { display: none; }
+html.intro-on #h-name, html.intro-on #h-tagline { opacity: 0; }
+html.intro-on .replay-tools, html.intro-on .toc-toggle { visibility: hidden; }
+
+.intro { position: fixed; inset: 0; z-index: 100; touch-action: none; user-select: none; -webkit-user-select: none; }
+.intro-bg { position: absolute; inset: 0; }
 .intro canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.intro-invite, .intro-hint { position: absolute; left: 50%; transform: translateX(-50%); margin: 0; text-align: center; letter-spacing: .18em; text-transform: uppercase; pointer-events: none; }
-.intro-invite { top: calc(50% + min(19vh, 170px)); font-size: .78rem; color: rgba(232, 237, 246, .82); opacity: 0; animation: intro-in 1.6s ease 1.2s forwards, intro-breathe 3.6s ease-in-out 2.8s infinite; }
-.intro-invite.is-gone { animation: none; opacity: 0; transition: opacity .4s ease; }
-.intro-hint { top: calc(50% + min(19vh, 170px) + 2rem); font-size: .7rem; color: rgba(232, 237, 246, .7); opacity: 0; transition: opacity .8s ease; }
-.intro-hint.is-on { opacity: 1; }
-@keyframes intro-in { to { opacity: 1; } }
-@keyframes intro-breathe { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
-.intro-ctrls { position: absolute; top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right)); display: flex; gap: .5rem; z-index: 2; }
-.intro-ctrls button, .intro-enter {
-  font: inherit; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: #e8edf6; background: rgba(3, 5, 11, .55);
-  border: 1px solid rgba(232, 237, 246, .35); border-radius: 999px; min-height: 36px; min-width: 36px; padding: 0 .9rem; cursor: pointer;
+/* The only thing on screen besides the piece: a small "Skip". Low-key, but still AA contrast (5:1 or more). */
+.intro-skip {
+  position: absolute; top: max(10px, env(safe-area-inset-top)); right: max(10px, env(safe-area-inset-right));
+  font-family: var(--mono, ui-monospace, monospace); font-size: .64rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--intro-ink); opacity: calc(var(--intro-skip) * var(--k, 1)); background: none; border: 0; border-radius: 4px;
+  min-height: 32px; min-width: 44px; padding: 0 .7rem; cursor: pointer; transition: opacity .3s ease;
 }
-.intro-ctrls button:hover, .intro-enter:hover { border-color: #aecbff; color: #fff; }
-.intro-ctrls button:focus-visible, .intro-enter:focus-visible { outline: 2px solid #aecbff; outline-offset: 3px; }
-.intro-sound { padding: 0 .7rem; }
-.intro-sound .intro-sr { margin-left: .4rem; }
-.intro-sound:not(.is-on) span[aria-hidden] { text-decoration: line-through; opacity: .7; }
-.intro-enter { position: absolute; left: 50%; top: calc(50% + min(19vh, 170px) + 2.6rem); transform: translateX(-50%); min-height: 44px; padding: 0 1.6rem; font-size: .8rem; }
-.intro.is-leaving { opacity: 0; transition: opacity .4s ease; }
-@media (prefers-reduced-motion: reduce) {
-  .intro-invite { animation: none; opacity: 1; }
+.intro-skip:hover, .intro-skip:focus-visible { opacity: calc(.95 * var(--k, 1)); }
+.intro-skip:focus-visible { outline: 1px solid currentColor; outline-offset: 2px; }
+.intro.is-leaving { opacity: 0; transition: opacity .6s cubic-bezier(.4, 0, .2, 1); }
+@media print {
+  .intro, html.intro-on body::after { display: none !important; }
+  html.intro-on #h-name, html.intro-on #h-tagline { opacity: 1 !important; filter: none !important; }
 }
-@media print { .intro, html.intro-on body::after { display: none !important; } }

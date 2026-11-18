@@ -84,8 +84,9 @@ lab/                  Lab edition: an experimental parallel design at /lab/ (noi
                       field3d.js (three.js shader background), sphere3d.js (Bloch sphere in the
                       contents panel), qubit3d.js (home "qubit you can steer"), gallery.js (field
                       notes lightbox), abstracts/<id>.js (interactive abstract per thread), lab.css.
-intro/                Big Bang intro for the lab home (WebGL, 2D fallback, reduced-motion still);
-                      all tunables in intro/config.js. ?intro=1 forces it.
+intro/                Lab home intro: wave → measurement → name (WebGL, 2D fallback,
+                      reduced-motion fade); all timings/colours in intro/config.js.
+                      ?intro=1 forces it, ?intro=0 skips it.
 cv/cv-template.tex    LaTeX CV template; scripts/cv_tex.py fills it from content.json
 data/links.json       Artifact links per thread and proof links per award (empty = hidden)
 data/journey.json     Photos and videos for the Path stages and the Personal page

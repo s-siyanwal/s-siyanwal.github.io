@@ -1,170 +1,174 @@
-/* Big Bang intro controller: vacuum → charging (clicks) → bang → reveal → hand-off.
+/* Intro controller (lab home): point → wave → measurement → name, about 4.5 s, no input needed.
    The intro is an overlay over the real home page, which is already rendered underneath and readable by screen
-   readers (the visual layer is aria-hidden). Skippable at any time (button, Esc, scrolling, or moving keyboard focus
-   into the page); never a forced wait (idle hint, then an automatic bang). On exit everything is torn down: the
-   animation loop, listeners, audio and the WebGL context. Reduced motion: one still frame and an Enter button. */
-import { CONFIG } from "./config.js";
-import { createGL, background } from "./renderer.js";
-import { fields } from "./fields.js";
-import { filaments, easeInOut } from "./bang.js";
-import { sampleGlyphs, revealer } from "./reveal.js";
-import { createAudio } from "./audio.js";
-import { fallback2d } from "./fallback2d.js";
+   readers (the visual layer is aria-hidden). Any click, key, scroll, "Skip" or moving keyboard focus into the page
+   fast-forwards smoothly to the end state (never a hard cut). The points land on the real hero name, the black
+   dissolves into the page and the DOM text sharpens in at the same place, so there is no layout shift; the tagline
+   fades in last. On exit everything is torn down: the animation loop, listeners and the WebGL context.
+   Reduced motion: no animation, the page with its final name simply fades in. */
+import { CONFIG as C } from "./config.js";
+import { E, seg, geometry, crossings, assign, along } from "./timeline.js";
+import { glyphTargets } from "./glyphs.js";
+import { tone } from "./audio.js";
+import { webgl } from "./webgl.js";
+import { canvas2d } from "./fallback2d.js";
 
 const root = document.documentElement;
+const isDark = () => {
+  const t = root.getAttribute("data-theme");
+  return t === "dark" || (t !== "light" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+};
+const hex2rgba = (h, a) => { const n = parseInt(h.slice(1), 16); return `rgba(${n >> 16 & 255}, ${n >> 8 & 255}, ${n & 255}, ${a})`; };
 
 export function play(opts = {}) {
   return new Promise((resolve) => {
-    const C = CONFIG;
+    const replay = !!opts.replay, dark = isDark();
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const mobile = window.matchMedia("(pointer: coarse)").matches || Math.min(innerWidth, innerHeight) < 700;
     try { sessionStorage.setItem(C.sessionKey, "1"); } catch (e) { /* storage blocked */ }
-    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-    window.scrollTo(0, 0);
-    root.classList.add("intro-on");
+    if (!dark && C.lightMode === "skip") { root.classList.remove("intro-on"); resolve(); return; }
+    const pal = dark ? C.colors.dark : C.colors.light;
+    const mobile = window.matchMedia("(pointer: coarse)").matches || Math.min(innerWidth, innerHeight) < 700;
+    const name = document.getElementById("h-name"), tagline = document.getElementById("h-tagline");
     const lab = () => (window.__lab && window.__lab.lenis) || null;
-    const stopScroll = () => { const l = lab(); if (l) { l.scrollTo(0, { immediate: true }); l.stop(); } };
-    stopScroll();
-    document.addEventListener("lab:ready", stopScroll, { once: true });
+    const toTop = () => { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; window.scrollTo(0, 0); const l = lab(); if (l) { l.scrollTo(0, { immediate: true }); l.stop(); } };
 
     // ---------------------------------------------------------------- DOM
+    if (replay) { if (name) name.style.opacity = "1"; if (tagline) tagline.style.opacity = "1"; }
+    if (tagline) tagline.style.transition = `opacity ${C.taglineMs}ms cubic-bezier(.22,.61,.36,1)`;
     const el = document.createElement("div");
     el.className = "intro";
-    el.innerHTML = `<div class="intro-visual" aria-hidden="true"><canvas></canvas>
-        <p class="intro-invite">Start clicking to create.</p><p class="intro-hint">Click anywhere, or press Space.</p></div>
-      <div class="intro-ctrls">
-        <button type="button" class="intro-sound" aria-pressed="false"><span aria-hidden="true">♪</span><span class="intro-sr">Sound</span></button>
-        <button type="button" class="intro-skip">Skip intro</button>
-      </div>
-      ${reduce ? '<button type="button" class="intro-enter">Enter</button>' : ""}`;
-    document.body.prepend(el);
-    const canvas = el.querySelector("canvas"), invite = el.querySelector(".intro-invite"), hint = el.querySelector(".intro-hint");
-    const skipBtn = el.querySelector(".intro-skip"), soundBtn = el.querySelector(".intro-sound");
+    el.innerHTML = '<div class="intro-bg" aria-hidden="true"></div><canvas aria-hidden="true"></canvas><button type="button" class="intro-skip">Skip</button>';
+    const bg = el.firstElementChild, canvas = el.querySelector("canvas"), skipBtn = el.querySelector(".intro-skip");
+    bg.style.background = pal.tint > 0 ? `radial-gradient(circle at 50% 50%, ${hex2rgba(pal.accent, pal.tint)}, rgba(0,0,0,0) 55%), ${pal.bg}` : pal.bg;
     skipBtn.setAttribute("aria-label", "Skip intro");
+    if (replay) bg.style.opacity = "0";
+    document.body.prepend(el);
+    root.classList.add("intro-on", "intro-live");                    // the overlay's own black replaces the cover
+    if (!replay) toTop();
+    document.addEventListener("lab:ready", () => { if (!done) toTop(); }, { once: true });
 
-    const audio = createAudio(C.soundDefault);
-    const paintSound = () => {
-      soundBtn.setAttribute("aria-pressed", String(audio.on));
-      soundBtn.setAttribute("aria-label", audio.on ? "Sound on. Turn intro sound off" : "Sound off. Turn intro sound on");
-      soundBtn.classList.toggle("is-on", audio.on);
-    };
-    soundBtn.addEventListener("click", (e) => { e.stopPropagation(); audio.toggle(); paintSound(); });
-    paintSound();
-
-    // ---------------------------------------------------------------- renderer
-    let dpr = Math.min(window.devicePixelRatio || 1, C.dprCap, mobile ? C.resolution.mobile : C.resolution.desktop);
+    // ---------------------------------------------------------------- renderer and scene
+    let dpr = Math.min(window.devicePixelRatio || 1, C.dprCap);
     const size = () => { canvas.width = Math.round(innerWidth * dpr); canvas.height = Math.round(innerHeight * dpr); };
     size();
-    const count = mobile ? C.particles.mobile : C.particles.desktop;
-    let gl = createGL(canvas), passes = null, draw2d = null;
-    if (gl) {
-      try {
-        passes = { bg: background(gl, C.colors), fields: fields(gl, C.colors, count), strings: filaments(gl, C.colors, C.particles.filaments) };
-      } catch (e) { console.warn("intro: WebGL setup failed, using 2D", e); gl = null; }
-    }
-    if (!gl) draw2d = fallback2d(canvas, C.colors, mobile ? 600 : 1400);
+    const maxHits = mobile ? C.hits.mobile : C.hits.desktop;
+    let R = reduce ? null : (webgl(canvas, pal, maxHits) || canvas2d(canvas, pal));
+    const g = geometry(innerWidth, innerHeight, mobile);
+    const hits = R ? crossings(g, innerWidth, innerHeight, maxHits) : [];
+    let landed = false, sampled = false;
+    const sample = () => {                                            // the name's letters, once fonts are ready
+      if (sampled) return;
+      sampled = true;
+      try { landed = assign(hits, glyphTargets(hits.length)); } catch (e) { landed = false; }
+    };
+    const s = {
+      g, dpr, hair: C.wave.hairline, decay: C.wave.decay, bendR: C.wave.bendRadius,
+      front: 0, half: 0, waveA: 0, c: 0, bend: 0, acc: 0, ptrX: -1e4, ptrY: -1e4,
+      pt: new Float32Array((hits.length + 2) * 5), nPt: 0, ln: new Float32Array(hits.length * 2 * 3), nLn: 0,
+    };
+    let ptr = null, ptrOn = 0, T = replay ? -C.replayInMs : 0, last = performance.now(), raf = 0, ff = null, done = false;
+    let probe = null, toned = false, atZero = !replay, hiddenAt = 0;
 
-    // ---------------------------------------------------------------- state
-    const st = { time: 0, energy: 0, kick: 0, bang: -1, bangLen: C.eruptionMs, fade: 1, dpr, ptr: [9, 9], ptrOn: 0 };
-    let phase = "charging", clicks = 0, raf = 0, last = performance.now(), t0 = last, bangAt = 0, revealAt = 0, reveal = null, revealDraw = null;
-    let probeFrames = 0, probed = false, withReveal = true, outAt = 0, done = false;
-    const timers = [];
-    const later = (ms, fn) => timers.push(setTimeout(fn, ms));
+    const update = (dt) => {
+      const t = C.t;
+      const bgA = T < 0 ? E.inOut(1 + T / C.replayInMs) : 1 - E.inOut(seg(T, t.bgOut[0], t.bgOut[1]));
+      bg.style.opacity = String(bgA);
+      skipBtn.style.setProperty("--k", bgA.toFixed(3));              // "Skip" leaves with the black
+      if (T < 0) return;
+      if (!atZero) {                                                  // replay: the page is covered now
+        atZero = true; toTop();
+        if (tagline) tagline.style.opacity = "";
+      }
+      if (!sampled && (T > 2600 || !document.fonts || document.fonts.status === "loaded")) sample();
+      const nameA = E.inOut(seg(T, t.nameIn[0], t.nameIn[1]));
+      if (name) { name.style.opacity = String(nameA); name.style.filter = nameA < 1 ? `blur(${(C.nameBlur * (1 - nameA)).toFixed(2)}px)` : ""; }
+      if (!R) return;
 
-    const frame = (now) => {
-      raf = requestAnimationFrame(frame);
-      const dt = Math.min(0.05, (now - last) / 1000); last = now;
-      st.time += dt;
-      st.energy += (Math.min(1, clicks / C.clicks) - st.energy) * Math.min(1, dt * 4);
-      st.kick *= Math.exp(-dt * 3.2);
-      st.ptrOn += ((st.ptr[0] < 8 ? 1 : 0) - st.ptrOn) * Math.min(1, dt * 3);
-      if (!probed) {                                                  // FPS probe: downgrade once if slow
-        probeFrames += 1;
-        if (now - t0 > C.fpsProbeMs) {
-          probed = true;
-          if ((probeFrames * 1000) / (now - t0) < C.minFps && passes) { passes.fields.reduce(0.5); dpr = Math.min(dpr, 0.75); st.dpr = dpr; size(); if (gl) gl.viewport(0, 0, canvas.width, canvas.height); }
+      const uW = seg(T, t.wave[0], t.wave[1]);
+      const cRaw = seg(T, t.collapse[0], t.collapse[1]), c = E.inOut(cRaw);
+      const gain = 1 + C.swell * Math.sin(Math.PI * cRaw) ** 2;      // one soft luminance swell, no flash
+      const sepK = E.inOut(seg(T, t.split[0], t.split[1]));
+      const waveIn = E.inOut(seg(T, t.wave[0], t.wave[0] + 350));
+      ptrOn += ((ptr ? 1 : 0) - ptrOn) * Math.min(1, dt / 400);
+      if (ptr) { s.ptrX = ptr[0]; s.ptrY = ptr[1]; }
+      s.front = g.R * E.out(uW); s.half = (g.sep * sepK) / 2; s.c = c;
+      s.waveA = C.wave.alpha * waveIn * gain;
+      s.acc = C.wave.accentAlpha * sepK * waveIn * (1 - c);
+      s.bend = C.wave.bend * ptrOn * (1 - E.inOut(seg(T, t.bendOff[0], t.bendOff[1])));
+      if (!toned && T >= t.collapse[0] + 250) { toned = true; tone(); }
+
+      let n = 0, m = 0;
+      const pa = E.inOut(seg(T, t.point[0], t.point[1])) * (1 - E.inOut(seg(T, t.pointOut[0], t.pointOut[1])));
+      if (pa > 0.002) {                                               // the first point of light and its faint halo
+        s.pt.set([g.cx, g.cy, pa * C.point.haloAlpha, C.point.halo, 1], n * 5); n++;
+        s.pt.set([g.cx, g.cy, pa, C.point.size, 0], n * 5); n++;
+      }
+      if (cRaw > 0) {
+        const out = 1 - E.inOut(landed ? seg(T, t.dotsOut[0], t.dotsOut[1]) : seg(T, t.glide, t.glide + 600));
+        for (const h of hits) {
+          const aIn = E.inOut(seg(cRaw, 0.3 + 0.35 * h.r, 0.65 + 0.35 * h.r));
+          let a = aIn * (0.5 + 0.5 * h.vis) * gain * out, x = h.x0, y = h.y0, size = C.hits.size;
+          if (landed) {
+            const u = seg(T, t.glide + h.delay, t.glide + h.delay + C.glide.dur), e = E.glide(u);
+            [x, y] = along(h, e);
+            a = aIn * (0.5 + 0.5 * h.vis + (0.5 - 0.5 * h.vis) * e) * gain * out;
+            size = C.hits.size + (C.hits.landSize - C.hits.size) * e;
+            if (u > 0 && u < 1 && m < s.ln.length / 3 - 1) {         // motion blur: a short trail behind the point
+              const [tx, ty] = along(h, E.glide(Math.max(0, u - C.glide.trail)));
+              if ((tx - x) ** 2 + (ty - y) ** 2 > 0.5) { s.ln.set([tx, ty, 0, x, y, a * 0.4], m * 3); m += 2; }
+            }
+          }
+          if (a > 0.002 && n < s.pt.length / 5) { s.pt.set([x, y, a, size, 0], n * 5); n++; }
         }
       }
-      if (phase === "bang" || phase === "reveal" || phase === "out") st.bang = now - bangAt;
-      let rp = 0;
-      if (phase === "reveal") {
-        rp = Math.min(1, (now - revealAt) / C.revealMs);
-        st.fade = 1 - easeInOut(Math.min(1, Math.max(0, (rp - 0.3) / 0.6)));
-        if (rp >= 1) return finish();
-      }
-      if (phase === "out") {
-        st.fade = Math.max(0, 1 - (now - outAt) / 280);
-        if (st.fade <= 0) return finish();
-      }
-      const shake = st.kick * (phase === "charging" ? 2.2 : 0);
-      canvas.style.transform = shake > 0.05 ? `translate(${((Math.random() - 0.5) * shake).toFixed(2)}px, ${((Math.random() - 0.5) * shake).toFixed(2)}px)` : "";
-      if (gl) {
-        gl.viewport(0, 0, canvas.width, canvas.height);
-        gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
-        passes.bg(st); passes.fields(st); passes.strings(st);
-        if (revealDraw && phase === "reveal") revealDraw(st, rp);
-      } else if (draw2d) draw2d(st);
+      s.nPt = n; s.nLn = m;
+      R.draw(s);
     };
 
-    const renderStill = () => {                                       // reduced motion: one still frame, no loop
-      st.time = 7.3; st.energy = 0.15;
-      if (gl && passes) { gl.viewport(0, 0, canvas.width, canvas.height); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT); passes.bg(st); passes.fields(st); }
-      else if (draw2d) draw2d(st);
-    };
-
-    // ---------------------------------------------------------------- phases
-    const click = () => {
-      if (phase !== "charging") return;
-      clicks += 1; st.kick = 1;
-      audio.resumeIfOn(); audio.setEnergy(Math.min(1, clicks / C.clicks));
-      hint.classList.remove("is-on");
-      idle();
-      if (clicks >= C.clicks) bang(C.eruptionMs, true);
-    };
-    function bang(len, reveal_) {
-      if (phase !== "charging") return;
-      phase = "bang"; bangAt = performance.now(); st.bangLen = len; withReveal = reveal_;
-      timers.forEach(clearTimeout);
-      invite.classList.add("is-gone"); hint.classList.remove("is-on");
-      audio.setEnergy(1); audio.bloom();
-      const revealStart = len * (1 - (withReveal ? C.revealOverlap : 0));
-      later(revealStart, () => (withReveal && gl ? startReveal() : fadeOut()));
-    }
-    async function startReveal() {
-      try { if (document.fonts) await document.fonts.ready; } catch (e) { /* ignore */ }
-      if (done || phase !== "bang") return;
-      try { reveal = sampleGlyphs(mobile ? C.particles.reveal.mobile : C.particles.reveal.desktop); revealDraw = reveal.pts.length ? revealer(gl, C.colors, reveal) : null; } catch (e) { revealDraw = null; }
-      phase = "reveal"; revealAt = performance.now();
-    }
-    function fadeOut() { if (phase === "out" || done) return; phase = "out"; outAt = performance.now(); if (!raf) finish(); }
-    const skip = () => {
-      if (done) return;
-      if (reduce || C.skipMode === "instant" || !(gl || draw2d)) return finish();
-      if (phase === "charging") bang(C.skipBangMs, false);
-      else fadeOut();
-    };
-    const idle = () => {
-      timers.forEach(clearTimeout); timers.length = 0;
-      if (reduce) return;
-      later(C.idleHintMs, () => { if (phase === "charging") hint.classList.add("is-on"); });
-      later(C.idleAutoMs, () => bang(C.eruptionMs, true));
+    const frame = () => {
+      raf = requestAnimationFrame(frame);
+      const now = performance.now();
+      const dt = Math.min(50, now - last); last = now;
+      if (ff) {                                                       // smooth fast-forward: a Hermite curve that starts at
+        const u = Math.min(1, (now - ff.at) / C.fastForwardMs);       // the current speed and eases into the end state
+        const h = (u * u * u - 2 * u * u + u) * ff.v0 + (3 * u * u - 2 * u * u * u);
+        T = ff.from + (C.t.end - ff.from) * h;
+      } else T += dt;
+      if (R && !probe && T >= C.t.wave[0]) probe = { at: now, n: 0 };
+      if (probe && !probe.done) {                                     // one FPS check: lower the resolution if slow
+        probe.n++;
+        if (now - probe.at > C.fpsProbeMs) {
+          probe.done = true;
+          if ((probe.n * 1000) / (now - probe.at) < C.minFps && dpr > 0.75) { dpr = dpr > 1 ? 1 : 0.75; s.dpr = dpr; size(); }
+        }
+      }
+      update(dt);
+      if (T >= C.t.end) finish();
     };
 
     // ---------------------------------------------------------------- input
-    const onDown = (e) => { if (e.target.closest(".intro-ctrls, .intro-enter")) return; click(); };
-    const onMove = (e) => { st.ptr = [(e.clientX - innerWidth / 2) / (innerHeight / 2), -(e.clientY - innerHeight / 2) / (innerHeight / 2)]; };
-    const onLeave = () => { st.ptr = [9, 9]; };
-    const onKey = (e) => {
-      if (e.key === "Escape") { e.preventDefault(); skip(); return; }
-      const onCtrl = e.target.closest && e.target.closest(".intro-ctrls, .intro-enter");
-      if ((e.key === " " || e.key === "Enter") && !onCtrl) { e.preventDefault(); reduce ? finish() : click(); return; }
-      if (["PageDown", "PageUp", "ArrowDown", "ArrowUp", "End", "Home"].includes(e.key) && !onCtrl) { e.preventDefault(); skip(); }
+    const fastForward = () => {
+      if (done || ff || reduce) return;
+      const left = C.t.end - T;
+      if (left <= C.fastForwardMs) return;                            // already about to end
+      ff = { at: performance.now(), from: T, v0: C.fastForwardMs / left };
     };
-    const onWheel = (e) => { e.preventDefault(); skip(); };
-    const onTouchMove = (e) => { e.preventDefault(); skip(); };
-    const onFocus = (e) => { if (!el.contains(e.target)) skip(); };
-    const onVis = () => { if (document.hidden) { cancelAnimationFrame(raf); raf = 0; } else if (!raf && !reduce && !done) { last = performance.now(); raf = requestAnimationFrame(frame); } };
-    const onLost = (e) => { e.preventDefault(); finish(); };
+    const onDown = (e) => { if (!e.target.closest(".intro-skip")) fastForward(); };
+    const onMove = (e) => { if (e.pointerType === "mouse" || e.pointerType === "pen") ptr = [e.clientX, e.clientY]; };
+    const onLeave = () => { ptr = null; };
+    const onKey = (e) => {
+      if (["Tab", "Shift", "Alt", "Control", "Meta", "CapsLock"].includes(e.key)) return;
+      if (e.target === skipBtn && (e.key === "Enter" || e.key === " ")) return;  // the button's own click handles it
+      if ([" ", "Enter", "PageDown", "PageUp", "ArrowDown", "ArrowUp", "End", "Home", "Escape"].includes(e.key)) e.preventDefault();
+      fastForward();
+    };
+    const onWheel = (e) => { e.preventDefault(); fastForward(); };
+    const onTouchMove = (e) => { e.preventDefault(); fastForward(); };
+    const onFocus = (e) => { if (!el.contains(e.target)) fastForward(); };
+    const onVis = () => {
+      if (document.hidden) { cancelAnimationFrame(raf); raf = 0; hiddenAt = performance.now(); }
+      else if (!raf && !done && !reduce) { last = performance.now(); if (ff) ff.at += last - hiddenAt; raf = requestAnimationFrame(frame); }
+    };
+    const onResize = () => { size(); fastForward(); };
     el.addEventListener("pointerdown", onDown);
     el.addEventListener("pointermove", onMove);
     el.addEventListener("pointerleave", onLeave);
@@ -173,41 +177,51 @@ export function play(opts = {}) {
     el.addEventListener("touchmove", onTouchMove, { passive: false });
     document.addEventListener("focusin", onFocus);
     document.addEventListener("visibilitychange", onVis);
-    window.addEventListener("resize", size);
-    canvas.addEventListener("webglcontextlost", onLost);
-    skipBtn.addEventListener("click", (e) => { e.stopPropagation(); skip(); });
-    const enter = el.querySelector(".intro-enter");
-    if (enter) enter.addEventListener("click", (e) => { e.stopPropagation(); finish(); });
+    window.addEventListener("resize", onResize);
+    skipBtn.addEventListener("click", (e) => { e.stopPropagation(); reduce ? leave() : fastForward(); });
+    if (R) R.lost((e) => { if (done) return; e.preventDefault(); R = null; leave(); });
 
-    // ---------------------------------------------------------------- teardown
+    // ---------------------------------------------------------------- exit
+    function leave() {                                                // a gentle fade when there is nothing to animate
+      if (done || el.classList.contains("is-leaving")) return;
+      cancelAnimationFrame(raf); raf = 0;
+      if (name) { name.style.opacity = "1"; name.style.filter = ""; }
+      el.style.opacity = "";
+      el.classList.add("is-leaving");
+      setTimeout(finish, 650);
+    }
     function finish() {
       if (done) return;
       done = true;
       const focusInside = el.contains(document.activeElement);
-      const removeAll = () => {
-        cancelAnimationFrame(raf); raf = 0;
-        timers.forEach(clearTimeout);
-        el.removeEventListener("pointerdown", onDown); el.removeEventListener("pointermove", onMove); el.removeEventListener("pointerleave", onLeave);
-        document.removeEventListener("keydown", onKey); el.removeEventListener("wheel", onWheel); el.removeEventListener("touchmove", onTouchMove);
-        document.removeEventListener("focusin", onFocus); document.removeEventListener("visibilitychange", onVis); window.removeEventListener("resize", size);
-        canvas.removeEventListener("webglcontextlost", onLost);
-        if (gl) { const ext = gl.getExtension("WEBGL_lose_context"); if (ext) ext.loseContext(); }
-        gl = null; passes = null; revealDraw = null;
-        audio.stop();
-        el.remove();
-        root.classList.remove("intro-on");
-        const l = lab(); if (l) l.start();
-        if (focusInside) { const m = document.getElementById("main"); if (m) { m.setAttribute("tabindex", "-1"); m.focus({ preventScroll: true }); } }
-        resolve();
-      };
-      if (reduce) { el.classList.add("is-leaving"); setTimeout(removeAll, 450); } else removeAll();
+      cancelAnimationFrame(raf); raf = 0;
+      el.removeEventListener("pointerdown", onDown); el.removeEventListener("pointermove", onMove); el.removeEventListener("pointerleave", onLeave);
+      document.removeEventListener("keydown", onKey); el.removeEventListener("wheel", onWheel); el.removeEventListener("touchmove", onTouchMove);
+      document.removeEventListener("focusin", onFocus); document.removeEventListener("visibilitychange", onVis); window.removeEventListener("resize", onResize);
+      if (R) R.destroy();
+      R = null;
+      el.remove();
+      if (name) { name.style.opacity = ""; name.style.filter = ""; }
+      if (tagline) tagline.style.opacity = "";
+      root.classList.remove("intro-on", "intro-live");                // the tagline fades in last (its transition)
+      setTimeout(() => { if (tagline) tagline.style.transition = ""; }, C.taglineMs + 100);
+      const l = lab(); if (l) l.start();
+      if (focusInside) { const main = document.getElementById("main"); if (main) { main.setAttribute("tabindex", "-1"); main.focus({ preventScroll: true }); } }
+      resolve();
     }
 
     // ---------------------------------------------------------------- go
-    if (reduce) { renderStill(); invite.textContent = "A still of the quantum vacuum."; return; }
-    el.classList.add("is-live");
-    idle();
+    if (reduce) {                                                     // a still: the final page, faded in gently
+      if (name) name.style.opacity = "1";
+      if (tagline) tagline.style.opacity = "1";
+      bg.style.opacity = "1";
+      if (replay) {                                                   // fade the still in over the page, then out
+        el.style.opacity = "0";
+        requestAnimationFrame(() => requestAnimationFrame(() => { el.style.transition = `opacity ${C.replayInMs}ms ease`; el.style.opacity = "1"; }));
+        setTimeout(() => { el.style.transition = ""; toTop(); leave(); }, C.replayInMs + 250);
+      } else setTimeout(leave, 250);
+      return;
+    }
     raf = requestAnimationFrame(frame);
-    if (opts.replay) invite.classList.remove("is-gone");
   });
 }

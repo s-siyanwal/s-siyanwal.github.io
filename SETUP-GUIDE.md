@@ -192,9 +192,13 @@ anything left empty is simply hidden on the site.
 | Layman write-ups on research threads | `data/content.json` → `projects` → `layman` | They are drafts written from your papers; read them, edit, then set `layman_status` to `"verified"` to remove the draft note. |
 | Who did which stage ("My role" diagram) | `data/content.json` → `projects` → `pipeline` → `by` | `"me"`, a collaborator's name, or `""` if not yet stated. |
 
-The Big Bang intro on the lab home page plays once per browser session. Add
-`?intro=1` to the address to see it again, or use "Replay intro" in the corner.
-Its settings (number of clicks, timings, colours, sound default) are in `intro/config.js`.
+The intro on the lab home page (a point of light spreads as a wave, collapses
+into detector hits, and the hits become your name; about 4.5 seconds) plays once
+per browser session. Add `?intro=1` to the address to see it again, or use
+"Replay intro" in the corner; `?intro=0` skips it. Any click, key or scroll
+fast-forwards it. The "Intro sound" switch next to "Replay intro" turns its one
+soft tone on or off (off by default). Every timing and colour is in
+`intro/config.js`.
 
 ---
 
