@@ -9,7 +9,7 @@
 <link rel="icon" href="../favicon.svg" type="image/svg+xml"/>
 <link rel="preload" href="../assets/fonts/instrument-serif.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin/>
-<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}try{if(!window.__PRERENDER__&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("lab-anim")}catch(e){}</script>
+<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}try{if(!window.__PRERENDER__&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("lab-anim")}catch(e){}try{if(!window.__PRERENDER__){var v=localStorage.getItem("view");document.documentElement.setAttribute("data-view",v==="layman"?"layman":"expert")}}catch(e){}</script>
 <link rel="stylesheet" href="lab.css"/>
 <script src="vendor/gsap.min.js" defer></script>
 <script src="vendor/ScrollTrigger.min.js" defer></script>
@@ -21,13 +21,33 @@
 <div class="curtain" aria-hidden="true"></div>
 <header class="bar" id="bar"></header>
 <main id="main" data-project="">
+  <div class="view-bar" id="view-bar"></div>
   <section class="page-hero project-hero" id="top" aria-labelledby="pr-h">
-    <p class="crumbs"><a href="index.html#work">← All threads</a> <span class="micro" id="pr-count"></span></p>
+    <nav class="crumbs" aria-label="Threads">
+      <a href="index.html#work">← All threads</a><span class="micro" id="pr-count"></span>
+      <span class="crumbs-pn" id="pr-pn-top"></span>
+    </nav>
     <p class="micro" id="pr-thread"></p>
     <h1 id="pr-h"></h1>
     <p class="page-lede" id="pr-blurb"></p>
     <p class="pr-status" id="pr-status"></p>
+    <div class="artifacts" id="pr-artifacts"></div>
     <ul class="pr-metrics" id="pr-metrics"></ul>
+  </section>
+  <section class="block" id="abstract" aria-labelledby="ab-h">
+    <p class="micro">Interactive abstract</p>
+    <h2 id="ab-h" data-split>Play with the <em>idea</em></h2>
+    <div class="ab-host" id="pr-abstract"><p class="ab-fallback">This interactive diagram needs JavaScript. The schematic and write-up below explain the same idea.</p></div>
+  </section>
+  <section class="block" id="plain" data-view="layman" aria-labelledby="pl-h">
+    <p class="micro">Layman view</p>
+    <h2 id="pl-h" data-split>In <em>plain</em> words</h2>
+    <div class="prose plain" id="pr-plain"></div>
+  </section>
+  <section class="block chapters" id="breakdown" data-view="expert" aria-labelledby="bd-h">
+    <p class="micro">Expert view</p>
+    <h2 id="bd-h" data-split>The <em>work</em>, step by step</h2>
+    <ol class="chapter-list" id="pr-chapters"></ol>
   </section>
   <section class="block" id="figure" aria-labelledby="fig-h" hidden>
     <p class="micro">Schematic</p>
@@ -38,11 +58,7 @@
     <p class="micro">Contribution</p>
     <h2 id="role-h" data-split>My <em>role</em></h2>
     <div class="prose" id="pr-role"></div>
-  </section>
-  <section class="block chapters" id="breakdown" aria-labelledby="bd-h">
-    <p class="micro">Breakdown</p>
-    <h2 id="bd-h" data-split>The <em>work</em>, step by step</h2>
-    <ol class="chapter-list" id="pr-chapters"></ol>
+    <div id="pr-pipeline"></div>
   </section>
   <section class="block" id="paper" aria-labelledby="ppr-h" hidden>
     <p class="micro">Publication</p>
