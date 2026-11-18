@@ -1,0 +1,55 @@
+{
+  "_readme": [
+    "Photos and videos for the Path page (one entry per stage) and for the Personal page. The site shows up to three 'featured' items on each stage; 'gallery' items open in the Field notes viewer.",
+    "Put media files in assets/media/ and list them here. Item: {\"type\": \"image\" or \"video\", \"src\": \"assets/media/name.jpg\", \"alt\": \"what the picture shows\", \"caption\": \"optional\", \"poster\": \"optional still for a video\"}.",
+    "Stage keys are generated from the role or degree title in content.json; 'label' is only a reminder for you. Keep the keys as they are."
+  ],
+  "stages": {
+    "bs-ms-dual-degree-major-physics-minor-data-science": {
+      "label": "BS–MS (Dual Degree) — Major: Physics; Minor: Data Science · IISER Mohali",
+      "featured": [],
+      "gallery": []
+    },
+    "high-school-diploma-cbse": {
+      "label": "High School Diploma (CBSE) · Dayawati Modi Academy (DMA-I)",
+      "featured": [],
+      "gallery": []
+    },
+    "quantum-applications-engineer": {
+      "label": "Quantum Applications Engineer · Centre for Development of Advanced Computing (C-DAC)",
+      "featured": [],
+      "gallery": []
+    },
+    "drdo-junior-research-fellow-quantum-networks-and-linear-opti": {
+      "label": "DRDO Junior Research Fellow — Quantum Networks and Linear Optics · Institute for Advancing Intelligence, TCG CREST (PI: Dr. Arpita Maitra)",
+      "featured": [],
+      "gallery": []
+    },
+    "research-intern-quantum-cryptography": {
+      "label": "Research Intern — Quantum Cryptography · Institute for Advancing Intelligence, TCG CREST (PI: Dr. Arpita Maitra)",
+      "featured": [],
+      "gallery": []
+    },
+    "quantum-computing-developer": {
+      "label": "Quantum Computing Developer · Arqanum Technologies Pvt. Ltd.",
+      "featured": [],
+      "gallery": []
+    },
+    "ms-research-student": {
+      "label": "MS Research Student · NMR Quantum Computing Group, IISER Mohali (PI: Prof. Kavita Dorai)",
+      "featured": [],
+      "gallery": []
+    }
+  },
+  "personal": {
+    "intro": "",
+    "sections": [
+      {
+        "title": "",
+        "text": "",
+        "featured": [],
+        "gallery": []
+      }
+    ]
+  }
+}

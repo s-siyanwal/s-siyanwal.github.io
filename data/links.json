@@ -1,0 +1,62 @@
+{
+  "_readme": [
+    "One place for the site's downloadable artefacts and proof links. Leave a value as \"\" until you have it: empty links are hidden on the site.",
+    "artifacts: per research thread (keyed by the project id in content.json). pdf / slides may point at a file you put in assets/docs/ (e.g. \"assets/docs/vqls-slides.pdf\") or at a full https:// URL.",
+    "proofs: per award, keyed by the award title exactly as it appears in content.json. Use the Google Drive share link of the certificate.",
+    "Paper DOIs, arXiv ids and profile links stay in content.json, because the inbox pipeline writes them there."
+  ],
+  "artifacts": {
+    "vqc-fpga": {
+      "pdf": "",
+      "code": "",
+      "data": "",
+      "slides": ""
+    },
+    "qir-qnn": {
+      "pdf": "",
+      "code": "",
+      "data": "",
+      "slides": ""
+    },
+    "qkd-testbeds": {
+      "pdf": "",
+      "code": "",
+      "data": "",
+      "slides": ""
+    },
+    "qcrypto-circuits": {
+      "pdf": "",
+      "code": "",
+      "data": "",
+      "slides": ""
+    },
+    "nmr-entanglement": {
+      "pdf": "",
+      "code": "",
+      "data": "",
+      "slides": ""
+    },
+    "vqls-forecasting": {
+      "pdf": "",
+      "code": "",
+      "data": "",
+      "slides": ""
+    },
+    "tensnet": {
+      "pdf": "",
+      "code": "",
+      "data": "",
+      "slides": ""
+    }
+  },
+  "proofs": {
+    "Honorable Mention, Quandela Q-volution Hackathon (Track B, photonic quantum computing) — FinTeQ: Photonic Quantum Kernel for Swaption IVS Forecasting": "",
+    "INSPIRE-SHE Fellow, Department of Science and Technology, Government of India": "",
+    "DRDO Junior Research Fellowship, TCG CREST": "",
+    "IBM Certified Associate Developer — Quantum Computation using Qiskit v0.2X": "",
+    "Qiskit Global Summer School, Quantum Simulations, Advanced Level": "",
+    "Qiskit Global Summer School, Quantum Machine Learning, Certificate of Excellence": "",
+    "IBM Quantum Challenge Africa, Advanced Achievement": "",
+    "TOEFL iBT 96": ""
+  }
+}
