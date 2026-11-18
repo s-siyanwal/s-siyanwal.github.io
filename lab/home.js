@@ -1,5 +1,5 @@
 /* Lab edition: home. */
-import { boot, $, esc, kineticName, MOTION, DESKTOP } from "./core.js";
+import { boot, $, esc, kineticName, MOTION, DESKTOP, PRERENDER, REDUCE } from "./core.js";
 import { THREADS, projectStatus, authorsHtml, venueHtml, idLinks } from "../js/site.js";
 
 const shortRole = (r = "") => r.split("—")[0].trim();
@@ -69,7 +69,7 @@ boot({
     (p.profiles || []).filter((x) => x.url && !x.url.startsWith("mailto:")).forEach((x) => links.push([x.url, x.label]));
     $("links").innerHTML = links.map(([h, l]) => `<li><a href="${esc(h)}"${/^(http|\.\.)/.test(h) ? ' target="_blank" rel="noopener"' : ""}>${esc(l)} <span aria-hidden="true">↗</span></a></li>`).join("");
 
-    return { kickers: ".hz-card a", after: horizontal };
+    return { kickers: ".hz-card a", after: (ctx) => { horizontal(ctx); playground(); navAwayAtHero(); } };
   },
 });
 
@@ -100,4 +100,27 @@ function horizontal({ gsap, ScrollTrigger, lenis }) {
     });
   });
   if (document.fonts) document.fonts.ready.then(() => ScrollTrigger.refresh());
+}
+
+/* Play: the three.js qubit is fetched only when its section approaches the viewport (it shares the vendored
+   three.js with the background field), and renders only on demand. */
+function playground() {
+  const host = $("play-host");
+  if (!host || PRERENDER) return;
+  const go = async () => {
+    try {
+      const { mountQubit } = await import("./qubit3d.js");
+      if (!mountQubit(host, { reduce: REDUCE })) host.innerHTML = '<p class="ab-fallback">This browser has WebGL turned off, so the Bloch sphere cannot be drawn.</p>';
+    } catch (e) { console.warn("qubit playground unavailable", e); }
+  };
+  if (!("IntersectionObserver" in window)) { go(); return; }
+  const io = new IntersectionObserver((ents) => { if (ents.some((x) => x.isIntersecting)) { io.disconnect(); go(); } }, { rootMargin: "500px 0px" });
+  io.observe(host);
+}
+
+/* The side contents panel steps aside while the hero (with the photo) is on screen. */
+function navAwayAtHero() {
+  const nav = document.querySelector(".page-nav"), hero = $("top");
+  if (!nav || !hero || !("IntersectionObserver" in window)) return;
+  new IntersectionObserver(([en]) => nav.classList.toggle("is-hero", en.intersectionRatio > 0.35), { threshold: [0, 0.35, 0.6, 1] }).observe(hero);
 }
