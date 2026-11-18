@@ -11,7 +11,7 @@
 <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href="../assets/fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin/>
 <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}try{if(!window.__PRERENDER__&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("lab-anim")}catch(e){}</script>
-<script>try{if(!window.__PRERENDER__&&(/[?&]intro=1(&|$)/.test(location.search)||!sessionStorage.getItem("intro-played"))){document.documentElement.classList.add("intro-on");if("scrollRestoration" in history)history.scrollRestoration="manual";setTimeout(function(){if(!window.__introStarted)document.documentElement.classList.remove("intro-on")},4000)}}catch(e){}</script>
+<script>try{if(!window.__PRERENDER__&&!/[?&]intro=0(&|$)/.test(location.search)&&(/[?&]intro=1(&|$)/.test(location.search)||!sessionStorage.getItem("intro-played"))){document.documentElement.classList.add("intro-on");if("scrollRestoration" in history)history.scrollRestoration="manual";setTimeout(function(){if(!window.__introStarted)document.documentElement.classList.remove("intro-on")},4000)}}catch(e){}</script>
 <link rel="stylesheet" href="lab.css"/>
 <link rel="stylesheet" href="../intro/intro.css"/>
 <script type="module" src="../intro/bootstrap.js"></script>

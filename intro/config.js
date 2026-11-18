@@ -17,14 +17,16 @@ export const CONFIG = {
   sessionKey: "intro-played", // sessionStorage flag; ?intro=1 forces the intro for review
 
   // --- Rendering -------------------------------------------------------------------------------------------------
-  dprCap: 2,                 // device-pixel-ratio cap
+  dprCap: 2,                 // device-pixel-ratio cap (desktop)
+  resolution: { desktop: 1.5, mobile: 0.75 }, // canvas pixels per CSS pixel actually rendered (≤ dprCap); the vacuum
+                             // and corona are soft, so phones render below native resolution to stay smooth
   particles: {               // matter + antimatter + sparks, chosen by device and adjusted by the FPS probe
     desktop: 30000,
     mobile: 6000,
     reveal: { desktop: 7000, mobile: 2600 }, // particles that form the name
     filaments: 48,           // vibrating strings in the bang
   },
-  fpsProbeMs: 1000,          // measure the first second; if slower than minFps, halve particles and drop DPR to 1
+  fpsProbeMs: 1000,          // measure the first second; if slower than minFps, halve particles and render at 0.75×
   minFps: 45,
 
   // --- Colours ---------------------------------------------------------------------------------------------------

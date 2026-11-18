@@ -52,7 +52,7 @@ export function play(opts = {}) {
     paintSound();
 
     // ---------------------------------------------------------------- renderer
-    let dpr = Math.min(window.devicePixelRatio || 1, C.dprCap);
+    let dpr = Math.min(window.devicePixelRatio || 1, C.dprCap, mobile ? C.resolution.mobile : C.resolution.desktop);
     const size = () => { canvas.width = Math.round(innerWidth * dpr); canvas.height = Math.round(innerHeight * dpr); };
     size();
     const count = mobile ? C.particles.mobile : C.particles.desktop;
@@ -82,7 +82,7 @@ export function play(opts = {}) {
         probeFrames += 1;
         if (now - t0 > C.fpsProbeMs) {
           probed = true;
-          if ((probeFrames * 1000) / (now - t0) < C.minFps && passes) { passes.fields.reduce(0.5); dpr = 1; st.dpr = 1; size(); if (gl) gl.viewport(0, 0, canvas.width, canvas.height); }
+          if ((probeFrames * 1000) / (now - t0) < C.minFps && passes) { passes.fields.reduce(0.5); dpr = Math.min(dpr, 0.75); st.dpr = dpr; size(); if (gl) gl.viewport(0, 0, canvas.width, canvas.height); }
         }
       }
       if (phase === "bang" || phase === "reveal" || phase === "out") st.bang = now - bangAt;
