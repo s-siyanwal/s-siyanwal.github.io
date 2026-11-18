@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Personal — Shivanshu Siyanwal (Lab edition)</title>
+<meta name="description" content="Hobbies and life outside research."/>
+<meta name="robots" content="noindex"/>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml"/>
+<link rel="preload" href="../assets/fonts/instrument-serif.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href="../assets/fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin/>
+<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}try{if(!window.__PRERENDER__&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("lab-anim")}catch(e){}</script>
+<link rel="stylesheet" href="lab.css"/>
+<script src="vendor/gsap.min.js" defer></script>
+<script src="vendor/ScrollTrigger.min.js" defer></script>
+<script src="vendor/lenis.min.js" defer></script>
+<script type="module" src="personal.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="curtain" aria-hidden="true"></div>
+<header class="bar" id="bar"></header>
+<main id="main">
+  <section class="page-hero" id="top" aria-labelledby="ps-h">
+    <p class="micro">Personal</p>
+    <h1 id="ps-h" data-split>Off the <em>clock</em></h1>
+    <p class="page-lede" id="ps-intro"></p>
+  </section>
+  <div id="ps-sections"></div>
+</main>
+<footer class="foot" id="foot"></footer>
+</body>
+</html>
