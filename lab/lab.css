@@ -40,6 +40,7 @@
 }
 .th-nmr { --th: var(--th-nmr); } .th-weather { --th: var(--th-weather); } .th-image { --th: var(--th-image); }
 .th-qkd, .th-crypto { --th: var(--th-qkd); } .th-fpga { --th: var(--th-fpga); } .th-vqls { --th: var(--th-vqls); } .th-tensor { --th: var(--th-tensor); }
+.th-magnet { --th: var(--th-fpga); } .th-pinn { --th: var(--th-nmr); } .th-chain { --th: var(--th-weather); } .th-evo { --th: var(--th-image); }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-padding-top: calc(var(--bar-h) + 1rem); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }

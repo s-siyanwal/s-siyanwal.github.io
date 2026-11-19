@@ -948,7 +948,13 @@
             "In the quasi-static RF model, a Swiss-roll slab improves SNR over the same coil held off over an air gap, but does not beat a coil placed directly on the tissue."
           ]
         }
-      ]
+      ],
+      "layman": [
+        "An MRI scanner needs a strong and very steady magnetic field. One way to make a strong field is to push a large electric current around a loop. A Bitter magnet does this with a stack of thick copper plates, cut so that the current circles the central bore, with many small holes through the stack so that cooling water can flow along it.",
+        "The difficulty is heat. Doubling the current doubles the field, but it quadruples the heat the copper gives off, so the water has to carry that heat away. The simulator on this page ties together the field, the electricity, the heat, the water flow and the mechanical forces, and searches for the design that uses the least power while staying inside its limits.",
+        "A separate layer looks at what an MRI scanner needs on top of the magnet itself: extra coils that even out the field, a check on how steady the field stays, and the radio-frequency signal received with Swiss-roll metamaterials, which are small rolled-up resonant structures."
+      ],
+      "layman_status": "draft"
     },
     {
       "id": "cpinn",
@@ -971,8 +977,21 @@
         {
           "h": "Status",
           "p": "The code and report are still being prepared for publication. No results are shown here until they are public."
+        },
+        {
+          "h": "Method background (general)",
+          "p": [
+            "In the rotating frame, a single spin driven by a radio-frequency pulse obeys dM/dt = ω × M with ω = (Ω_x, Ω_y, Δ). Ω_x and Ω_y come from the pulse amplitude and phase, and Δ is the offset from resonance. In quantum form, dU/dt = −iH(t)U with H = ½(Ω_x σx + Ω_y σy + Δ σz). Pulse design chooses the controls Ω(t) so that the final U(T), or the final state, matches a target.",
+            "A physics-informed neural network represents quantities such as the controls or the state as outputs of a network and adds the residual of the governing equation to its training loss, so that training pushes the outputs towards solutions of the physics. Which quantities this project's CPINN represents, and how, is not stated on this site yet."
+          ]
         }
-      ]
+      ],
+      "layman": [
+        "In nuclear magnetic resonance (NMR), the nuclei of atoms behave like tiny compass needles. Short bursts of radio waves, called pulses, turn those needles, and the exact shape of a pulse decides what operation it performs. Designing a pulse means choosing the radio signal that produces the wanted result.",
+        "A physics-informed neural network is a neural network that is trained to follow a known physical law as well as to fit examples. For pulse design, that law describes how the spins respond to the radio signal. In general, such a method can search for pulses without solving the equations again for every guess.",
+        "This page explains the idea in general terms. The project's own network, data and results are not described here until they are public."
+      ],
+      "layman_status": "draft"
     },
     {
       "id": "worm-like-spin-chain",
@@ -1004,9 +1023,23 @@
         {
           "h": "Status",
           "p": "The public repository currently holds a README and a licence. The original 2020 code and results are still to be added, so no results are reported here."
+        },
+        {
+          "h": "Model (textbook)",
+          "p": [
+            "Cut the chain into N segments of length b with unit tangents tᵢ. Up to a constant the bending energy becomes E = −J Σ tᵢ · tᵢ₊₁ with J = κ/b, a classical ferromagnetic chain: Heisenberg in three dimensions, XY in two.",
+            "For an open chain the angle between neighbours is independent from one bond to the next, so the tangent correlation decays geometrically, ⟨tᵢ · tᵢ₊ₙ⟩ = rⁿ. In two dimensions r = I₁(K)/I₀(K) with K = J/k_BT; in three dimensions r = coth K − 1/K. A force on the chain ends adds −b f · Σ tᵢ, which acts like a magnetic field on the spins.",
+            "This section is general background taken from the standard theory; it does not describe what the project's code implements."
+          ]
         }
       ],
-      "abstract": "A 2020 summer project with Dr. Abhishek Chaudhuri on worm-like spin chain models: semiflexible polymers described as classical spin chains."
+      "abstract": "A 2020 summer project with Dr. Abhishek Chaudhuri on worm-like spin chain models: semiflexible polymers described as classical spin chains.",
+      "layman": [
+        "Think of a long, flexible molecule such as a polymer or a strand of DNA as a rope made of many short segments. Each segment points in some direction, and neighbouring segments prefer to point the same way. That preference is what makes the rope bend smoothly instead of kinking at random.",
+        "The same description fits a row of tiny magnets, called spins, where neighbours prefer to line up. Because the mathematics is the same, tools from the physics of magnets can be used on flexible chains. Pulling on the two ends of the chain then plays the part of an external magnetic field.",
+        "This page explains the general idea. The 2020 project's own code and results are not public yet, so none are described here."
+      ],
+      "layman_status": "draft"
     },
     {
       "id": "ebl-sexual-antagonism",
@@ -1036,7 +1069,13 @@
           "h": "Computational models",
           "p": "The public repository rebuilds published models of sexual conflict: a two-locus model for the resolution of intra-locus sexual conflict from a poster by the lab, Parsons' (1961) invasion conditions with Owen's (1953) equilibria, and a \"mother's curse\" cytonuclear model. Each is solved twice: as deterministic recursions, and as an individual-based simulation that never imports the analytical maths. Statistical tests then check whether the simulated populations reproduce each prediction. A second part models published sexual-antagonism results from the lab with a hybrid analytic, individual-based and emulator approach."
         }
-      ]
+      ],
+      "layman": [
+        "Males and females share almost all of their genes, yet they can benefit from different versions of the same gene. A version that helps males may harm females, and the other way round. Biologists call this sexual antagonism, a tug of war between the sexes over a single gene.",
+        "Mathematical models predict when such a tug of war can keep both versions in a population instead of letting one win. This project rebuilt published models of sexual conflict in fruit flies (Drosophila) in two independent ways: once with the equations from the papers, and once as a simulation of individual animals that is not allowed to use those equations.",
+        "Statistical tests then ask whether the simulated populations behave as the equations predict. Agreeing from two independent directions is a stronger check than either one alone."
+      ],
+      "layman_status": "draft"
     }
   ],
   "publications": [

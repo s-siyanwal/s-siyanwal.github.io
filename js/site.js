@@ -249,10 +249,10 @@ export const THREADS = {
   "qcrypto-circuits": ["qkd", "Quantum cryptography"],
   "vqls-forecasting": ["vqls", "VQLS forecasting"],
   "tensnet": ["tensor", "Tensor networks"],
-  "bitter-solenoid": ["", "Magnet design · fMRI"],
-  "cpinn": ["", "NMR group · 2021"],
-  "worm-like-spin-chain": ["", "Spin chains"],
-  "ebl-sexual-antagonism": ["", "Evolutionary biology"],
+  "bitter-solenoid": ["fpga", "Magnet design · fMRI"],
+  "cpinn": ["nmr", "NMR group · 2021"],
+  "worm-like-spin-chain": ["weather", "Spin chains"],
+  "ebl-sexual-antagonism": ["image", "Evolutionary biology"],
 };
 
 /* ---------- Detail pages (built by scripts/build.py; keep slug() in sync with build.py) ---------- */
