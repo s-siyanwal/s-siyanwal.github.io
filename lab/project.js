@@ -9,7 +9,7 @@ import { figuresFor } from "../js/figures.js";
 const MODES = { tensor: 1, nmr: 2, image: 3, vqls: 3, weather: 4, qkd: 5 };
 /* Threads that have an interactive abstract in lab/abstracts/<id>.js. Other threads hide that section (and never
    request a module that does not exist), so a new project needs only its content.json entry. */
-const ABSTRACTS = new Set(["vqc-fpga", "qir-qnn", "qkd-testbeds", "qcrypto-circuits", "nmr-entanglement", "vqls-forecasting", "tensnet"]);
+const ABSTRACTS = new Set(["vqc-fpga", "qir-qnn", "qkd-testbeds", "qcrypto-circuits", "nmr-entanglement", "vqls-forecasting", "tensnet", "bitter-solenoid", "cpinn", "worm-like-spin-chain", "ebl-sexual-antagonism"]);
 const numeric = (v) => /^\d+$/.test(String(v).trim());
 const root = document.documentElement;
 

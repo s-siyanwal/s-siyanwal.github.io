@@ -217,6 +217,76 @@ function tensor() {
     arrow(560, 230, 560, 132) + `<text class="fg-s" x="552" y="186" text-anchor="end">next step</text>`;
 }
 
+/* Bitter solenoid (from the write-up's Approach): a side-on cross-section of the plate stack (current around the bore,
+   water through axial holes, field along the axis) and the five coupled models that the optimiser works on. No numbers. */
+function magnet() {
+  const cols = [[40, 96], [228, 284]], hole = (x, y) => `<circle class="fg-faint" cx="${x}" cy="${y}" r="3"/>`;
+  const plates = cols.map(([a, b]) => {
+    const w = b - a;
+    return Array.from({ length: 9 }, (_, i) => `<rect class="fg-box" x="${a}" y="${44 + i * 28}" width="${w}" height="24" rx="2"/>`).join("") +
+      Array.from({ length: 9 }, (_, i) => hole(a + w / 3, 56 + i * 28) + hole(a + 2 * w / 3, 56 + i * 28)).join("");
+  }).join("");
+  const dots = [[68, "×"], [256, "•"]].map(([x, c]) => `<text class="fg-hue" style="fill:var(--th);stroke:none;font-size:22px" x="${x}" y="30" text-anchor="middle">${c === "×" ? "⊗" : "⊙"}</text>`).join("");
+  const water = arrow(46, 316, 46, 296, "fg-hue") + arrow(90, 316, 90, 296, "fg-hue");
+  const names = ["field", "electrical", "thermal", "hydraulic", "mechanical"], subs = ["Biot–Savart", "plate resistance", "Joule heat", "coolant in axial holes", "Lorentz force"];
+  const stack = names.map((n, i) => box(360, 16 + i * 54, 256, 40, [`${n}: ${subs[i]}`], "fg-box") +
+    (i < names.length - 1 ? arrow(488, 56 + i * 54, 488, 70 + i * 54) : "")).join("");
+  return `<line class="fg-faint" stroke-dasharray="5 5" x1="162" y1="30" x2="162" y2="300"/>` + plates + dots +
+    arrow(162, 210, 162, 70, "fg-hue") + `<text class="fg-s" x="170" y="140">B₀</text>` +
+    `<text class="fg-s" x="162" y="330" text-anchor="middle">bore</text>` + water +
+    `<text class="fg-s" x="68" y="338" text-anchor="middle">water</text>` +
+    `<text class="fg-s" x="162" y="20" text-anchor="middle" style="font-size:12px">current around the bore</text>` + stack +
+    box(360, 290, 256, 52, ["optimiser: differential evolution", "then SLSQP, within the limits"], "fg-hbox") + arrow(488, 286, 488, 292);
+}
+
+/* Generic physics-informed pulse design (not the project's own architecture): a network proposes a pulse, the physics
+   equation of a driven spin gives a residual, and the loss compares the outcome with a target; weights are updated. */
+function pinn() {
+  return box(24, 40, 150, 56, ["neural network", "weights w"], "fg-hbox") +
+    box(24, 150, 150, 56, ["pulse u(t)", "amplitude, phase"]) + arrow(99, 96, 99, 150) +
+    box(236, 150, 180, 56, ["driven-spin equation", "dM/dt = ω(u) × M"], "fg-hbox") + arrow(174, 178, 236, 178) +
+    box(236, 40, 180, 56, ["residual of the", "physics equation"]) + arrow(326, 150, 326, 96) +
+    box(478, 40, 138, 56, ["loss"], "fg-box") + arrow(416, 68, 478, 68) +
+    box(478, 150, 138, 56, ["target state", "or gate"]) + arrow(547, 150, 547, 96) +
+    arrow(547, 40, 547, 24, "fg-faint") +
+    `<path class="fg-faint" d="M547 24 H99 V32"/>` + arrow(99, 30, 99, 40) +
+    `<text class="fg-s" x="323" y="18" text-anchor="middle">gradient step: update w</text>` +
+    box(24, 262, 592, 56, ["The network is trained to satisfy the physics, not only to fit data."], "fg-box");
+}
+
+/* Worm-like chain as a spin chain (textbook): segments with unit tangents; neighbours prefer to align (coupling J). */
+function chain() {
+  const n = 9, seg = 56, x0 = 40, pts = [[x0, 168]];
+  const ang = Array.from({ length: n }, (_, i) => -0.5 * Math.sin(i * 0.55 + 0.4) - 0.1 * i + 0.25);
+  ang.forEach((a) => { const [x, y] = pts[pts.length - 1]; pts.push([x + seg * Math.cos(a) * 0.95, y + seg * Math.sin(a) * 0.95]); });
+  const line = `<path class="fg-hue" d="M${pts.map((p) => p.map((v) => v.toFixed(1)).join(" ")).join("L")}"/>`;
+  const tang = ang.map((a, i) => { const [x, y] = pts[i]; const mx = x + 0.95 * seg * Math.cos(a) / 2, my = y + 0.95 * seg * Math.sin(a) / 2;
+    return arrow(mx - 12 * Math.cos(a), my - 12 * Math.sin(a) - 26, mx + 12 * Math.cos(a), my + 12 * Math.sin(a) - 26, "fg-ln"); }).join("");
+  const spins = ang.map((a, i) => { const cx = 62 + i * 64, cy = 280;
+    return `<circle class="fg-fill" cx="${cx}" cy="${cy}" r="3"/>` + arrow(cx - 16 * Math.cos(a), cy - 16 * Math.sin(a), cx + 16 * Math.cos(a), cy + 16 * Math.sin(a), "fg-ln") +
+      (i < n - 1 ? `<line class="fg-faint" stroke-dasharray="3 3" x1="${cx + 20}" y1="${cy}" x2="${cx + 44}" y2="${cy}"/>` : ""); }).join("");
+  return `<text class="fg-s" x="24" y="196">polymer: bending costs energy</text>` + line + tang +
+    arrow(440, 192, 440, 228, "fg-faint") + `<text class="fg-s" x="452" y="216">same maths</text>` + spins +
+    `<text class="fg-s" x="24" y="250">unit tangent of each segment = a spin</text>` +
+    `<text class="fg-t" x="320" y="340" text-anchor="middle">E = −J Σ tᵢ · tᵢ₊₁ (neighbours prefer to align)</text>`;
+}
+
+/* Sexual antagonism (from the README): opposite selection in the two sexes keeps a polymorphism; the deterministic
+   recursions and the individual-based simulation share only conditions, then statistical tests compare them. */
+function evo() {
+  return box(16, 24, 140, 48, ["males favour A1", "(advantage a)"]) + box(168, 24, 148, 48, ["females favour A2", "(advantage b)"]) +
+    arrow(88, 72, 150, 118) + arrow(236, 72, 174, 118) +
+    `<line class="fg-ln" x1="40" y1="150" x2="284" y2="150"/><text class="fg-s" x="40" y="176">A2 only</text><text class="fg-s" x="284" y="176" text-anchor="end">A1 only</text>` +
+    `<circle class="fg-hbox" cx="162" cy="150" r="9"/><text class="fg-s" x="162" y="130" text-anchor="middle">balance p*</text>` +
+    `<text class="fg-s" x="162" y="196" text-anchor="middle">allele frequency p</text>` +
+    box(340, 16, 276, 40, "shared: viability table, r, N, start") +
+    box(340, 86, 276, 48, ["deterministic recursions", "(the papers' maths)"], "fg-hbox") +
+    box(340, 154, 276, 48, ["individual-based simulation", "(never imports the maths)"], "fg-hbox") +
+    arrow(478, 56, 478, 86) + `<path class="fg-faint" d="M616 36H630V178"/>` + arrow(630, 178, 618, 178) +
+    arrow(478, 202, 478, 262) + `<path class="fg-faint" d="M340 110H326V286"/>` + arrow(326, 286, 338, 286) +
+    box(340, 262, 276, 48, ["statistical tests:", "does the simulation agree?"]);
+}
+
 const FIGS = {
   nmr: [nmr, "Schematic. The SLOCC classes of three-qubit pure states that the ANN distinguishes, and the reduction from 128 real features to 18 canonical-form inputs, ranked by ANOVA."],
   weather: [weather, "Schematic. Illustrative temperature series with a classical baseline and a variational-circuit forecast; not data from the paper."],
@@ -225,6 +295,10 @@ const FIGS = {
   qkd: [qkd, "Schematic. Protocol layouts for DPS, COW and twin-field QKD studied at TCG CREST."],
   crypto: [crypto, "Schematic. Grover key search on the scaled-down cipher: the key register starts in uniform superposition (H); the oracle encrypts the known plaintext P under each candidate key k with the cipher circuit (including its Galois-field S-box), marks the key whose output equals the known ciphertext C, and uncomputes; diffusion amplifies the marked key, and after about √N rounds a measurement returns it. The bars are illustrative, not data."],
   vqls: [vqls, "Schematic. A Hankel-like trajectory matrix built from daily closing prices is decomposed into a Pauli basis. Quantum circuits (outlined in colour) prepare the ansatz state and evaluate the cost with Hadamard tests; COBYLA, a classical optimiser, updates the parameter. A SWAP test of the solution state against recent market data gives the next-day forecast. The price line is illustrative, not data."],
+  magnet: [magnet, "Schematic. Left: a side-on cross-section of a Bitter solenoid. Current runs around the bore through stacked copper plates (⊗ into the page, ⊙ out of it), water is pumped through axial holes, and the field B₀ points along the axis. Right: the five coupled models of the simulator, and the optimiser that works on them. No values are shown."],
+  pinn: [pinn, "Schematic. A generic physics-informed approach to pulse design, drawn for intuition rather than as this project's architecture: a network proposes an RF pulse, the equation for a driven spin turns it into a residual, and the loss combines that residual with the distance to a target state or gate."],
+  chain: [chain, "Schematic. A worm-like (Kratky–Porod) chain cut into segments is the same mathematical object as a row of spins whose neighbours prefer to align. The curve and the arrows are illustrative; this is textbook background, not data from the project."],
+  evo: [evo, "Schematic. When an allele is favoured in males and its alternative in females, the opposing pushes can balance at an intermediate frequency p*. The project solves each published model twice, as deterministic recursions and as a simulation of individuals that never imports the maths, then tests statistically whether they agree."],
   tensor: [tensor, "Schematic. A velocity field on a grid (here around a cylinder) is compressed into a matrix product state by SVD truncation to bond dimension D ≤ D_max. Each pressure-correction step applies operators as MPOs, solves the pressure Poisson equation with two-site DMRG, and gives the corrected velocity for the next step; obstacles enter as MPS built by cross-approximation."],
 };
 
@@ -236,6 +310,10 @@ const BY_PROJECT = {
   "tensnet": ["tensor"],
   "vqls-forecasting": ["vqls"],
   "qcrypto-circuits": ["crypto"],
+  "bitter-solenoid": ["magnet"],
+  "cpinn": ["pinn"],
+  "worm-like-spin-chain": ["chain"],
+  "ebl-sexual-antagonism": ["evo"],
 };
 
 export function figuresFor(projectId) {
