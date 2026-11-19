@@ -953,26 +953,12 @@
     {
       "id": "cpinn",
       "name": "CPINN",
-      "blurb": "2021 project in Prof. Kavita Dorai's NMR Quantum Computing Group, IISER Mohali.",
+      "blurb": "2021 project on CPINNs for NMR quantum pulse design, in Prof. Kavita Dorai's NMR Quantum Computing Group, IISER Mohali.",
       "period": "2021",
-      "tags": [],
-      "audience": "academic",
-      "links": [],
-      "featured": false,
-      "sections": [
-        {
-          "h": "Context",
-          "p": "A 2021 project in the NMR Quantum Computing Group at IISER Mohali, led by Prof. Kavita Dorai."
-        }
-      ]
-    },
-    {
-      "id": "worm-like-spin-chain",
-      "name": "Worm-like Spin Chain",
-      "blurb": "2020 project on a worm-like spin chain with Dr. Abhishek Chaudhuri.",
-      "period": "2020",
       "tags": [
-        "Spin chains"
+        "NMR",
+        "Pulse design",
+        "Neural networks"
       ],
       "audience": "academic",
       "links": [],
@@ -980,9 +966,47 @@
       "sections": [
         {
           "h": "Context",
-          "p": "A 2020 project on a worm-like spin chain, with Dr. Abhishek Chaudhuri."
+          "p": "A 2021 project in the NMR Quantum Computing Group at IISER Mohali, led by Prof. Kavita Dorai. The project studies CPINNs for NMR quantum pulse design."
+        },
+        {
+          "h": "Status",
+          "p": "The code and report are still being prepared for publication. No results are shown here until they are public."
         }
       ]
+    },
+    {
+      "id": "worm-like-spin-chain",
+      "name": "Worm-like Spin Chain",
+      "blurb": "2020 summer project on worm-like spin chain models with Dr. Abhishek Chaudhuri.",
+      "period": "2020",
+      "tags": [
+        "Spin chains",
+        "Polymer physics",
+        "Statistical mechanics"
+      ],
+      "audience": "academic",
+      "links": [
+        {
+          "label": "Repository (README only; code to follow)",
+          "url": "https://github.com/s-siyanwal/spin-chain-models-simulator"
+        }
+      ],
+      "featured": false,
+      "sections": [
+        {
+          "h": "Context",
+          "p": "A summer project in 2020 on worm-like spin chain models, with Dr. Abhishek Chaudhuri."
+        },
+        {
+          "h": "Background",
+          "p": "This is textbook background, not a description of the project's code. The worm-like chain (Kratky–Porod) model describes a semiflexible polymer as an inextensible curve whose energy penalises bending. Cut into short segments, it takes the form of a one-dimensional classical ferromagnetic spin chain: the unit tangents of the segments act as spins, and a force pulling on the chain ends acts like an external magnetic field."
+        },
+        {
+          "h": "Status",
+          "p": "The public repository currently holds a README and a licence. The original 2020 code and results are still to be added, so no results are reported here."
+        }
+      ],
+      "abstract": "A 2020 summer project with Dr. Abhishek Chaudhuri on worm-like spin chain models: semiflexible polymers described as classical spin chains."
     },
     {
       "id": "ebl-sexual-antagonism",
@@ -1279,9 +1303,9 @@
       "project": "qcrypto-circuits"
     },
     {
-      "topic": "Quantum and classical optimisation for urban heat island mitigation",
+      "topic": "Quantum Optimization for Urban Heat Island",
       "kind": "Manuscript",
-      "detail": "With Vikramaditya Bisani; collaboration since March 2025"
+      "detail": "With Vikramaditya Bisani, since March 2025"
     }
   ]
 }
