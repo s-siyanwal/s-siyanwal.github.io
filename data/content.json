@@ -321,7 +321,35 @@
           "p": "A hybrid VQC forecaster with low-latency FPGA inference for edge use. Published at IEEE TQCEBT 2026."
         }
       ],
-      "paper": "Hybrid variational quantum circuits based temperature forecasting with low-latency FPGA inference"
+      "paper": "Hybrid variational quantum circuits based temperature forecasting with low-latency FPGA inference",
+      "layman": [
+        "Weather forecasting means predicting the future from today's measurements. This project asked whether a small quantum circuit could learn temperature patterns 24 days ahead from daily reanalysis records (NCMRWF data), and whether the trained model could answer quickly enough to run on a small device at the edge.",
+        "A variational quantum circuit works like a tunable recipe. Weather measurements are written into the rotation angles of 7 qubits, a fixed pattern of entangling gates mixes them, and 50 adjustable settings are tuned during training until the circuit's measured outputs match the recorded temperatures.",
+        "Once trained, the recipe is frozen. The same calculation was then written as a custom circuit for an FPGA, a chip whose wiring can be programmed for one job, so that forecasts come back with low delay."
+      ],
+      "layman_status": "draft",
+      "pipeline": [
+        {
+          "stage": "NCMRWF reanalysis data",
+          "by": ""
+        },
+        {
+          "stage": "Angle encoding",
+          "by": ""
+        },
+        {
+          "stage": "VQC: 7 qubits, 50 parameters",
+          "by": ""
+        },
+        {
+          "stage": "Training in PennyLane",
+          "by": ""
+        },
+        {
+          "stage": "FPGA kernel on Alveo U55C",
+          "by": ""
+        }
+      ]
     },
     {
       "id": "qir-qnn",
@@ -370,7 +398,35 @@
           "p": "Published in The Journal of Supercomputing 82(8):495 (2026)."
         }
       ],
-      "paper": "Quantum image representation-based quantum neural networks for binary classification"
+      "paper": "Quantum image representation-based quantum neural networks for binary classification",
+      "layman": [
+        "A quantum computer cannot look at a picture directly: every pixel first has to be written into a quantum state, and there are many ways to do that. This study compared four of these quantum image encodings (NASS, QBIR, FTQR and FRQCI) to see which ones let a quantum neural network learn well.",
+        "Each encoding was placed in the same quantum neural network and trained on the same small images, from 2×2 pixels upwards, many times over with different random starting points. Besides accuracy, the study measured how large the resulting circuits are and whether training gets stuck.",
+        "The headline is that the encoding matters a great deal. Among the fully quantum models, QBIR gave the best balance of accuracy, noise robustness and circuit size, while FTQR and FRQCI stayed close to chance, a sign of barren plateaus, where the training signal fades away."
+      ],
+      "layman_status": "draft",
+      "pipeline": [
+        {
+          "stage": "Study design",
+          "by": "me"
+        },
+        {
+          "stage": "Four encodings in one QNN framework",
+          "by": "me"
+        },
+        {
+          "stage": "Comparative analysis",
+          "by": "me"
+        },
+        {
+          "stage": "Visualisation",
+          "by": "me"
+        },
+        {
+          "stage": "Revision analyses (gradients, comparison, modelling)",
+          "by": "me"
+        }
+      ]
     },
     {
       "id": "qkd-testbeds",
@@ -411,6 +467,30 @@
           "h": "Attack modelling",
           "p": "I modelled intercept-resend and photon-number-splitting attacks and benchmarked resource-state and entanglement generation."
         }
+      ],
+      "layman": [
+        "Quantum key distribution (QKD) lets two parties build a shared secret key from single photons; an eavesdropper who interferes leaves traces that can be detected. Textbook analyses usually assume ideal fibres and detectors.",
+        "This work built simulated testbeds for three QKD protocols (DPS, COW and Twin-Field) in optical-design software, with the losses, noise and imperfections of real photonic channels included.",
+        "On top of the channels, two classic attacks were modelled: intercept-resend, where the attacker measures and re-sends each photon, and photon-number splitting, where the attacker siphons off extra photons from pulses that carry more than one."
+      ],
+      "layman_status": "draft",
+      "pipeline": [
+        {
+          "stage": "DPS, COW and TF protocol simulation",
+          "by": "me"
+        },
+        {
+          "stage": "Channel loss and noise",
+          "by": "me"
+        },
+        {
+          "stage": "Attack modelling",
+          "by": "me"
+        },
+        {
+          "stage": "Resource-state benchmarking",
+          "by": "me"
+        }
       ]
     },
     {
@@ -445,6 +525,30 @@
         {
           "h": "Attack",
           "p": "I implemented a plaintext–ciphertext attack with Grover search and amplitude amplification, demonstrating Grover key search on a scaled-down cipher, which needs O(√N) oracle queries versus O(N) classically."
+        }
+      ],
+      "layman": [
+        "Ciphers such as AES scramble data with a secret key. Grover's quantum search could find that key in roughly the square root of the number of guesses a classical brute-force search needs, which is why key lengths matter for a quantum future.",
+        "To make this concrete, this project built the full quantum circuit for a miniature 8-bit version of AES, including the finite-field arithmetic inside its S-box, and ran it with Qiskit and on IBM Quantum hardware.",
+        "It then used Grover search to recover the key from a known plaintext and ciphertext pair on the scaled-down cipher: a hands-on demonstration of the square-root speed-up."
+      ],
+      "layman_status": "draft",
+      "pipeline": [
+        {
+          "stage": "Mini-AES circuits",
+          "by": "me"
+        },
+        {
+          "stage": "Galois-field S-box arithmetic",
+          "by": "me"
+        },
+        {
+          "stage": "Runs on IBM Quantum",
+          "by": "me"
+        },
+        {
+          "stage": "Grover key search",
+          "by": "me"
         }
       ]
     },
@@ -499,7 +603,35 @@
           "p": "Published in Quantum Information Processing 24(3), 74 (2025); preprint arXiv:2409.19739."
         }
       ],
-      "paper": "ANN-enhanced detection of multipartite entanglement in a three-qubit NMR quantum processor"
+      "paper": "ANN-enhanced detection of multipartite entanglement in a three-qubit NMR quantum processor",
+      "layman": [
+        "Entanglement is the quantum link that lets particles share correlations no classical system can. Three qubits can be entangled in different ways, and telling these kinds apart in a real experiment usually means reconstructing the full quantum state, which is costly.",
+        "This study trained a neural network to do the sorting. Given the numbers that describe a three-qubit state, it says whether the state is genuinely entangled across all three qubits, and which of six entanglement classes it belongs to.",
+        "A key step was shrinking the input. A full description has 128 numbers; writing states in a standard (canonical) form leaves 18, and the trained network needs only a handful of those: 4 for the entanglement test and 6 for the classes. Trained on simulated states, it was tested on 30 states prepared on a real NMR quantum processor."
+      ],
+      "layman_status": "draft",
+      "pipeline": [
+        {
+          "stage": "Sample and NMR gate preparation",
+          "by": "V. Gulati"
+        },
+        {
+          "stage": "NMR experiments and measurement",
+          "by": "V. Gulati"
+        },
+        {
+          "stage": "Data analysis and cleaning",
+          "by": "V. Gulati"
+        },
+        {
+          "stage": "Canonical-form features + ANOVA",
+          "by": "me"
+        },
+        {
+          "stage": "ANN design and encodings",
+          "by": "me"
+        }
+      ]
     },
     {
       "id": "vqls-forecasting",
@@ -538,7 +670,35 @@
           "p": "Published by IEEE, 2026."
         }
       ],
-      "paper": "Variational Quantum Linear Solver for Time Series Forecasting: A Practical Implementation on Financial Data"
+      "paper": "Variational Quantum Linear Solver for Time Series Forecasting: A Practical Implementation on Financial Data",
+      "layman": [
+        "Many forecasting methods come down to solving a system of linear equations. The variational quantum linear solver (VQLS) is a near-term quantum algorithm for exactly that, but it has mostly been shown on made-up test problems.",
+        "This project ran VQLS end to end on real data. Daily closing prices of Reliance Industries from January to April 2023 were turned into a small (2 × 2) linear system, solved with quantum circuits on a simulator, and the result was used to forecast the next day's price.",
+        "It is an honest test: at this tiny size there is no quantum advantage, and simple classical methods are just as accurate and much faster. The value is in running the whole workflow and showing exactly where it would have to scale."
+      ],
+      "layman_status": "draft",
+      "pipeline": [
+        {
+          "stage": "Trajectory matrix",
+          "by": ""
+        },
+        {
+          "stage": "Pauli decomposition",
+          "by": ""
+        },
+        {
+          "stage": "Hadamard-test cost",
+          "by": ""
+        },
+        {
+          "stage": "COBYLA optimisation",
+          "by": ""
+        },
+        {
+          "stage": "SWAP-test forecast",
+          "by": ""
+        }
+      ]
     },
     {
       "id": "tensnet",
@@ -685,7 +845,35 @@
         }
       ],
       "paper": "TensNet: Memory-Efficient Tensor Network Methods for 2D Incompressible Flow Simulation",
-      "role": "TensNet was originally developed by N. Khan and S. S. Pandey. I carried out the testing, code troubleshooting, benchmarking and visualisation, and prepared the manuscript."
+      "role": "TensNet was originally developed by N. Khan and S. S. Pandey. I carried out the testing, code troubleshooting, benchmarking and visualisation, and prepared the manuscript.",
+      "layman": [
+        "Simulating how a fluid flows, for example air around a pillar, means storing the velocity at every point of a fine grid, which quickly needs gigabytes of memory.",
+        "TensNet stores those flow fields in a compressed form borrowed from quantum physics: tensor networks, specifically matrix product states. One setting, the bond dimension, controls how much detail is kept; larger means more accurate and more memory.",
+        "In the submitted manuscript, the compressed simulations stay close to a standard full-grid solver while using megabytes instead of gigabytes on the test cases."
+      ],
+      "layman_status": "draft",
+      "pipeline": [
+        {
+          "stage": "Library: MPS/MPO, DMRG",
+          "by": "N. Khan, S. S. Pandey"
+        },
+        {
+          "stage": "Testing and troubleshooting",
+          "by": "me"
+        },
+        {
+          "stage": "Benchmarking",
+          "by": "me"
+        },
+        {
+          "stage": "Visualisation",
+          "by": "me"
+        },
+        {
+          "stage": "Manuscript",
+          "by": "me"
+        }
+      ]
     }
   ],
   "publications": [

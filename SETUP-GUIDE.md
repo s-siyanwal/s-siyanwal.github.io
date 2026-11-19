@@ -172,10 +172,33 @@ Upload photos into the `assets/` folder.
 
 The downloadable CV (`assets/Shivanshu_Siyanwal_CV.pdf`) is **generated from
 `data/content.json` on every deploy**, so it always matches the site: education,
-roles, publications, presentations, awards and skills. To change the CV, edit
-`content.json`; don't upload a PDF over it (the next deploy would replace it).
-The phone number is never printed. The research-interests paragraph at the top
-comes from `profile.research_interests`.
+research experience, publications, posters and talks, awards and skills. The
+deploy typesets it with LaTeX (template: `cv/cv-template.tex`, filled in by
+`scripts/cv_tex.py`) and publishes the `.tex` source next to the PDF. To change
+the CV, edit `content.json`; to change its look, edit the template. Don't upload
+a PDF over it (the next deploy would replace it). The phone number is never printed.
+
+### Lab edition: your photo, links, proofs and galleries
+The lab edition (`/lab/`) reads three extra files. All of them start empty, and
+anything left empty is simply hidden on the site.
+
+| What | Where | How |
+|---|---|---|
+| Hero photo | `assets/img/profile.jpg` | Upload a portrait crop (about 900 × 1100 px). Until it exists, your existing portrait is used. |
+| PDF / code / data / slides buttons on each research thread | `data/links.json` → `artifacts` → the thread's id | Paste a full `https://` link, or put a small PDF in `assets/docs/` and write `assets/docs/name.pdf`. |
+| "Proof" links next to awards on the CV | `data/links.json` → `proofs` → the award title exactly as in `content.json` | Paste the Google Drive share link of the certificate. |
+| Photos and videos on the Path page ("Field notes") | `data/journey.json` → `stages` → the stage | Upload files to `assets/media/`, then list them under `featured` (up to 3 shown) or `gallery`. Each item: `{"type": "image", "src": "assets/media/name.jpg", "alt": "what it shows", "caption": ""}`. |
+| Personal page | `data/journey.json` → `personal` | Write an `intro` and add `sections` with a `title`, `text` and media. |
+| Layman write-ups on research threads | `data/content.json` → `projects` → `layman` | They are drafts written from your papers; read them, edit, then set `layman_status` to `"verified"` to remove the draft note. |
+| Who did which stage ("My role" diagram) | `data/content.json` → `projects` → `pipeline` → `by` | `"me"`, a collaborator's name, or `""` if not yet stated. |
+
+The intro on the lab home page (a point of light spreads as a wave, collapses
+into detector hits, and the hits become your name; about 4.5 seconds) plays once
+per browser session. Add `?intro=1` to the address to see it again, or use
+"Replay intro" in the corner; `?intro=0` skips it. Any click, key or scroll
+fast-forwards it. The "Intro sound" switch next to "Replay intro" turns its one
+soft tone on or off (off by default). Every timing and colour is in
+`intro/config.js`.
 
 ---
 

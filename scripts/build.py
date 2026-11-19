@@ -47,7 +47,7 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "_site"
 DEFAULT_SITE_URL = "https://s-siyanwal.github.io"
 
-COPY = ["index.html", "project.html", "publications.html", "about.html", "notes.html", "lab",
+COPY = ["index.html", "project.html", "publications.html", "about.html", "notes.html", "lab", "intro",
         "style.css", ".nojekyll", "js", "data", "assets"]
 PAGES = ["index.html", "publications.html", "about.html", "notes.html"]
 
@@ -656,13 +656,18 @@ def assemble(data, site):
     return written
 
 
-LAB_PAGES = ["lab/index.html", "lab/about.html", "lab/path.html", "lab/papers.html"]
+LAB_PAGES = ["lab/index.html", "lab/about.html", "lab/path.html", "lab/papers.html", "lab/cv.html", "lab/personal.html"]
+PROFILE_PHOTO = "assets/img/profile.jpg"   # the lab hero photo; until it exists the existing portrait is used
 
 
 def build_lab(data):
     """The lab edition (an experimental parallel design, noindex): its fixed pages, plus one breakdown page per
     project, lab/project-<id>.html, made from the lab/project.html template. All are prerendered like the rest."""
     written = list(LAB_PAGES)
+    if (ROOT / PROFILE_PHOTO).exists():
+        home = OUT / "lab" / "index.html"
+        home.write_text(home.read_text(encoding="utf-8").replace('src="../assets/portrait-440.webp" width="440" height="550"',
+                                                                 f'src="../{PROFILE_PHOTO}"', 1), encoding="utf-8")
     tmpl = (ROOT / "lab" / "project.html").read_text(encoding="utf-8")
     assert tmpl.count('data-project=""') == 1, "lab/project.html needs one data-project=\"\" placeholder"
     for pr in data.get("projects", []):
@@ -869,7 +874,24 @@ def main():
     site = (os.environ.get("SITE_URL") or DEFAULT_SITE_URL).rstrip("/")
     pages = assemble(data, site)
     prerender(pages, og_card(data), cv_html(data))
+    latex_cv(data)
     print(f"Built {len(pages)} pages into {OUT.relative_to(ROOT)}/ for {site}")
+
+
+def latex_cv(data):
+    """The academic CV from LaTeX (scripts/cv_tex.py + cv/cv-template.tex). The .tex source is always published next
+    to the PDF; when pdflatex is installed (CI installs it) the LaTeX PDF replaces the browser-printed fallback."""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import cv_tex
+    lp = ROOT / "data" / "links.json"
+    links = json.loads(lp.read_text(encoding="utf-8")) if lp.exists() else {}
+    src = cv_tex.generate(data, links)
+    (OUT / "assets").mkdir(exist_ok=True)
+    (OUT / "assets" / "Shivanshu_Siyanwal_CV.tex").write_text(src, encoding="utf-8")
+    if cv_tex.compile_pdf(src, OUT / "assets" / CV_NAME):
+        print("CV: compiled from LaTeX")
+    else:
+        print("CV: pdflatex not found; kept the browser-printed PDF")
 
 
 if __name__ == "__main__":

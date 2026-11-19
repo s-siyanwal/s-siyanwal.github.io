@@ -11,7 +11,10 @@
 <link rel="preload" href="../assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href="../assets/fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin/>
 <script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}try{if(!window.__PRERENDER__&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("lab-anim")}catch(e){}</script>
+<script>try{if(!window.__PRERENDER__&&!/[?&]intro=0(&|$)/.test(location.search)&&(/[?&]intro=1(&|$)/.test(location.search)||!sessionStorage.getItem("intro-played"))){document.documentElement.classList.add("intro-on");if("scrollRestoration" in history)history.scrollRestoration="manual";setTimeout(function(){if(!window.__introStarted)document.documentElement.classList.remove("intro-on")},4000)}}catch(e){}</script>
 <link rel="stylesheet" href="lab.css"/>
+<link rel="stylesheet" href="../intro/intro.css"/>
+<script type="module" src="../intro/bootstrap.js"></script>
 <script src="vendor/gsap.min.js" defer></script>
 <script src="vendor/ScrollTrigger.min.js" defer></script>
 <script src="vendor/lenis.min.js" defer></script>
@@ -23,6 +26,7 @@
 <header class="bar" id="bar"></header>
 <main id="main">
   <section class="hero" id="top" aria-labelledby="h-name">
+    <figure class="hero-photo"><img id="h-photo" src="../assets/portrait-440.webp" width="440" height="550" alt="Portrait of Shivanshu Siyanwal" decoding="async" fetchpriority="low"/></figure>
     <p class="micro kicker" id="h-kicker"></p>
     <h1 class="hero-name" id="h-name"></h1>
     <p class="hero-plus" id="h-title"></p>
@@ -44,25 +48,31 @@
     </div>
     <div class="hz"><ol class="hz-track" id="work-track"></ol></div>
   </section>
+  <section class="block play" id="play" aria-labelledby="play-h">
+    <p class="micro">03 · Play</p>
+    <h2 id="play-h" data-split>A qubit you can <em>steer</em></h2>
+    <p class="play-lede">Every one-qubit state is a point on the Bloch sphere, and every gate is a rotation of it. Apply gates and watch the state move; drag the sphere to look around.</p>
+    <div class="play-host" id="play-host"><p class="ab-fallback">The interactive Bloch sphere needs JavaScript and WebGL.</p></div>
+  </section>
   <section class="block" id="glance" aria-labelledby="glance-h">
-    <p class="micro">03 · At a glance</p>
+    <p class="micro">04 · At a glance</p>
     <h2 id="glance-h" data-split>In <em>numbers</em></h2>
     <ul class="nums" id="nums"></ul>
   </section>
   <section class="block" id="path-teaser" aria-labelledby="path-h">
-    <p class="micro">04 · Path</p>
+    <p class="micro">05 · Path</p>
     <h2 id="path-h" data-split>From physics to <em>hardware</em></h2>
     <ol class="mini-path" id="mini-path"></ol>
     <p class="more"><a href="path.html">The full path <span aria-hidden="true">→</span></a></p>
   </section>
   <section class="block" id="papers-teaser" aria-labelledby="pap-h">
-    <p class="micro">05 · Papers</p>
+    <p class="micro">06 · Papers</p>
     <h2 id="pap-h" data-split>Selected <em>papers</em></h2>
     <ol class="cites" id="cites"></ol>
     <p class="more"><a href="papers.html">All papers, posters and talks <span aria-hidden="true">→</span></a></p>
   </section>
   <section class="block contact" id="contact" aria-labelledby="contact-h">
-    <p class="micro">06 · Contact</p>
+    <p class="micro">07 · Contact</p>
     <h2 id="contact-h" data-split>Say <em>hello</em></h2>
     <p class="avail" id="avail"></p>
     <ul class="links" id="links"></ul>

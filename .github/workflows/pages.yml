@@ -32,6 +32,11 @@ jobs:
           python -m pip install --quiet playwright
           python -m playwright install --with-deps chromium
 
+      - name: Install TeX for the LaTeX CV
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends texlive-latex-base texlive-latex-recommended texlive-fonts-recommended lmodern
+
       - name: Resolve site URL
         id: pages
         if: github.event_name != 'pull_request'
