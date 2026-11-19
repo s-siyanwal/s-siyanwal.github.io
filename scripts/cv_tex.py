@@ -24,7 +24,7 @@ TEMPLATE = ROOT / "cv" / "cv-template.tex"
 ME = "S. Siyanwal"
 
 PAPER_GROUPS = [("journal", "Journal articles", "J"), ("conference", "Conference papers", "C"),
-                ("manuscript", "Manuscripts under review", "M"), ("preprint", "Preprints", "P"), ("thesis", "Thesis", "T")]
+                ("manuscript", "Manuscripts under review", "M"), ("preprint", "Preprints", "P"), ("thesis", "Thesis", "Th")]
 
 _TEX = {"\\": r"\textbackslash{}", "&": r"\&", "%": r"\%", "$": r"\$", "#": r"\#", "_": r"\_",
         "{": r"\{", "}": r"\}", "~": r"\textasciitilde{}", "^": r"\textasciicircum{}"}
@@ -91,15 +91,22 @@ def body(d, proofs):
         if lst:
             out.append(r"\cvsubsection{%s}" % label)
             out += [r"\cvref{%s%d}{%s}" % (pre, i + 1, cite(p)) for i, p in enumerate(lst)]
+    prep = d.get("in_preparation") or []                           # topics only: no title or author list yet
+    if prep:
+        out.append(r"\cvsubsection{Manuscripts in preparation}")
+        out.append(r"\begin{cvitems}" + "".join(r"\item %s.%s" % (tex(m["topic"]), (" " + tex(m["detail"]) + ".") if m.get("detail") else "")
+                                                for m in prep) + r"\end{cvitems}")
     if any(p.get("equal_contribution") for p in pubs):
         out.append(r"\par\vspace{2pt}{\footnotesize $^{*}$Equal contribution.}\par")
     talks = [p for p in pubs if p.get("category") in ("poster", "presentation")]
     if talks:
         out.append(r"\cvsection{Posters and talks}")
-        for i, p in enumerate(talks):
+        count = {"Poster": 0, "Talk": 0}                            # posters [Po1..] and talks [T1..] numbered separately
+        for p in talks:
             kind = "Poster" if p["category"] == "poster" else "Talk"
+            count[kind] += 1
             head = (authors(p.get("authors")) + ". ") if p.get("authors") else ""
-            out.append(r"\cvref{%s%d}{%s%s. %s, \textit{%s}%s.}" % ("Po" if kind == "Poster" else "T", i + 1, head, tex(p["title"]), kind,
+            out.append(r"\cvref{%s%d}{%s%s. %s, \textit{%s}%s.}" % ("Po" if kind == "Poster" else "T", count[kind], head, tex(p["title"]), kind,
                                                                     tex(p.get("venue")), (", " + tex(p["year"])) if p.get("year") else ""))
     out.append(r"\cvsection{Awards and fellowships}")
     for a in d.get("awards", []):

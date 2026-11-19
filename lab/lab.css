@@ -275,7 +275,7 @@ h1 em, h2 em, .foot-big em { color: var(--accent); }
 .pr-metrics .v { display: block; font-family: var(--display); font-size: clamp(2.8rem, 6vw, 4.6rem); line-height: 1; color: var(--th, var(--accent)); }
 .pr-metrics .l { font-family: var(--mono); font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
 .chapter-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-.chapter { display: grid; gap: 1rem 3rem; padding: 2.4rem 0; border-bottom: 1px solid var(--line); }
+.chapter { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem 3rem; padding: 2.4rem 0; border-bottom: 1px solid var(--line); }
 @media (min-width: 900px) {
   .chapter { grid-template-columns: 15rem minmax(0, 1fr); }
   .ch-side { position: sticky; top: calc(var(--bar-h) + 1.5rem); align-self: start; }

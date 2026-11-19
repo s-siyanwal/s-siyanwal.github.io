@@ -1,4 +1,4 @@
-import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, CATEGORIES, groupOf, chip, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE , paperHref, paperMore, readMore } from "./site.js";
+import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, CATEGORIES, groupOf, chip, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE , paperHref, paperMore, readMore, projectHref } from "./site.js";
 
 (async function () {
   let data;
@@ -35,7 +35,7 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, CATEGORIE
           <div class="ids">${idLinks(p)}${groupOf(p) === "presentation" ? "" : `<button type="button" class="bib-btn" data-i="${i}" aria-label="Copy BibTeX for ${esc(p.title)}">Copy BibTeX</button><span class="bib-status" role="status"></span>`}</div>
         </li>`;
       }).join("")}</ol>
-    </section>`).join("") + (pubs.some((p) => p.equal_contribution) ? EQ_FOOTNOTE : "");
+    </section>`).join("") + prepHtml(data) + (pubs.some((p) => p.equal_contribution) ? EQ_FOOTNOTE : "");
 
   $("pub-list").addEventListener("click", async (e) => {
     const btn = e.target.closest(".bib-btn");
@@ -49,6 +49,26 @@ import { $, esc, loadData, fail, mountChrome, mountFooter, initReveal, CATEGORIE
 
   initReveal();
 })();
+
+/* Manuscripts in preparation: a topic, a short detail line and the related project, if any. No title or author list
+   is shown until the manuscript has one, and there is no BibTeX. */
+function prepHtml(data) {
+  const prep = data.in_preparation || [];
+  if (!prep.length) return "";
+  const projects = data.projects || [];
+  return `<section class="pub-group" aria-labelledby="g-prep">
+    <h2 id="g-prep">In preparation</h2>
+    <ol class="cites">${prep.map((m) => {
+      const pr = m.project && projects.find((x) => x.id === m.project);
+      return `<li class="cite" data-reveal>
+        <div class="cite-head">${chip("manuscript")}<span class="cite-year">In preparation</span></div>
+        <h3 class="cite-title">${esc(m.topic)}</h3>
+        ${m.detail ? `<p class="cite-venue">${esc(m.detail)}</p>` : ""}
+        ${pr ? `<p class="cite-note"><a href="${projectHref(pr.id)}">Project: ${esc(pr.name)} →</a></p>` : ""}
+      </li>`;
+    }).join("")}</ol>
+  </section>`;
+}
 
 /* BibTeX built only from stored fields; nothing is guessed. */
 function bibtex(p) {

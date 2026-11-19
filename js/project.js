@@ -59,8 +59,15 @@ import { figuresFor } from "./figures.js";
       ${(pr.sections || []).map((s) => `
         <section class="prose-sec" data-reveal>
           <h2>${esc(s.h)}</h2>
-          <p>${esc(s.p)}</p>
+          ${[].concat(s.p || []).map((t) => `<p>${esc(t)}</p>`).join("")}
+          ${[s.table, ...(s.tables || [])].map(table).join("")}
         </section>`).join("")}
+
+      ${(pr.sections || []).some((s) => /result/i.test(s.h || "")) ? "" : `
+        <section class="prose-sec" data-reveal>
+          <h2>Results</h2>
+          <p class="coming-soon">Results write-up coming soon.</p><!-- TODO(Shivanshu): results for ${esc(pr.id)} (content.json → projects → sections) -->
+        </section>`}
 
       <div class="tag-row" data-reveal>${tags(pr.tags || [])}</div>
 
@@ -72,3 +79,12 @@ import { figuresFor } from "./figures.js";
 
   initReveal();
 })();
+
+/* A results table stored with a section ({caption, head, rows}); it scrolls sideways on narrow screens. */
+function table(t) {
+  if (!t || !t.rows) return "";
+  return `<div class="tbl" tabindex="0" role="group" aria-label="${esc(t.caption || "Table")} (scrolls sideways on small screens)"><table>
+    ${t.caption ? `<caption>${esc(t.caption)}</caption>` : ""}
+    ${t.head ? `<thead><tr>${t.head.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead>` : ""}
+    <tbody>${t.rows.map((r) => `<tr>${r.map((c, i) => (i ? `<td>${esc(c)}</td>` : `<th scope="row">${esc(c)}</th>`)).join("")}</tr>`).join("")}</tbody></table></div>`;
+}

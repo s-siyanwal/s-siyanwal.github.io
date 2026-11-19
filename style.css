@@ -673,6 +673,15 @@ html.tts .listen-slot { display: block; height: 34px; margin: 0 0 1.2rem; }
 .fig-data caption { text-align: left; color: var(--ink-soft); padding-bottom: .3rem; }
 .fig-data th, .fig-data td { padding: .25rem .9rem .25rem 0; border-bottom: 1px solid var(--rule); text-align: right; }
 .fig-data th[scope="row"], .fig-data thead th:first-child { text-align: left; }
+.prose-sec .coming-soon { color: var(--ink-soft); font-style: italic; }
+/* Results tables inside project write-ups: thin rules, tabular figures, sideways scroll on narrow screens. */
+.prose-sec .tbl { overflow-x: auto; margin: 1rem 0 1.4rem; }
+.prose-sec .tbl:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.prose-sec .tbl table { border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: .94rem; min-width: 24rem; }
+.prose-sec .tbl caption { text-align: left; color: var(--ink-soft); padding-bottom: .4rem; font-family: var(--mono); font-size: .76rem; }
+.prose-sec .tbl th, .prose-sec .tbl td { padding: .3rem 1rem .3rem 0; border-bottom: 1px solid var(--rule); text-align: right; }
+.prose-sec .tbl thead th { border-bottom: 1px solid var(--rule-strong); }
+.prose-sec .tbl th[scope="row"], .prose-sec .tbl thead th:first-child { text-align: left; font-weight: 400; }
 .fg-t { font-family: var(--text); font-size: 17px; fill: var(--ink); }
 .fg-s { font-family: var(--mono); font-size: 14px; fill: var(--ink-soft); }
 .fg-ln { stroke: var(--ink); stroke-width: 1.6; fill: none; }

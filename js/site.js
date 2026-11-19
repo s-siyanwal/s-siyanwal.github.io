@@ -229,13 +229,16 @@ export const EQ_FOOTNOTE = '<p class="footnote"><span class="eq">*</span> Equal 
 
 /* Research threads are a display grouping of projects, not content. */
 /* Status line for a project: from the publication its `paper` field names. */
+/* Status line for a project: from its linked paper, else the project's own "status" (e.g. "Manuscript in
+   preparation"), then its "period" (e.g. "2020", "Aug 2023 – Oct 2024") when one is given. */
 export function projectStatus(pr, pubs) {
   const pub = pr.paper && (pubs || []).find((x) => x.title === pr.paper);
-  if (!pub) return "Research project (unpublished)";
-  if (/submitted|under review/i.test(pub.status || "")) return `Submitted · ${pub.venue || ""}`.replace(/ · $/, "");
-  if (pub.category === "manuscript" || /manuscript/i.test(pub.status || "")) return "Manuscript in preparation";
+  const when = pr.period ? ` · ${pr.period}` : "";
+  if (!pub) return `${pr.status || "Research project (unpublished)"}${when}`;
+  if (/submitted|under review/i.test(pub.status || "")) return `Submitted · ${pub.venue || ""}`.replace(/ · $/, "") + when;
+  if (pub.category === "manuscript" || /manuscript/i.test(pub.status || "")) return `Manuscript in preparation${when}`;
   const venue = pub.venue || "", year = String(pub.year || "");
-  return `Published · ${venue}${year && !venue.endsWith(year) ? ` ${year}` : ""}`;
+  return `Published · ${venue}${year && !venue.endsWith(year) ? ` ${year}` : ""}${when}`;
 }
 
 export const THREADS = {
@@ -246,6 +249,10 @@ export const THREADS = {
   "qcrypto-circuits": ["qkd", "Quantum cryptography"],
   "vqls-forecasting": ["vqls", "VQLS forecasting"],
   "tensnet": ["tensor", "Tensor networks"],
+  "bitter-solenoid": ["", "Magnet design · fMRI"],
+  "cpinn": ["", "NMR group · 2021"],
+  "worm-like-spin-chain": ["", "Spin chains"],
+  "ebl-sexual-antagonism": ["", "Evolutionary biology"],
 };
 
 /* ---------- Detail pages (built by scripts/build.py; keep slug() in sync with build.py) ---------- */

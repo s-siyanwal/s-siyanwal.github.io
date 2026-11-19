@@ -91,7 +91,7 @@ function replayControl(active) {
     if (active === "work" && window.__intro && typeof window.__intro.replay === "function") { e.preventDefault(); window.__intro.replay(); }
   });
   box.append(a);
-  if (active === "work") {
+  if (active === "work" && document.getElementById("h-name")) {   // the home page only (project pages share "work")
     const b = document.createElement("button");
     b.type = "button"; b.className = "replay-intro intro-sound";
     const get = () => { try { return localStorage.getItem("intro-sound") === "on"; } catch (e) { return false; } };

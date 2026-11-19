@@ -17,8 +17,12 @@ boot({
   render(d) {
     const pubs = [...(d.publications || [])].sort((a, b) => String(b.year).localeCompare(String(a.year)));
     const groups = GROUPS.map(([k, label, f]) => [k, label, pubs.filter(f)]).filter(([, , list]) => list.length);
-    $("pp-lede").textContent = `${pubs.length} entries: ${groups.map(([k, label, list]) => plural(list.length, label.toLowerCase().replace(/s$/, ""), label.toLowerCase())).join(", ")}.`;
-    $("filters").innerHTML = [["all", "All"], ...groups.map(([k, label]) => [k, label])].map(([k, label], i) =>
+    // Manuscripts in preparation: topics only (no title or author list yet), kept apart from the bibliography.
+    const prep = d.in_preparation || [];
+    const nameOf = (id) => ((d.projects || []).find((x) => x.id === id) || {}).name || "";
+    $("pp-lede").textContent = `${pubs.length} entries: ${groups.map(([k, label, list]) => plural(list.length, label.toLowerCase().replace(/s$/, ""), label.toLowerCase())).join(", ")}.`
+      + (prep.length ? ` ${prep.length} more in preparation.` : "");
+    $("filters").innerHTML = [["all", "All"], ...groups.map(([k, label]) => [k, label]), ...(prep.length ? [["prep", "In preparation"]] : [])].map(([k, label], i) =>
       `<button type="button" class="chip" data-f="${k}" aria-pressed="${i === 0}">${esc(label)}</button>`).join("");
     $("pub-groups").innerHTML = groups.map(([k, label, list]) => `<section class="block pub-group" id="g-${k}" aria-labelledby="g-${k}-h" data-g="${k}">
       <div class="pub-head"><h2 id="g-${k}-h" data-split>${esc(label)} <span class="pub-n">${list.length}</span></h2>
@@ -30,7 +34,15 @@ boot({
         <p class="cite-v">${venueHtml(p)}</p>
         ${idLinks(p) ? `<p class="ids">${idLinks(p)}</p>` : ""}
         ${p.abstract ? `<details class="abs"><summary>Abstract</summary><p>${esc(p.abstract)}</p></details>` : ""}</li>`).join("")}</ol>
-    </section>`).join("");
+    </section>`).join("") + (prep.length ? `<section class="block pub-group" id="g-prep" aria-labelledby="g-prep-h" data-g="prep">
+      <div class="pub-head"><h2 id="g-prep-h" data-split>In preparation <span class="pub-n">${prep.length}</span></h2>
+        <div class="row-ctrl"><button type="button" class="ab-btn" data-dir="-1" aria-label="Scroll In preparation back">←</button><button type="button" class="ab-btn" data-dir="1" aria-label="Scroll In preparation forward">→</button></div></div>
+      <ol class="pub-row" tabindex="0" aria-label="In preparation, scrolls sideways" data-lenis-prevent>${prep.map((m) => `<li class="bib" data-rv>
+        <p class="cite-k">${esc(m.kind || "Manuscript")} · in preparation</p>
+        <h3 class="cite-t">${esc(m.topic)}</h3>
+        ${m.detail ? `<p class="cite-v">${esc(m.detail)}</p>` : ""}
+        ${m.project && nameOf(m.project) ? `<p class="ids"><a href="project-${esc(m.project)}.html">Thread: ${esc(nameOf(m.project))} <span aria-hidden="true">→</span></a></p>` : ""}</li>`).join("")}</ol>
+    </section>` : "");
     $("biblio-foot").innerHTML = pubs.some((p) => p.equal_contribution) ? EQ_FOOTNOTE : "";
 
     document.querySelectorAll(".pub-group").forEach((g) => {

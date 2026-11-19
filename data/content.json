@@ -266,6 +266,15 @@
         "ANN-enhanced detection of multipartite entanglement in a three-qubit NMR quantum processor",
         "Entanglement detection and gate optimization in the system of three and four NMR qubits using deep learning and machine learning"
       ]
+    },
+    {
+      "org": "Mesoscopic Physics Lab (PI: Dr. Ananth Venkatesan)",
+      "role": "Intern",
+      "location": "",
+      "period": "2018",
+      "summary": "",
+      "points": [],
+      "tags": []
     }
   ],
   "projects": [
@@ -431,11 +440,11 @@
     {
       "id": "qkd-testbeds",
       "name": "Linear-Optical QKD Network Testbeds",
-      "blurb": "DPS, COW, and Twin-Field QKD simulated over realistic photonic channels with attack modelling.",
-      "abstract": "Simulation testbeds for differential-phase-shift (DPS), coherent-one-way (COW), and twin-field QKD protocols on linear-optical setups in OptiSystem and ANSYS, including loss, noise, and photonic channel impairments. Intercept-resend and photon-number-splitting attacks are modelled, and resource-state and entanglement generation benchmarked.",
+      "blurb": "DPS, COW, Twin-Field and MDI QKD simulated over realistic photonic channels with attack modelling.",
+      "abstract": "Simulation testbeds for differential-phase-shift (DPS), coherent-one-way (COW), twin-field (TF) and measurement-device-independent (MDI) QKD protocols on linear-optical setups in OptiSystem and ANSYS, including loss, noise, and photonic channel impairments. Intercept-resend and photon-number-splitting attacks are modelled, and resource-state and entanglement generation benchmarked.",
       "metrics": [
         {
-          "value": "3",
+          "value": "4",
           "label": "QKD protocols"
         }
       ],
@@ -453,7 +462,7 @@
         }
       ],
       "featured": true,
-      "role": "DRDO Junior Research Fellow — protocol simulation and attack modelling.",
+      "role": "Protocol simulation and attack modelling in Dr. Arpita Maitra's group at TCG CREST, first as a research intern and then as a DRDO Junior Research Fellow.",
       "sections": [
         {
           "h": "Problem",
@@ -461,22 +470,26 @@
         },
         {
           "h": "Approach",
-          "p": "I built simulation testbeds for three protocols — differential-phase-shift (DPS), coherent-one-way (COW), and Twin-Field QKD — in OptiSystem and ANSYS, including loss, noise, and photonic channel impairments."
+          "p": "I built simulation testbeds for four protocols — differential-phase-shift (DPS), coherent-one-way (COW), Twin-Field (TF) and measurement-device-independent (MDI) QKD — in OptiSystem and ANSYS, including loss, noise, and photonic channel impairments."
         },
         {
           "h": "Attack modelling",
           "p": "I modelled intercept-resend and photon-number-splitting attacks and benchmarked resource-state and entanglement generation."
+        },
+        {
+          "h": "Status",
+          "p": "Manuscripts in preparation."
         }
       ],
       "layman": [
         "Quantum key distribution (QKD) lets two parties build a shared secret key from single photons; an eavesdropper who interferes leaves traces that can be detected. Textbook analyses usually assume ideal fibres and detectors.",
-        "This work built simulated testbeds for three QKD protocols (DPS, COW and Twin-Field) in optical-design software, with the losses, noise and imperfections of real photonic channels included.",
+        "This work built simulated testbeds for four QKD protocols (DPS, COW, Twin-Field and MDI) in optical-design software, with the losses, noise and imperfections of real photonic channels included.",
         "On top of the channels, two classic attacks were modelled: intercept-resend, where the attacker measures and re-sends each photon, and photon-number splitting, where the attacker siphons off extra photons from pulses that carry more than one."
       ],
       "layman_status": "draft",
       "pipeline": [
         {
-          "stage": "DPS, COW and TF protocol simulation",
+          "stage": "DPS, COW, TF and MDI protocol simulation",
           "by": "me"
         },
         {
@@ -491,7 +504,9 @@
           "stage": "Resource-state benchmarking",
           "by": "me"
         }
-      ]
+      ],
+      "period": "Aug 2023 – Oct 2024",
+      "status": "Manuscripts in preparation"
     },
     {
       "id": "qcrypto-circuits",
@@ -525,6 +540,10 @@
         {
           "h": "Attack",
           "p": "I implemented a plaintext–ciphertext attack with Grover search and amplitude amplification, demonstrating Grover key search on a scaled-down cipher, which needs O(√N) oracle queries versus O(N) classically."
+        },
+        {
+          "h": "Status",
+          "p": "Manuscript in preparation."
         }
       ],
       "layman": [
@@ -550,7 +569,9 @@
           "stage": "Grover key search",
           "by": "me"
         }
-      ]
+      ],
+      "period": "Aug 2023 – Mar 2024",
+      "status": "Manuscript in preparation"
     },
     {
       "id": "nmr-entanglement",
@@ -874,6 +895,124 @@
           "by": "me"
         }
       ]
+    },
+    {
+      "id": "bitter-solenoid",
+      "name": "Bitter Solenoid Simulator (0.5 T)",
+      "blurb": "A real-time simulator for a 0.5 T water-cooled copper Bitter solenoid, with Swiss-roll RF metamaterials for early-stage fMRI.",
+      "abstract": "An open-source simulator that couples the field, electrical, thermal, hydraulic and mechanical models of a 0.5 T water-cooled copper Bitter solenoid, optimises the design under engineering constraints, and adds an fMRI layer: shim coils, B0 stability and an RF signal-to-noise model with Swiss-roll metamaterials. It runs on a laptop, Kaggle or Colab, and a browser demo needs no install.",
+      "metrics": [
+        {
+          "value": "0.5 T",
+          "label": "design field"
+        },
+        {
+          "value": "99.95 ppm",
+          "label": "homogeneity over a 30 mm-diameter sphere (simulated)"
+        }
+      ],
+      "tags": [
+        "Electromagnetism",
+        "Thermal-hydraulics",
+        "Optimisation",
+        "Numba"
+      ],
+      "audience": "both",
+      "links": [
+        {
+          "label": "Code",
+          "url": "https://github.com/s-siyanwal/bitter-solenoid-simulator"
+        },
+        {
+          "label": "Live demo",
+          "url": "https://s-siyanwal.github.io/bitter-solenoid-simulator/demo.html"
+        }
+      ],
+      "featured": false,
+      "status": "Open-source software",
+      "sections": [
+        {
+          "h": "Problem",
+          "p": "Design a 0.5 T water-cooled copper Bitter solenoid for early-stage fMRI and evaluate it in real time on modest hardware (a 32 GB Ryzen 5 laptop, Kaggle or Colab), using only Python-3.6-compatible NumPy, SciPy, Numba and Matplotlib APIs that existed before July 2018."
+        },
+        {
+          "h": "Approach",
+          "p": "The continuum simulator couples closed-form and exact elliptic-integral field models (checked against an independent straight-segment Biot–Savart engine), Bitter-plate electrics, thermal and hydraulic models of the axial cooling holes (Dittus–Boelter, with a Gnielinski check) and Lorentz-force mechanics. Differential evolution followed by SLSQP minimises electrical plus pump power subject to 0.5 T at the centre, a copper hot spot of at most 85 °C, a supply of at most 8 V, an inner radius of at least 50 mm, at most 100 ppm inhomogeneity, a pressure drop of at most 5 bar and Re ≥ 10⁴. A separate fMRI layer adds Z2/Z4 shim loops, B0 stability and a quasi-static RF SNR model of Swiss-roll metamaterials. A mesoscopic emulation layer adds tolerance and contact-resistance scatter, and particle estimators re-derive the continuum numbers as a cross-check."
+        },
+        {
+          "h": "Results",
+          "p": [
+            "From the repository's generated results (differential-evolution run, seed 1).",
+            "The optimum has an inner radius of 50.0 mm, an outer radius of 300 mm and a 1.10 m stack. It carries 2576 A at 4.54 V, dissipating 11.7 kW plus 81 W of pump power, with 99.95 ppm peak-to-peak homogeneity over a 30 mm-diameter sphere and a 25.9 °C copper hot spot. The active limits are field homogeneity and size, not cooling.",
+            "Two Z2/Z4 shim-loop pairs bring the homogeneity over the same sphere to 0.26 ppm.",
+            "In the quasi-static RF model, a Swiss-roll slab improves SNR over the same coil held off over an air gap, but does not beat a coil placed directly on the tissue."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cpinn",
+      "name": "CPINN",
+      "blurb": "2021 project in Prof. Kavita Dorai's NMR Quantum Computing Group, IISER Mohali.",
+      "period": "2021",
+      "tags": [],
+      "audience": "academic",
+      "links": [],
+      "featured": false,
+      "sections": [
+        {
+          "h": "Context",
+          "p": "A 2021 project in the NMR Quantum Computing Group at IISER Mohali, led by Prof. Kavita Dorai."
+        }
+      ]
+    },
+    {
+      "id": "worm-like-spin-chain",
+      "name": "Worm-like Spin Chain",
+      "blurb": "2020 project on a worm-like spin chain with Dr. Abhishek Chaudhuri.",
+      "period": "2020",
+      "tags": [
+        "Spin chains"
+      ],
+      "audience": "academic",
+      "links": [],
+      "featured": false,
+      "sections": [
+        {
+          "h": "Context",
+          "p": "A 2020 project on a worm-like spin chain, with Dr. Abhishek Chaudhuri."
+        }
+      ]
+    },
+    {
+      "id": "ebl-sexual-antagonism",
+      "name": "Sexually Antagonistic Selection",
+      "blurb": "2019 project on sexually antagonistic selection in Dr. N. G. Prasad's Evolutionary Biology Lab (EBL), IISER Mohali.",
+      "abstract": "A 2019 project on sexually antagonistic selection in the Evolutionary Biology Lab of Dr. N. G. Prasad at IISER Mohali, with a public repository of computational models of sexual conflict in Drosophila.",
+      "period": "2019",
+      "tags": [
+        "Evolutionary biology",
+        "Population genetics",
+        "Individual-based models"
+      ],
+      "audience": "academic",
+      "links": [
+        {
+          "label": "Code",
+          "url": "https://github.com/s-siyanwal/Computational-Models-EBL-Lab-IISER-Mohali"
+        }
+      ],
+      "featured": false,
+      "sections": [
+        {
+          "h": "Context",
+          "p": "A 2019 project on sexually antagonistic selection in the Evolutionary Biology Lab (EBL) of Dr. N. G. Prasad, IISER Mohali."
+        },
+        {
+          "h": "Computational models",
+          "p": "The public repository rebuilds published models of sexual conflict: a two-locus model for the resolution of intra-locus sexual conflict from a poster by the lab, Parsons' (1961) invasion conditions with Owen's (1953) equilibria, and a \"mother's curse\" cytonuclear model. Each is solved twice: as deterministic recursions, and as an individual-based simulation that never imports the analytical maths. Statistical tests then check whether the simulated populations reproduce each prediction. A second part models published sexual-antagonism results from the lab with a hybrid analytic, individual-based and emulator approach."
+        }
+      ]
     }
   ],
   "publications": [
@@ -1120,10 +1259,29 @@
       },
       {
         "title": "Photonic quantum networks",
-        "detail": "Linear-optical QKD (DPS, COW, twin-field) with loss, noise and photonic channel impairments; attack modelling and resource-state generation."
+        "detail": "Linear-optical QKD (DPS, COW, twin-field, MDI) with loss, noise and photonic channel impairments; attack modelling and resource-state generation."
       }
     ],
     "looking_for": "I am seeking PhD or research-Master's positions in quantum information science, and remain open to industry Quantum R&D roles where research and engineering are equally weighted.",
     "research_interests": "Quantum information and near-term quantum algorithms: variational quantum circuits and quantum machine learning for scientific data, quantum image representations, entanglement detection on NMR processors, linear-optical quantum networks and QKD, and hybrid quantum–classical implementations including FPGA inference."
-  }
+  },
+  "in_preparation": [
+    {
+      "topic": "Simulated DPS, COW, twin-field and MDI QKD over linear-optical channels, with attack modelling",
+      "kind": "Manuscripts",
+      "detail": "TCG CREST, Aug 2023 – Oct 2024",
+      "project": "qkd-testbeds"
+    },
+    {
+      "topic": "Quantum circuits for a scaled-down AES (Mini-AES / S-AES) and a Grover-search plaintext–ciphertext attack",
+      "kind": "Manuscript",
+      "detail": "TCG CREST, Aug 2023 – Mar 2024",
+      "project": "qcrypto-circuits"
+    },
+    {
+      "topic": "Quantum and classical optimisation for urban heat island mitigation",
+      "kind": "Manuscript",
+      "detail": "With Vikramaditya Bisani; collaboration since March 2025"
+    }
+  ]
 }

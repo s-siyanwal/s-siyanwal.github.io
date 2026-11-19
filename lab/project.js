@@ -7,6 +7,9 @@ import { THREADS, projectStatus, authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE } 
 import { figuresFor } from "../js/figures.js";
 
 const MODES = { tensor: 1, nmr: 2, image: 3, vqls: 3, weather: 4, qkd: 5 };
+/* Threads that have an interactive abstract in lab/abstracts/<id>.js. Other threads hide that section (and never
+   request a module that does not exist), so a new project needs only its content.json entry. */
+const ABSTRACTS = new Set(["vqc-fpga", "qir-qnn", "qkd-testbeds", "qcrypto-circuits", "nmr-entanglement", "vqls-forecasting", "tensnet"]);
 const numeric = (v) => /^\d+$/.test(String(v).trim());
 const root = document.documentElement;
 
@@ -38,6 +41,7 @@ function artifactsHtml(pr, pub) {
     ["Code", hrefOf(a.code) || fromContent(/code|github/i)],
     ["Data", hrefOf(a.data) || fromContent(/data/i)],
     ["Slides / poster", hrefOf(a.slides) || fromContent(/slides|poster/i)],
+    ["Live demo", fromContent(/demo/i)],
   ].filter(([, url]) => url);
   return items.length ? `<ul class="artifact-row" aria-label="Artifacts">${items.map(([label, url, kind]) =>
     `<li><a class="btn${kind === "primary" ? " btn--solid" : ""}" href="${esc(url)}" target="_blank" rel="noopener">${esc(label)} <span aria-hidden="true">↗</span></a></li>`).join("")}</ul>` : "";
@@ -111,14 +115,16 @@ boot({
     const hasResults = sections.some((s) => /result/i.test(s.h || ""));
     $("pr-chapters").innerHTML = sections.map((s, k) => `<li class="chapter" data-rv>
       <div class="ch-side"><span class="ch-n">${String(k + 1).padStart(2, "0")}</span><h3 class="ch-h">${esc(s.h || "")}</h3></div>
-      <div class="ch-body prose">${paras(s.p)}${table(s.table)}</div></li>`).join("")
+      <div class="ch-body prose">${paras(s.p)}${[s.table, ...(s.tables || [])].map(table).join("")}</div></li>`).join("")
       + (hasResults ? "" : `<li class="chapter"><div class="ch-side"><span class="ch-n">${String(sections.length + 1).padStart(2, "0")}</span><h3 class="ch-h">Results</h3></div>
       <div class="ch-body prose"><p class="coming-soon">Results write-up coming soon.</p><!-- TODO(Shivanshu): results for ${esc(pr.id)} (content.json → projects → sections) --></div></li>`);
 
+    if (!ABSTRACTS.has(pr.id)) $("abstract").hidden = true;
     const fig = figuresFor(pr.id);
     if (fig) { $("figure").hidden = false; $("pr-figure").innerHTML = fig; }
 
-    $("pr-role").innerHTML = pr.role ? paras(pr.role) : `<p class="coming-soon">Contribution statement coming soon.</p>`;
+    $("pr-role").innerHTML = pr.role ? paras(pr.role)
+      : `<p class="coming-soon">Contribution statement coming soon.</p><!-- TODO(Shivanshu): my role in ${esc(pr.id)} (content.json → projects → role) -->`;
     $("pr-pipeline").innerHTML = pipelineHtml(pr);
 
     if (pub) {
@@ -151,7 +157,7 @@ function heroIn() {
 /* The interactive abstract is loaded only when its section comes near the viewport, and is paused off-screen. */
 function mountAbstract(pr) {
   const host = $("pr-abstract");
-  if (!host || PRERENDER) return;
+  if (!host || PRERENDER || !ABSTRACTS.has(pr.id)) return;
   const go = async () => {
     try {
       const mod = await import(`./abstracts/${pr.id}.js`);
