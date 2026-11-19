@@ -900,7 +900,7 @@
       "id": "bitter-solenoid",
       "name": "Bitter Solenoid Simulator (0.5 T)",
       "blurb": "A real-time simulator for a 0.5 T water-cooled copper Bitter solenoid, with Swiss-roll RF metamaterials for early-stage fMRI.",
-      "abstract": "An open-source simulator that couples the field, electrical, thermal, hydraulic and mechanical models of a 0.5 T water-cooled copper Bitter solenoid, optimises the design under engineering constraints, and adds an fMRI layer: shim coils, B0 stability and an RF signal-to-noise model with Swiss-roll metamaterials. It runs on a laptop, Kaggle or Colab, and a browser demo needs no install.",
+      "abstract": "A simulator that couples the field, electrical, thermal, hydraulic and mechanical models of a 0.5 T water-cooled copper Bitter solenoid, optimises the design under engineering constraints, and adds an fMRI layer: shim coils, B0 stability and an RF signal-to-noise model with Swiss-roll metamaterials. It runs on a laptop, Kaggle or Colab, and a browser demo needs no install.",
       "metrics": [
         {
           "value": "0.5 T",
@@ -929,7 +929,7 @@
         }
       ],
       "featured": false,
-      "status": "Open-source software",
+      "status": "Public repository",
       "sections": [
         {
           "h": "Problem",
@@ -1112,7 +1112,7 @@
       "name": "QCA CFD",
       "blurb": "Repository for a discrete solver of the 2D fluid equations based on quantum cellular automata. So far it holds a classical lattice-Boltzmann solver.",
       "abstract": "The repository's stated aim is a discrete solver of the 2D fluid equations based on quantum cellular automata (QCA). What it holds so far is a classical D2Q9 lattice-Boltzmann solver, built one component at a time, with tests, verification notebooks and an example configuration for flow past a cylinder at Re = 100.",
-      "status": "Open-source repository",
+      "status": "Public repository",
       "tags": [
         "Quantum cellular automata",
         "CFD",
