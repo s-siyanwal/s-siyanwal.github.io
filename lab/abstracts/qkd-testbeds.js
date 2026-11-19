@@ -1,4 +1,4 @@
-/* Linear-optical QKD testbeds: differential-phase-shift (DPS) QKD, one of the three protocols simulated.
+/* Linear-optical QKD testbeds: differential-phase-shift (DPS) QKD, one of the four protocols simulated.
    Alice sends a train of weak pulses, each with phase 0 or π. Bob's delay-line interferometer compares each pulse
    with the next: equal phases send the photon to detector D0 (bit 0), opposite phases to D1 (bit 1).
    An intercept-resend attacker who measures and re-sends the light breaks the phase relation between the blocks
@@ -12,7 +12,7 @@ export function mount(host) {
   const ui = shell(host, {
     title: "Phases, interference and an eavesdropper",
     lede: "Click pulses to switch their phase between 0 and π. Then let an attacker intercept and re-send the light.",
-    note: "A noise-free sketch of the DPS principle, computed in your browser. The project also simulated COW and Twin-Field QKD, and modelled photon-number-splitting attacks, over channels with loss and detector noise.",
+    note: "A noise-free sketch of the DPS principle, computed in your browser. The project also simulated COW, Twin-Field and MDI QKD, and modelled photon-number-splitting attacks, over channels with loss and detector noise.",
   });
   let phase = [0, 1, 1, 0, 1, 0, 0, 0, 1, 1], eve = false, seed = 7;
   const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };

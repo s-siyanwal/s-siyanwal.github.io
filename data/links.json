@@ -3,7 +3,8 @@
     "One place for the site's downloadable artefacts and proof links. Leave a value as \"\" until you have it: empty links are hidden on the site.",
     "artifacts: per research thread (keyed by the project id in content.json). pdf / slides may point at a file you put in assets/docs/ (e.g. \"assets/docs/vqls-slides.pdf\") or at a full https:// URL.",
     "proofs: per award, keyed by the award title exactly as it appears in content.json. Use the Google Drive share link of the certificate.",
-    "Paper DOIs, arXiv ids and profile links stay in content.json, because the inbox pipeline writes them there."
+    "Paper DOIs, arXiv ids and profile links stay in content.json, because the inbox pipeline writes them there.",
+    "A Code or Live demo link can also live in content.json → projects → links (both sites read it); bitter-solenoid and ebl-sexual-antagonism keep their GitHub links there."
   ],
   "artifacts": {
     "vqc-fpga": {
@@ -43,6 +44,30 @@
       "slides": ""
     },
     "tensnet": {
+      "pdf": "",
+      "code": "",
+      "data": "",
+      "slides": ""
+    },
+    "bitter-solenoid": {
+      "pdf": "",
+      "code": "",
+      "data": "",
+      "slides": ""
+    },
+    "cpinn": {
+      "pdf": "",
+      "code": "",
+      "data": "",
+      "slides": ""
+    },
+    "worm-like-spin-chain": {
+      "pdf": "",
+      "code": "",
+      "data": "",
+      "slides": ""
+    },
+    "ebl-sexual-antagonism": {
       "pdf": "",
       "code": "",
       "data": "",

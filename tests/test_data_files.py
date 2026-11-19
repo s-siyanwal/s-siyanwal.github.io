@@ -66,3 +66,27 @@ def test_cv_tex_has_sections_and_no_phone():
 
 def test_cv_tex_escapes_specials():
     assert cv_tex.tex("R&D 50% #1 a_b") == r"R\&D 50\% \#1 a\_b"
+
+
+def test_in_preparation_is_well_formed():
+    ids = {p["id"] for p in DATA["projects"]}
+    for m in DATA.get("in_preparation", []):
+        assert set(m) <= {"topic", "kind", "detail", "project"}, m
+        assert isinstance(m.get("topic"), str) and m["topic"].strip(), m
+        assert m.get("project") in (None, *ids), f"unknown project {m.get('project')}"
+        assert not PHONE.search(" ".join(str(v) for v in m.values())), "no phone-like numbers"
+
+
+def test_cv_tex_lists_manuscripts_in_preparation():
+    src = cv_tex.generate(DATA, LINKS)
+    if DATA.get("in_preparation"):
+        assert r"\cvsubsection{Manuscripts in preparation}" in src
+        for m in DATA["in_preparation"]:
+            assert cv_tex.tex(m["topic"]) in src
+
+
+def test_project_links_are_https_or_empty():
+    for p in DATA["projects"]:
+        for link in p.get("links", []):
+            assert set(link) == {"label", "url"}, link
+            assert link["url"] == "" or link["url"].startswith("https://"), link

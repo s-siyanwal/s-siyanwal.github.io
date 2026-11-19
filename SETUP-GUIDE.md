@@ -191,6 +191,8 @@ anything left empty is simply hidden on the site.
 | Personal page | `data/journey.json` → `personal` | Write an `intro` and add `sections` with a `title`, `text` and media. |
 | Layman write-ups on research threads | `data/content.json` → `projects` → `layman` | They are drafts written from your papers; read them, edit, then set `layman_status` to `"verified"` to remove the draft note. |
 | Who did which stage ("My role" diagram) | `data/content.json` → `projects` → `pipeline` → `by` | `"me"`, a collaborator's name, or `""` if not yet stated. |
+| When a project ran, and its status | `data/content.json` → `projects` → `period` and `status` | Optional. `"period": "2020"` or `"Aug 2023 – Oct 2024"`; `"status": "Manuscript in preparation"`. A project linked to a paper (`paper`) takes its status from that paper instead. Both sites show them in the project's status line. |
+| Manuscripts in preparation | `data/content.json` → `in_preparation` | One item per manuscript: `{"topic": "...", "detail": "...", "project": "project-id"}` (`detail` and `project` are optional). Listed on both Papers pages and in the CV. When a manuscript gets a title and author list, move it to `publications`. |
 
 The intro on the lab home page (a point of light spreads as a wave, collapses
 into detector hits, and the hits become your name; about 4.5 seconds) plays once

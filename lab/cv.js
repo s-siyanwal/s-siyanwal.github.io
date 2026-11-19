@@ -5,7 +5,7 @@
 import { boot, $, esc, extras, hrefOf } from "./core.js";
 import { authorsHtml } from "../js/site.js";
 
-const PAPER_GROUPS = [["journal", "Journal articles", "J"], ["conference", "Conference papers", "C"], ["manuscript", "Manuscripts under review", "M"], ["preprint", "Preprints", "P"], ["thesis", "Thesis", "T"]];
+const PAPER_GROUPS = [["journal", "Journal articles", "J"], ["conference", "Conference papers", "C"], ["manuscript", "Manuscripts under review", "M"], ["preprint", "Preprints", "P"], ["thesis", "Thesis", "Th"]];
 
 function cite(p) {
   const bits = [];
@@ -48,9 +48,13 @@ boot({
       const list = pubs.filter((x) => x.category === cat);
       return list.length ? `<h3 class="cv-h3">${label}</h3><ol class="cv-refs">${list.map((x, i) => `<li><span class="cv-key">[${pre}${i + 1}]</span> ${cite(x)}</li>`).join("")}</ol>` : "";
     }).join("");
+    const prep = d.in_preparation || [];
+    const prepHtml = prep.length ? `<h3 class="cv-h3">Manuscripts in preparation</h3><ul class="cv-ul">${prep.map((m) =>
+      `<li>${esc(m.topic)}.${m.detail ? ` ${esc(m.detail)}.` : ""}</li>`).join("")}</ul>` : "";
     const eq = pubs.some((x) => x.equal_contribution) ? '<p class="cv-foot">* Equal contribution.</p>' : "";
     const talks = pubs.filter((x) => x.category === "poster" || x.category === "presentation");
-    const talksHtml = `<ol class="cv-refs">${talks.map((x, i) => `<li><span class="cv-key">[${x.category === "poster" ? "Po" : "T"}${i + 1}]</span> ${x.authors ? `${authorsHtml(x.authors)}. ` : ""}${esc(x.title)}. ${x.category === "poster" ? "Poster" : "Talk"}, <em>${esc(x.venue || "")}</em>${x.year ? `, ${esc(x.year)}` : ""}.</li>`).join("")}</ol>`;
+    const seen = { poster: 0, presentation: 0 };                  // posters [Po1..] and talks [T1..] numbered separately
+    const talksHtml = `<ol class="cv-refs">${talks.map((x) => `<li><span class="cv-key">[${x.category === "poster" ? "Po" : "T"}${++seen[x.category]}]</span> ${x.authors ? `${authorsHtml(x.authors)}. ` : ""}${esc(x.title)}. ${x.category === "poster" ? "Poster" : "Talk"}, <em>${esc(x.venue || "")}</em>${x.year ? `, ${esc(x.year)}` : ""}.</li>`).join("")}</ol>`;
     const awards = `<ul class="cv-awards">${(d.awards || []).map((a) => {
       const proof = proofs[a.title];
       return `<li><span class="cv-l">${esc(a.title)}${proof ? ` <a class="cv-proof" href="${esc(hrefOf(proof))}" target="_blank" rel="noopener">Proof<span class="sr"> for ${esc(a.title)}</span></a>` : ""}</span><span class="cv-r">${esc(a.year || "")}</span></li>`;
@@ -60,7 +64,7 @@ boot({
     $("cv-body").innerHTML = [
       section("education", "Education", edu),
       section("research", "Research experience", roles),
-      section("publications", "Publications", papers + eq),
+      section("publications", "Publications", papers + prepHtml + eq),
       section("talks", "Posters and talks", talksHtml),
       section("awards", "Awards and fellowships", awards),
       section("skills", "Skills", skills),
