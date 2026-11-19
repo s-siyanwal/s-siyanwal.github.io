@@ -1006,7 +1006,7 @@
       "audience": "academic",
       "links": [
         {
-          "label": "Repository (README only; code to follow)",
+          "label": "Repository (2026 simulation toolkit for self-propelled worm-like filaments; the 2020 code is not in it)",
           "url": "https://github.com/s-siyanwal/spin-chain-models-simulator"
         }
       ],
@@ -1022,7 +1022,14 @@
         },
         {
           "h": "Status",
-          "p": "The public repository currently holds a README and a licence. The original 2020 code and results are still to be added, so no results are reported here."
+          "p": "The public repository now holds code, but it is not the 2020 summer-project code. It is a later (2026) Brownian-dynamics toolkit for self-propelled worm-like filaments, built to reproduce a published paper, and it is not a completed replication. The 2020 code and results are still not public, so no 2020 results are reported here."
+        },
+        {
+          "h": "Code in the repository (2026 toolkit)",
+          "p": [
+            "The repository contains a Python package that simulates a two-dimensional self-propelled worm-like filament, following Isele-Holder, Elgeti and Gompper (Soft Matter 11, 7181, 2015). The chain is a row of beads joined by harmonic bonds, with a bending energy and a repulsive excluded-volume interaction, and an active force along the chain. It is integrated with overdamped Brownian (Euler–Maruyama) dynamics without hydrodynamics, in a compiled Numba kernel with a neighbour list. The runs are deterministic and can be checkpointed and resumed. The analysis measures spiral number, end-to-end distance, centre-of-mass and rotational diffusion, and the dynamic structure factor.",
+            "The repository has 64 automated tests, which passed in its continuous-integration check. Its notes record one strong-spiral run lasting 5 of the paper’s characteristic times (5 τ) on one random seed, in which a spiral state dominated. They state that this is not a replication: other seeds and parameter points were not run at full length, and the paper's time step and exclusion rule are not known."
+          ]
         },
         {
           "h": "Model (textbook)",
