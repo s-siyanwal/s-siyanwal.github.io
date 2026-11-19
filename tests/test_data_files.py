@@ -55,9 +55,9 @@ def test_project_extras_are_well_formed():
 
 def test_cv_tex_has_sections_and_no_phone():
     src = cv_tex.generate(DATA, LINKS)
-    for h in ["Education", "Research experience", "Publications", "Posters and talks", "Awards and fellowships", "Skills", "References"]:
+    for h in ["Education", "Research experience", "Publications", "Posters and talks", "Awards and fellowships", "Skills"]:
         assert r"\cvsection{%s}" % h in src
-    assert "Available on request." in src
+    assert "References available on request." in src
     body = src.split(r"\begin{document}")[1]
     text = re.sub(r"\\href\{[^}]*\}", "", body)
     text = re.sub(r"(doi|arXiv):\S+", "", text)                   # identifiers are not phone numbers

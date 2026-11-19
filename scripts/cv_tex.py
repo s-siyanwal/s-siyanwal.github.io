@@ -110,8 +110,8 @@ def body(d, proofs):
     out.append(r"\begin{tabular}{@{}>{\bfseries}p{0.24\linewidth}p{0.72\linewidth}@{}}")
     out += [r"%s & %s \\[2pt]" % (tex(g["category"]), tex(", ".join(g.get("items", [])))) for g in d.get("skills", [])]
     out.append(r"\end{tabular}")
-    out.append(r"\cvsection{References}")
-    out.append("Available on request.")
+    # References as one closing line, not a section: a heading for a single line would orphan onto its own page
+    out.append(r"\par\nopagebreak\vspace{8pt}{\itshape References available on request.}")
     return "\n".join(out)
 
 
