@@ -1,4 +1,4 @@
-/* Lab edition: home. */
+/* Site: home. */
 import { boot, $, esc, kineticName, MOTION, DESKTOP, PRERENDER, REDUCE } from "./core.js";
 import { THREADS, projectStatus, authorsHtml, venueHtml, idLinks } from "../js/site.js";
 
@@ -23,7 +23,7 @@ boot({
     $("h-cta").innerHTML = [
       `<a class="btn btn--solid" href="#work">See the work</a>`,
       `<a class="btn" href="about.html">Research statement</a>`,
-      cv ? `<a class="btn" href="../${esc(cv)}" target="_blank" rel="noopener">CV (PDF)</a>` : "",
+      cv ? `<a class="btn" href="${esc(cv)}" target="_blank" rel="noopener">CV (PDF)</a>` : "",
     ].join("");
 
     const a = d.about || {};
@@ -65,7 +65,7 @@ boot({
     $("avail").textContent = p.availability || "";
     const links = [];
     if (p.email) links.push([`mailto:${p.email}`, "Email"]);
-    if (cv) links.push([`../${cv}`, "CV (PDF)"]);
+    if (cv) links.push([cv, "CV (PDF)"]);
     (p.profiles || []).filter((x) => x.url && !x.url.startsWith("mailto:")).forEach((x) => links.push([x.url, x.label]));
     $("links").innerHTML = links.map(([h, l]) => `<li><a href="${esc(h)}"${/^(http|\.\.)/.test(h) ? ' target="_blank" rel="noopener"' : ""}>${esc(l)} <span aria-hidden="true">↗</span></a></li>`).join("");
 

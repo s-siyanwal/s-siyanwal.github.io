@@ -6,7 +6,8 @@ What it does
 ------------
 1. Copies the static site (HTML, CSS, JS, data, assets) into _site/.
 2. Writes one page per project (project-<id>.html) and turns project.html?id=<id>
-   into a redirect to it, so old links keep working.
+   into a redirect to it, so old links keep working. Old /lab/ and /publications.html
+   addresses become small forwarding pages.
 3. Injects per-page <title>, meta description, canonical URL, Open Graph /
    Twitter tags and JSON-LD structured data.
 4. Prerenders every page by running the site's own JS renderers in headless
@@ -47,9 +48,17 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "_site"
 DEFAULT_SITE_URL = "https://s-siyanwal.github.io"
 
-COPY = ["index.html", "project.html", "publications.html", "about.html", "notes.html", "lab", "intro",
-        "style.css", ".nojekyll", "js", "data", "assets"]
-PAGES = ["index.html", "publications.html", "about.html", "notes.html"]
+# The site is the former "lab" design: its pages sit at the root and its scripts, styles and vendored libraries live
+# in lab/. style.css belongs only to the supporting pages (paper-*, role-*, notes, 404).
+COPY = ["index.html", "about.html", "path.html", "papers.html", "cv.html", "personal.html", "project.html",
+        "notes.html", "lab", "intro", "style.css", ".nojekyll", "js", "data", "assets"]
+PAGES = ["notes.html"]
+SITE_PAGES = ["index.html", "about.html", "path.html", "papers.html", "cv.html", "personal.html"]
+
+
+def is_site_page(name):
+    """Pages built from the main design (everything else is a supporting page in the older style)."""
+    return name in SITE_PAGES or name.startswith("project-")
 
 # Light-theme tokens from style.css (Interference); keep in sync.
 ACCENT = "#0b6a5a"
@@ -210,7 +219,7 @@ def not_found(data, site):
       <p class="lede">The page you were looking for isn't here. It may have moved.</p>
       <div class="hero-cta">
         <a class="btn btn--primary" href="{site}/">Home</a>
-        <a class="btn" href="{site}/publications.html">Publications</a>
+        <a class="btn" href="{site}/papers.html">Papers</a>
         <a class="btn" href="{site}/about.html">About</a>
       </div>
     </div>
@@ -518,7 +527,7 @@ def build_details(data, site, name):
         venue = ", ".join(x for x in [p.get("venue", ""), yr if yr not in p.get("venue", "") else ""] if x)
         links = id_links(p) + [(l["label"], l["url"]) for l in (pr or {}).get("links", []) if l.get("url")]
         links = list(dict.fromkeys(links))
-        head = (f'<a class="backlink" href="publications.html">← Publications</a>'
+        head = (f'<a class="backlink" href="papers.html">← Papers</a>'
                 f'<p class="eyebrow">{esc(p.get("type") or p.get("category", ""))}</p>'
                 f'<h1>{esc(p["title"])}</h1>'
                 f'<p class="lede">{esc(p.get("authors", ""))}</p>'
@@ -602,8 +611,8 @@ def assemble(data, site):
     pages = {
         "index.html": head_block(site, "", f"{name} — {p.get('title', '')}", home_desc,
                                  extra=jsonld(person_ld(data, site))),
-        "publications.html": head_block(
-            site, "publications.html", f"Publications — {name}",
+        "papers.html": head_block(
+            site, "papers.html", f"Papers — {name}",
             clip(f"{len(pubs)} publications, conference papers and posters by {name}: "
                  + "; ".join(x.get("title", "") for x in pubs[:3])),
             extra="\n".join(jsonld(article_ld(x)) for x in pubs)),
@@ -611,29 +620,32 @@ def assemble(data, site):
             site, "about.html", f"About — {name}",
             clip((about.get("research_interests") or "").split(":")[0] or (about.get("statement") or [""])[0]),
             og_type="profile"),
+        "path.html": head_block(site, "path.html", f"Path — {name}",
+                                clip(f"Research positions, roles and degrees of {name}, in time order.")),
+        "cv.html": head_block(site, "cv.html", f"CV — {name}",
+                              clip(f"Academic CV of {name}: education, research experience, publications, awards and skills.")),
+        "personal.html": head_block(site, "personal.html", f"Personal — {name}",
+                                    clip(f"Life outside research: {name}.")),
     }
     for page, block in pages.items():
         f = OUT / page
         f.write_text(mark_built(set_head(f.read_text(encoding="utf-8"), block)), encoding="utf-8")
 
     notes = build_notes(site, name)
-    written = list(PAGES) + notes + build_details(data, site, name) + build_lab(data)
-    tmpl = (ROOT / "project.html").read_text(encoding="utf-8")
-    for pr in data.get("projects", []):
-        pid = pr["id"]
-        fname = f"project-{pid}.html"
-        block = head_block(site, fname, f"{pr.get('name', '')} — {name}",
-                           clip(pr.get("blurb") or pr.get("abstract")), og_type="article")
-        doc = mark_built(set_head(tmpl, block))
-        doc = doc.replace("<body>", f'<body data-project-id="{esc(pid)}">', 1)
-        (OUT / fname).write_text(doc, encoding="utf-8")
-        written.append(fname)
+    written = list(SITE_PAGES) + list(PAGES) + notes + build_details(data, site, name) + build_projects(data, site, name)
 
     # project.html?id=x -> project-x.html; with no/unknown id it still renders the list
-    legacy = set_head(tmpl, head_block(site, "project.html", f"Projects — {name}",
-                                       clip(f"Project write-ups by {name}.")))
+    legacy = set_head((ROOT / "project.html").read_text(encoding="utf-8"),
+                      head_block(site, "project.html", f"Projects — {name}", clip(f"Project write-ups by {name}.")))
     legacy = legacy.replace('<meta name="viewport"', REDIRECT + '<meta name="viewport"', 1)
     (OUT / "project.html").write_text(mark_built(legacy), encoding="utf-8")
+
+    # Old addresses keep working: /publications.html (the previous bibliography page) and everything under /lab/,
+    # where this design used to live, now forward to the page at the root.
+    (OUT / "publications.html").write_text(redirect_stub(site, "papers.html", ""), encoding="utf-8")
+    for old in SITE_PAGES + [f"project-{pr['id']}.html" for pr in data.get("projects", [])] + ["project.html"]:
+        (OUT / "lab" / old).write_text(
+            redirect_stub(site, "" if old == "index.html" else old, "../"), encoding="utf-8")
 
     (OUT / "favicon.svg").write_text(FAVICON, encoding="utf-8")
     (OUT / "404.html").write_text(not_found(data, site), encoding="utf-8")
@@ -647,8 +659,7 @@ def assemble(data, site):
                          encoding="utf-8")
     urls = "\n".join(
         f"  <url><loc>{esc(site + '/' + ('' if w == 'index.html' else w))}</loc></url>"
-        # The lab edition is an experimental parallel design (noindex) and stays out of the sitemap.
-        for w in written if (notes or w != "notes.html") and not w.startswith("lab/"))
+        for w in written if (notes or w != "notes.html"))
     (OUT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -656,25 +667,49 @@ def assemble(data, site):
     return written
 
 
-LAB_PAGES = ["lab/index.html", "lab/about.html", "lab/path.html", "lab/papers.html", "lab/cv.html", "lab/personal.html"]
-PROFILE_PHOTO = "assets/img/profile.jpg"   # the lab hero photo; until it exists the existing portrait is used
+PROFILE_PHOTO = "assets/img/profile.jpg"   # the home-page hero photo; until it exists the existing portrait is used
 
 
-def build_lab(data):
-    """The lab edition (an experimental parallel design, noindex): its fixed pages, plus one breakdown page per
-    project, lab/project-<id>.html, made from the lab/project.html template. All are prerendered like the rest."""
-    written = list(LAB_PAGES)
+def build_projects(data, site, name):
+    """One breakdown page per project, project-<id>.html, made from the project.html template, plus the home-page
+    hero photo swap. All are prerendered like the rest."""
+    written = []
     if (ROOT / PROFILE_PHOTO).exists():
-        home = OUT / "lab" / "index.html"
-        home.write_text(home.read_text(encoding="utf-8").replace('src="../assets/portrait-440.webp" width="440" height="550"',
-                                                                 f'src="../{PROFILE_PHOTO}"', 1), encoding="utf-8")
-    tmpl = (ROOT / "lab" / "project.html").read_text(encoding="utf-8")
-    assert tmpl.count('data-project=""') == 1, "lab/project.html needs one data-project=\"\" placeholder"
+        home = OUT / "index.html"
+        home.write_text(home.read_text(encoding="utf-8").replace('src="assets/portrait-440.webp" width="440" height="550"',
+                                                                 f'src="{PROFILE_PHOTO}"', 1), encoding="utf-8")
+    tmpl = (ROOT / "project.html").read_text(encoding="utf-8")
+    assert tmpl.count('data-project=""') == 1, "project.html needs one data-project=\"\" placeholder"
     for pr in data.get("projects", []):
-        fname = f"lab/project-{pr['id']}.html"
-        (OUT / fname).write_text(tmpl.replace('data-project=""', f'data-project="{esc(pr["id"])}"', 1), encoding="utf-8")
+        fname = f"project-{pr['id']}.html"
+        block = head_block(site, fname, f"{pr.get('name', '')} — {name}",
+                           clip(pr.get("blurb") or pr.get("abstract")), og_type="article")
+        doc = mark_built(set_head(tmpl, block)).replace('data-project=""', f'data-project="{esc(pr["id"])}"', 1)
+        (OUT / fname).write_text(doc, encoding="utf-8")
         written.append(fname)
     return written
+
+
+def redirect_stub(site, target, up):
+    """A tiny page that forwards to `target` (relative to the site root; `up` is the path from the stub back to the root).
+    The query string and hash are kept, so /lab/?intro=1 still lands on /?intro=1."""
+    rel = (up + target) or "./"
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Moved</title>
+<meta name="robots" content="noindex"/>
+<link rel="canonical" href="{esc(site + '/' + target)}"/>
+<meta http-equiv="refresh" content="0; url={esc(rel)}"/>
+<script>location.replace({json.dumps(rel)} + location.search + location.hash);</script>
+</head>
+<body>
+<p>This page has moved to <a href="{esc(rel)}">{esc(site + '/' + target)}</a>.</p>
+</body>
+</html>
+"""
 
 
 def clean_snapshot(doc):
@@ -829,14 +864,14 @@ def prerender(pages, og_html, cv_doc=None):
         with sync_playwright() as pw:
             browser = pw.chromium.launch(**kw)
             ctx = browser.new_context(reduced_motion="reduce")
-            # Lets pages skip purely runtime effects (the lab field and kinetic type) while being snapshotted.
+            # Lets pages skip purely runtime effects (the 3D field and kinetic type) while being snapshotted.
             ctx.add_init_script("window.__PRERENDER__ = true")
             errors = []
             for page_name in pages:
                 pg = ctx.new_page()
                 pg.on("pageerror", lambda e, n=page_name: errors.append(f"{n}: {e}"))
                 pg.goto(base + page_name, wait_until="load")
-                if page_name.startswith("lab/"):
+                if is_site_page(page_name):
                     pg.wait_for_selector("html[data-lab-ready]", timeout=15000)
                 else:
                     pg.wait_for_selector(".topbar-name", timeout=15000)

@@ -1,5 +1,7 @@
 # DESIGN.md: "Landscape" (v2)
 
+> **Scope note (20 Nov 2026):** the main site design is now the former lab design (`lab/lab.css`, pages at the site root). This file describes the older design, which `style.css` still serves on the supporting pages (paper-*, role-*, notes, 404).
+
 The design system for s-siyanwal.github.io, from Shivanshu's v2 brief (`inbox/redesign-v2-brief.md`, 30 Sep 2026). It supersedes "Interference": the paper ground is gone. The site should read as a **research record** for PhD committees in quantum information, QML and quantum software, set on glass panels over a quiet valley landscape.
 
 Still forbidden: invented facts or metrics, terminal cosplay, neon, text gradients, rainbow headings, remote images, fonts or scripts, and stock photography of people or things. The single background landscape (§2) and Shivanshu's own portrait (§8) are the only imagery allowed.

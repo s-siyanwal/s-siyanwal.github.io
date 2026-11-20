@@ -1,4 +1,4 @@
-/* Lab edition: the path — every role and degree in time order, oldest first. On desktop with motion allowed the
+/* Site: the path — every role and degree in time order, oldest first. On desktop with motion allowed the
    section pins and vertical scroll moves the worldline left to right; on phones, under reduced motion, without JS
    and in print it is an ordinary vertical list. Photos and videos come from data/journey.json (stage key = slug of
    the role or degree title); until they exist each stage shows a quiet "coming soon" frame. */

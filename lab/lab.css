@@ -1,4 +1,4 @@
-/* Lab edition stylesheet (every lab page).
+/* Site stylesheet (every lab page).
    Contrast: every text colour stays >= 4.5:1 (body) and >= 3:1 (large display text) on the page ground even where
    the three.js field is brightest (its peak alpha is --field-alpha); checked numerically, see the PR.
    Nothing is hidden by CSS alone: GSAP sets the start state of a reveal only when motion runs, so each page is
@@ -88,7 +88,6 @@ html.lab-anim .curtain.is-leaving { animation: none; }
 .bar-tools button[hidden] { display: none; }
 @media (max-width: 720px) {
   .bar-nav { order: 3; flex: 1 0 100%; }
-  .bar-tools .classic { display: none; }
 }
 
 /* ---------- Buttons and links ---------- */
@@ -306,7 +305,7 @@ h1 em, h2 em, .foot-big em { color: var(--accent); }
 .next-card:hover .next-t, .next-card:focus-visible .next-t { color: var(--accent); }
 .next-b { color: var(--muted); }
 
-/* ---------- Figures (markup from js/figures.js, shared with the classic site) ---------- */
+/* ---------- Figures (markup from js/figures.js) ---------- */
 .fig { margin: 0 0 2rem; }
 .fig svg { display: block; width: 100%; height: auto; aspect-ratio: 640 / 360; }
 .fig-scroll { overflow-x: auto; background: var(--veil); border: 1px solid var(--line); border-radius: 6px; padding: 1rem; }

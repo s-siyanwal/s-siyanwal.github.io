@@ -1,5 +1,5 @@
-/* Lab edition: one research thread, rendered from content.json (+ data/links.json for artifacts). The build writes
-   lab/project-<id>.html with data-project set; opened directly, lab/project.html?id=<id> works too.
+/* Site: one research thread, rendered from content.json (+ data/links.json for artifacts). The build writes
+   project-<id>.html with data-project set; opened directly, project.html?id=<id> works too.
    Two reading levels: Layman (plain-language write-up) and Expert (methods, numbers, results). The choice is kept in
    localStorage("view") and applied before first paint by the inline script in the page head; without JS both show. */
 import { boot, $, esc, paras, splitWords, MOTION, PRERENDER, REDUCE, extras, hrefOf } from "./core.js";
@@ -89,7 +89,7 @@ boot({
     if (!pr) { $("pr-h").textContent = "Thread not found"; return {}; }
     const [th, label] = THREADS[pr.id] || ["", "Project"];
     const pub = pr.paper && pubs.find((x) => x.title === pr.paper);
-    document.title = `${pr.name} — ${(d.profile || {}).name} (Lab edition)`;
+    document.title = `${pr.name} — ${(d.profile || {}).name}`;
     document.querySelector("main").classList.add(`th-${th}`);
     viewToggle();
 

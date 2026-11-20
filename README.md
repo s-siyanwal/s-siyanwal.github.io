@@ -65,26 +65,25 @@ already have.
 ## 2. Structure
 
 ```
-index.html            Home: hero, experience, projects, recent papers
-project.html          Project deep-dive template (built into project-<id>.html)
-publications.html     Full bibliography with abstracts + type filter
-about.html            Research statement, interests, skills, education
-style.css             All styling
+index.html            Home (the main design): hero, "the question", research threads, qubit, numbers
+about.html  path.html  papers.html  cv.html  personal.html   The other pages of the main design
+project.html          Research-thread template (built into project-<id>.html; ?id=<id> redirects)
+style.css             Styling for the supporting pages only (paper-*, role-*, notes, 404)
 js/
-  site.js             Shared helpers, nav, footer, scroll reveal
-  circuit.js          Animated quantum-circuit hero motif
-  index.js  project.js  publications.js  about.js
+  site.js             Shared helpers (also used by the main design); nav and footer of supporting pages
+  figures.js          Schematic figures, shared with the project pages
+  detail.js  notes.js Supporting-page renderers
 data/content.json     ★ ALL CONTENT
 assets/               CV PDF (generated from content.json by scripts/build.py)
-lab/                  Lab edition: an experimental parallel design at /lab/ (noindex, not in the
-                      sitemap), rendered from data/content.json + data/links.json + data/journey.json.
-                      Pages: index, about, path, papers, cv, personal, and project-<id>.html per
-                      project (built from lab/project.html, Layman/Expert reading levels).
+lab/                  Code and styles of the main design (the folder kept its old name; the pages
+                      themselves sit at the site root). Rendered from data/content.json +
+                      data/links.json + data/journey.json. Project pages have Layman/Expert reading levels.
                       core.js (data, nav, contents drawer, sign-offs, Lenis + GSAP motion, curtain),
                       field3d.js (three.js shader background), sphere3d.js (Bloch sphere in the
                       contents panel), qubit3d.js (home "qubit you can steer"), gallery.js (field
                       notes lightbox), abstracts/<id>.js (interactive abstract per thread), lab.css.
-intro/                Lab home intro: wave → measurement → name (WebGL, 2D fallback,
+                      The build writes forwarding pages at /lab/*.html so old /lab/ links still work.
+intro/                Home-page intro: wave → measurement → name (WebGL, 2D fallback,
                       reduced-motion fade); all timings/colours in intro/config.js.
                       ?intro=1 forces it, ?intro=0 skips it.
 cv/cv-template.tex    LaTeX CV template; scripts/cv_tex.py fills it from content.json

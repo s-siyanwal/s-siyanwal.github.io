@@ -29,8 +29,8 @@ export function mountChrome(data, active) {
     <a class="topbar-name" href="index.html">${esc(p.name)}</a>
     <nav class="topbar-nav" aria-label="Sections">
       ${item("index.html#work", "Work", "work")}
-      ${item("index.html#projects", "Projects", "projects")}
-      ${item("publications.html", "Publications", "pubs")}
+      ${item("papers.html", "Papers", "pubs")}
+      ${item("path.html", "Path", "path")}
       ${item("about.html", "About", "about")}
       ${cv ? `<a class="topbar-cv" href="${esc(cv)}" target="_blank" rel="noopener">CV ↓</a>` : ""}
       ${notesOn() ? `<a class="topbar-notes" href="notes.html"${active === "notes" ? ' aria-current="page"' : ""}>Notes</a>` : ""}

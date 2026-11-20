@@ -178,8 +178,8 @@ deploy typesets it with LaTeX (template: `cv/cv-template.tex`, filled in by
 the CV, edit `content.json`; to change its look, edit the template. Don't upload
 a PDF over it (the next deploy would replace it). The phone number is never printed.
 
-### Lab edition: your photo, links, proofs and galleries
-The lab edition (`/lab/`) reads three extra files. All of them start empty, and
+### Your photo, links, proofs and galleries
+The site reads three extra files. All of them start empty, and
 anything left empty is simply hidden on the site.
 
 | What | Where | How |

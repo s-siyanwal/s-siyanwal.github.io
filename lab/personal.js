@@ -1,4 +1,4 @@
-/* Lab edition: Personal — hobbies and life outside research, from data/journey.json → personal
+/* Site: Personal — hobbies and life outside research, from data/journey.json → personal
    ({ intro, sections: [{ title, text, featured, gallery }] }). Until Shiv fills it in, the page shows a quiet
    "coming soon" state; nothing here is written on his behalf. */
 import { boot, $, esc, paras, extras } from "./core.js";

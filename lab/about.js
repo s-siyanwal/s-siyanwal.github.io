@@ -1,4 +1,4 @@
-/* Lab edition: about. */
+/* Site: about. */
 import { boot, $, esc } from "./core.js";
 
 boot({

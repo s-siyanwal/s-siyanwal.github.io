@@ -1,4 +1,4 @@
-/* Lab edition background, rendered with three.js: one full-screen shader with a physics "mode" per page.
+/* Site background, rendered with three.js: one full-screen shader with a physics "mode" per page.
      0  wave interference   ψ = Σ ψ_i, contour lines of |ψ|² coloured by arg ψ     (home, about, papers, path)
      1  flow past a cylinder streamlines of a uniform flow + a drifting vortex street     (TensNet)
      2  spin precession     free-induction rings, phase = ω t − k r, decaying envelope    (NMR entanglement)
