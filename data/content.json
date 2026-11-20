@@ -900,7 +900,7 @@
       "id": "bitter-solenoid",
       "name": "Bitter Solenoid Simulator (0.5 T)",
       "blurb": "A real-time simulator for a 0.5 T water-cooled copper Bitter solenoid, with Swiss-roll RF metamaterials for early-stage fMRI.",
-      "abstract": "An open-source simulator that couples the field, electrical, thermal, hydraulic and mechanical models of a 0.5 T water-cooled copper Bitter solenoid, optimises the design under engineering constraints, and adds an fMRI layer: shim coils, B0 stability and an RF signal-to-noise model with Swiss-roll metamaterials. It runs on a laptop, Kaggle or Colab, and a browser demo needs no install.",
+      "abstract": "A simulator that couples the field, electrical, thermal, hydraulic and mechanical models of a 0.5 T water-cooled copper Bitter solenoid, optimises the design under engineering constraints, and adds an fMRI layer: shim coils, B0 stability and an RF signal-to-noise model with Swiss-roll metamaterials. It runs on a laptop, Kaggle or Colab, and a browser demo needs no install.",
       "metrics": [
         {
           "value": "0.5 T",
@@ -929,7 +929,7 @@
         }
       ],
       "featured": false,
-      "status": "Open-source software",
+      "status": "Public repository",
       "sections": [
         {
           "h": "Problem",
@@ -945,7 +945,16 @@
             "From the repository's generated results (differential-evolution run, seed 1).",
             "The optimum has an inner radius of 50.0 mm, an outer radius of 300 mm and a 1.10 m stack. It carries 2576 A at 4.54 V, dissipating 11.7 kW plus 81 W of pump power, with 99.95 ppm peak-to-peak homogeneity over a 30 mm-diameter sphere and a 25.9 °C copper hot spot. The active limits are field homogeneity and size, not cooling.",
             "Two Z2/Z4 shim-loop pairs bring the homogeneity over the same sphere to 0.26 ppm.",
+            "With the fMRI layer's assumed inputs, the field at the centre varies by about 4.4 ppm over 10 minutes with a current-regulated supply, against about 600 ppm with a voltage-regulated one, so the magnet needs a current-regulated supply and tightly held cooling-water temperature.",
             "In the quasi-static RF model, a Swiss-roll slab improves SNR over the same coil held off over an air gap, but does not beat a coil placed directly on the tissue."
+          ]
+        },
+        {
+          "h": "Validation",
+          "p": [
+            "From the repository's validation suite.",
+            "On the axis, the loop field model matches the closed-form fields of a uniform thick solenoid and of a Bitter (J ∝ 1/r) coil to within 2 × 10⁻¹³ (relative), and it reproduces the long-solenoid limit, B = μ₀nI, to 2 × 10⁻⁶. The independent straight-segment Biot–Savart engine converges at second order (measured order 1.99998, theory 2) and agrees with the thick-solenoid closed form to 1.1 × 10⁻⁴.",
+            "A pytest suite covers analytic limits, convergence, energy balance, the particle emulation and agreement between the browser demo and the Python model."
           ]
         }
       ],
@@ -1073,8 +1082,22 @@
           "p": "A 2019 project on sexually antagonistic selection in the Evolutionary Biology Lab (EBL) of Dr. N. G. Prasad, IISER Mohali."
         },
         {
+          "h": "Question",
+          "p": "The repository asks two questions. Do populations of simulated organisms, built only from biological rules, produce the patterns that the published mathematics predicts? And for published sexual-conflict results from the lab, does the model predict what the experiments found?"
+        },
+        {
           "h": "Computational models",
           "p": "The public repository rebuilds published models of sexual conflict: a two-locus model for the resolution of intra-locus sexual conflict from a poster by the lab, Parsons' (1961) invasion conditions with Owen's (1953) equilibria, and a \"mother's curse\" cytonuclear model. Each is solved twice: as deterministic recursions, and as an individual-based simulation that never imports the analytical maths. Statistical tests then check whether the simulated populations reproduce each prediction. A second part models published sexual-antagonism results from the lab with a hybrid analytic, individual-based and emulator approach."
+        },
+        {
+          "h": "Results (from the repository)",
+          "p": [
+            "From the repository's generated report and its plain-language summary of the hypothesis tests.",
+            "The deterministic reconstruction reproduces the poster's polymorphism formula, p* = ½ + ½(1/b − 1/a), and all five summary points of its stability analysis. Its invasion thresholds come within about 0.002 of the values read off the poster's bifurcation plots.",
+            "In the individual-based simulation, a rare modifier allele spreads or declines in the direction the mathematics predicts in almost every parameter cell that reached a verdict. The one disagreement lies within about 0.5% of neutrality, where drift dominates.",
+            "A caveat the deterministic model cannot show: balancing selection at the polymorphism is very weak, so in finite simulated populations drift fixes one allele within hundreds to thousands of generations unless the population is large.",
+            "For the lab's published sexual-conflict results, about 40 formal hypothesis tests found that the model's genuine predictions are right in direction and roughly in size. The evidence is modest, because the experiments are small. Where the data show more than the model contains (vial-to-vial scatter, a sex difference in offspring survival, genotype effects on courtship), the model fails, which points to biology it is missing. Many earlier \"matches\" were not evidence, because those tests could not have failed."
+          ]
         }
       ],
       "layman": [
@@ -1083,6 +1106,78 @@
         "Statistical tests then ask whether the simulated populations behave as the equations predict. Agreeing from two independent directions is a stronger check than either one alone."
       ],
       "layman_status": "draft"
+    },
+    {
+      "id": "qca-cfd",
+      "name": "QCA CFD",
+      "blurb": "Repository for a discrete solver of the 2D fluid equations based on quantum cellular automata. So far it holds a classical lattice-Boltzmann solver.",
+      "abstract": "The repository's stated aim is a discrete solver of the 2D fluid equations based on quantum cellular automata (QCA). What it holds so far is a classical D2Q9 lattice-Boltzmann solver, built one component at a time, with tests, verification notebooks and an example configuration for flow past a cylinder at Re = 100.",
+      "status": "Public repository",
+      "tags": [
+        "Quantum cellular automata",
+        "CFD",
+        "Lattice Boltzmann"
+      ],
+      "audience": "academic",
+      "links": [
+        {
+          "label": "Code",
+          "url": "https://github.com/s-siyanwal/QCA_CFD"
+        }
+      ],
+      "featured": false,
+      "sections": [
+        {
+          "h": "Aim",
+          "p": "A discrete solver of the 2D fluid equations based on quantum cellular automata, as stated in the repository's README."
+        },
+        {
+          "h": "What the repository holds",
+          "p": [
+            "A classical D2Q9 lattice-Boltzmann solver, built one component at a time: a YAML configuration manager that checks each file against a JSON schema; the D2Q9 lattice (velocities, weights and the equilibrium distribution); a geometry builder for circular, rectangular and NACA 4-digit aerofoil obstacles; and a core engine with BGK collision and streaming with bounce-back walls, compiled with Numba.",
+            "It also has pytest tests, verification notebooks and an example configuration for flow past a cylinder at Re = 100 on an 800 × 400 grid. No quantum cellular automaton code is in the repository so far."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "qpoland-hqlstm",
+      "name": "Hybrid Quantum LSTM (Qpoland Hackathon 2025)",
+      "blurb": "Submission to the Qpoland Global Quantum Hackathon 2025, FinQbit quantum machine learning track: a hybrid quantum LSTM that predicts closing prices on the test set.",
+      "abstract": "A hybrid quantum–classical LSTM submitted to the FinQbit quantum machine learning track of the Qpoland Global Quantum Hackathon 2025, whose task was to predict closing prices on a test set. The LSTM's gates are classical; its cell candidate comes from a 4-qubit circuit simulated with PennyLane.",
+      "period": "2025",
+      "status": "Hackathon submission",
+      "tags": [
+        "QML",
+        "PennyLane",
+        "Time series"
+      ],
+      "audience": "industry",
+      "links": [
+        {
+          "label": "Code",
+          "url": "https://github.com/s-siyanwal/Qpoland-Hackathon-PlanckShift-2025"
+        }
+      ],
+      "featured": false,
+      "sections": [
+        {
+          "h": "Task",
+          "p": "Predict closing prices on the test set of the FinQbit quantum machine learning track, Qpoland Global Quantum Hackathon 2025."
+        },
+        {
+          "h": "Model",
+          "p": [
+            "Inputs are windows of 8 consecutive time steps of seven min–max-scaled features from the price data: open, high, low, volume, the high–low range, the high/low ratio and a 3-step moving average of volume. The target is the closing price.",
+            "The LSTM's input, forget and output gates are classical. Its cell candidate comes from a 4-qubit circuit simulated with PennyLane: PCA reduces the current input and hidden state to four values, which are angle-embedded and passed through two basic entangler layers; the Pauli-Z expectation values, passed through tanh, form the candidate.",
+            "Training uses Adam with weight decay, a Huber loss, dropout and early stopping, on a chronological 65/35 split into training and validation data."
+          ]
+        },
+        {
+          "h": "Repository",
+          "p": "The notebook, the trained weights, the training metrics and the test-set close-price predictions."
+        }
+      ]
     }
   ],
   "publications": [
@@ -1119,6 +1214,17 @@
       "abstract": "A hybrid quantum machine learning approach for 24-day temperature forecasting from daily NCMRWF reanalysis data, using a 7-qubit variational quantum circuit with Strongly Entangling Layers and 50 trainable parameters, trained on a CPU-based quantum simulator, with low-latency inference on an AMD Alveo U55C FPGA kernel.",
       "pages": "1–6",
       "xplore": "11681266",
+      "category": "conference"
+    },
+    {
+      "venue": "ETTIS 2026",
+      "year": "2026",
+      "title": "Adaptive Multi-Algorithm Imputation Pipeline for Weather and Environmental Time Series",
+      "type": "Conference paper",
+      "status": "",
+      "authors": "A. Tiwari, R. Jaware, S. Siyanwal, K. Dave, H. Gupta",
+      "doi": "",
+      "abstract": "",
       "category": "conference"
     },
     {
