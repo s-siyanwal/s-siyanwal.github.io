@@ -1,4 +1,4 @@
-/* Lab edition: the academic CV as a page, laid out like the LaTeX CV that scripts/cv_tex.py generates from the same
+/* Site: the academic CV as a page, laid out like the LaTeX CV that scripts/cv_tex.py generates from the same
    content.json (education, research experience, publications, posters and talks, awards and fellowships, skills,
    references on request). Award proofs come from data/links.json → proofs; an award without a link shows none.
    No phone number is ever shown. */
@@ -29,8 +29,8 @@ boot({
   render(d) {
     const p = d.profile || {}, proofs = (extras.links || {}).proofs || {};
     const cv = (p.links || {}).cv_pdf;
-    $("cv-actions").innerHTML = `<ul class="artifact-row">${cv ? `<li><a class="btn btn--solid" href="../${esc(cv)}" download>Download PDF <span aria-hidden="true">↓</span></a></li>` : ""}
-      <li><a class="btn" href="../assets/Shivanshu_Siyanwal_CV.tex">LaTeX source</a></li></ul>`;
+    $("cv-actions").innerHTML = `<ul class="artifact-row">${cv ? `<li><a class="btn btn--solid" href="${esc(cv)}" download>Download PDF <span aria-hidden="true">↓</span></a></li>` : ""}
+      <li><a class="btn" href="assets/Shivanshu_Siyanwal_CV.tex">LaTeX source</a></li></ul>`;
     const links = (p.profiles || []).filter((x) => x.url && /orcid|github|linkedin|scholar|researchgate/.test(x.id));
     $("cv-head").innerHTML = `<p class="cv-name">${esc(p.name || "")}</p>
       <p class="cv-tag">${esc(p.title || "")}</p>

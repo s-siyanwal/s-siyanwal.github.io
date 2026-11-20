@@ -1,5 +1,5 @@
-/* Lab edition core: shared by every lab page.
-   - data from ../data/content.json (the same single source of truth as the classic site)
+/* Site core: shared by every lab page.
+   - data from data/content.json (the single source of truth)
    - chrome: top bar, footer, "On this page" navigator with a three.js Bloch sphere
    - motion: Lenis smooth scroll driving GSAP ScrollTrigger; word-split heading reveals, scrubbed text,
      count-ups, a magnetic kinetic name, page-to-page curtain transitions, the three.js field
@@ -21,7 +21,7 @@ root.classList.add("js");
 
 /* ---------------------------------------------------------------- data */
 export async function loadData() {
-  const res = await fetch("../data/content.json", { cache: "no-cache" });
+  const res = await fetch("data/content.json", { cache: "no-cache" });
   if (!res.ok) throw new Error(`content.json: ${res.status}`);
   return res.json();
 }
@@ -29,12 +29,12 @@ export async function loadData() {
 /* Optional data files (links.json: artifacts and proofs; journey.json: photos and videos). A missing or broken file
    only hides the features that use it. */
 async function loadOptional(name) {
-  try { const r = await fetch(`../data/${name}`, { cache: "no-cache" }); return r.ok ? await r.json() : {}; } catch (e) { return {}; }
+  try { const r = await fetch(`data/${name}`, { cache: "no-cache" }); return r.ok ? await r.json() : {}; } catch (e) { return {}; }
 }
 export const extras = { links: {}, journey: {} };
 
-/* A link stored in links.json: an https URL, or a repo path such as assets/docs/x.pdf (made relative to /lab/). */
-export const hrefOf = (v) => (!v ? "" : /^(https?:|mailto:)/.test(v) ? v : `../${String(v).replace(/^\/+/, "")}`);
+/* A link stored in links.json: an https URL, or a repo path such as assets/docs/x.pdf (relative to the site root). */
+export const hrefOf = (v) => (!v ? "" : /^(https?:|mailto:)/.test(v) ? v : String(v).replace(/^\/+/, ""));
 
 /* ---------------------------------------------------------------- chrome */
 const NAV = [["index.html#work", "Work", "work"], ["about.html", "About", "about"], ["path.html", "Path", "path"], ["papers.html", "Papers", "papers"],
@@ -54,12 +54,11 @@ export function chrome(data, active) {
   const p = data.profile || {};
   $("bar").innerHTML = `
     <a class="mark" href="index.html">${esc(p.name || "")}</a>
-    <nav class="bar-nav" aria-label="Lab edition">${NAV.map(([href, label, key], i) =>
+    <nav class="bar-nav" aria-label="Sections">${NAV.map(([href, label, key], i) =>
       `<a href="${href}"${key === active ? ' aria-current="page"' : ""}>${label}<span class="num">${String(i + 1).padStart(2, "0")}</span></a>`).join("")}</nav>
     <div class="bar-tools">
       <button type="button" class="field-toggle" hidden>Pause field</button>
       <button type="button" class="theme-toggle">Theme: Auto</button>
-      <a class="classic" href="../">Classic site</a>
     </div>`;
   const links = [];
   if (p.email) links.push([`mailto:${p.email}`, "Email"]);
@@ -70,7 +69,7 @@ export function chrome(data, active) {
     <div class="foot-row">
       <p>${esc([p.name, p.location].filter(Boolean).join(" · "))}</p>
       <ul class="foot-links">${links.map(([h, l]) => `<li><a href="${esc(h)}"${h.startsWith("http") ? ' target="_blank" rel="noopener"' : ""}>${esc(l)}</a></li>`).join("")}</ul>
-      <p><a href="#top" data-top>Return to |0⟩ ↑</a> · <a href="../">Classic site</a></p>
+      <p><a href="#top" data-top>Return to |0⟩ ↑</a></p>
     </div>`;
   themeToggle(document.querySelector(".theme-toggle"));
   replayControl(active);
@@ -262,7 +261,7 @@ function anchors() {
 }
 
 /* Page-to-page curtain: CSS slides it away on arrival (so a JS failure can never leave it covering the page);
-   GSAP draws it back in before following a link to another lab page. */
+   GSAP draws it back in before following a link to another page. */
 function transitions() {
   const curtain = document.querySelector(".curtain");
   if (!curtain) return;
@@ -272,7 +271,7 @@ function transitions() {
     const a = e.target.closest("a[href]");
     if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target === "_blank" || a.hasAttribute("download")) return;
     const url = new URL(a.href, location.href);
-    if (url.origin !== location.origin || !/\/lab\//.test(url.pathname) || url.pathname === location.pathname) return;
+    if (url.origin !== location.origin || !/(\/|\.html)$/.test(url.pathname) || url.pathname.replace(/index\.html$/, "") === location.pathname.replace(/index\.html$/, "")) return;
     e.preventDefault();
     curtain.classList.add("is-leaving");
     gsap.fromTo(curtain, { yPercent: 100 }, { yPercent: 0, duration: 0.6, ease: "expo.inOut", onComplete: () => { location.href = url.href; } });

@@ -25,16 +25,15 @@ negotiable; everything else is guidance.
 ### Repository map
 
 ```
-index.html            Home: hero + animated circuit, metrics, profile links,
-                      experience (<details>), project cards with filter, recent papers
-project.html          Project deep-dive template; built into project-<id>.html
-                      (project.html?id=<id> redirects there on the live site)
-publications.html     Full bibliography, abstracts, type filter
-about.html            Research statement, interests, training, skills, education
-style.css             All styling; design tokens in :root
-js/site.js            Shared: data loading, nav, footer, fail-safe scroll reveal
-js/circuit.js         Signature element: animated SVG quantum circuit
-js/index.js, project.js, publications.js, about.js   Page renderers
+index.html            Home of the main design (formerly "lab"): hero, the question, research
+                      threads, qubit, numbers. about / path / papers / cv / personal.html are its
+                      other pages; project.html is the thread template (built into
+                      project-<id>.html; project.html?id=<id> redirects there on the live site)
+lab/                  Scripts, styles and vendored libraries of the main design (old folder name
+                      kept; /lab/*.html are build-generated forwarding pages)
+style.css             Styling of the supporting pages only (paper-*, role-*, notes, 404)
+js/site.js            Shared: data loading, helpers; nav and footer of the supporting pages
+js/detail.js, notes.js   Supporting-page renderers
 data/content.json     ★ Single source of truth for ALL content
 assets/               CV PDF; fonts/ holds self-hosted woff2 + OFL licences
 DESIGN.md             Design tokens, type scale, motion rules (Direction A)
@@ -75,7 +74,8 @@ README.md             Technical overview
 8. **Accessibility is WCAG 2.2 AA minimum.** Keyboard operable, visible focus,
    correct heading order, AA contrast, meaningful link text, screen-reader-sane
    disclosure widgets.
-9. **Keep the aesthetic (Direction A, "Interference").** Academic-paper look:
+9. **Keep the aesthetic.** (The main design is now the former lab design, `lab/lab.css`; the Direction A
+   tokens below describe the supporting pages that still use `style.css`.) **Direction A, "Interference":** Academic-paper look:
    warm paper ground (`--bg #FAF8F2`), ink text, verdigris accent
    (`--accent #0B6A5A`) with vermilion (`--accent-2 #B93A0E`) reserved for
    live/phase state only. Fraunces / Geist / Geist Mono, self-hosted from

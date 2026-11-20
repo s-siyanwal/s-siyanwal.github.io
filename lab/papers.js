@@ -1,4 +1,4 @@
-/* Lab edition: papers, posters and talks. One horizontal row per type (native scroll-snap, swipe on touch, buttons
+/* Site: papers, posters and talks. One horizontal row per type (native scroll-snap, swipe on touch, buttons
    and keyboard on desktop), newest first, so the page keeps the same height however long the list grows.
    Filter chips show one type at a time. Abstracts open in place. Without JS the rows are still scrollable lists. */
 import { boot, $, esc, MOTION } from "./core.js";

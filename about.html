@@ -4,69 +4,53 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>About — Shivanshu Siyanwal</title>
-<meta name="description" content="Quantum information and near-term quantum algorithms"/>
-<link rel="preload" href="assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin/>
+<meta name="description" content="Research statement, interests, education, skills and recognition of Shivanshu Siyanwal."/>
+<link rel="preload" href="assets/fonts/instrument-serif.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href="assets/fonts/geist.woff2" as="font" type="font/woff2" crossorigin/>
-<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}try{if("speechSynthesis"in window)document.documentElement.classList.add("tts")}catch(e){}</script>
-<link rel="stylesheet" href="style.css"/>
+<link rel="preload" href="assets/fonts/instrument-serif-italic.woff2" as="font" type="font/woff2" crossorigin/>
+<script>try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}try{if(!window.__PRERENDER__&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("lab-anim")}catch(e){}</script>
+<link rel="stylesheet" href="lab/lab.css"/>
+<script src="lab/vendor/gsap.min.js" defer></script>
+<script src="lab/vendor/ScrollTrigger.min.js" defer></script>
+<script src="lab/vendor/lenis.min.js" defer></script>
+<script type="module" src="lab/about.js"></script>
 </head>
 <body>
-<a class="skip-link" href="#main">Skip to content</a>
-<header class="topbar"><div class="wrap topbar-inner"></div></header>
+<a class="skip" href="#main">Skip to content</a>
+<div class="curtain" aria-hidden="true"></div>
+<header class="bar" id="bar"></header>
 <main id="main">
-  <header class="page-head">
-    <div class="wrap narrow"><div class="panel">
-      <a class="backlink" href="index.html">← Home</a>
-      <h1 id="about-headline">Research statement</h1>
-    </div></div>
-  </header>
-
-  <div class="wrap narrow"><div class="panel prose">
-    <picture class="portrait-pic"><source type="image/webp" srcset="assets/portrait-296.webp 296w, assets/portrait-440.webp 440w" sizes="220px"/><img class="portrait portrait--about" src="assets/portrait.jpg" width="220" height="275" alt="Portrait of Shivanshu Siyanwal" loading="lazy" decoding="async"/></picture>
-    <div id="about-statement"></div>
-  </div></div>
-
-  <section class="section" aria-labelledby="int-h">
-    <div class="wrap narrow"><div class="panel">
-      <div class="section-head" data-reveal><h2 id="int-h">Research interests</h2></div>
-      <p class="interests-lede" id="interests-lede" data-reveal></p>
-      <div class="interests" id="interests"></div>
-      <p class="hero-avail" id="looking" data-reveal></p>
-    </div></div>
+  <section class="page-hero" id="top" aria-labelledby="ab-h">
+    <p class="micro">About</p>
+    <h1 id="ab-h" data-split>Research <em>statement</em></h1>
+    <p class="page-lede" id="ab-lede"></p>
   </section>
-
-  <section class="section" aria-labelledby="tr-h">
-    <div class="wrap narrow"><div class="panel">
-      <div class="section-head" data-reveal><h2 id="tr-h">Research training</h2></div>
-      <div class="stack" id="research-list"></div>
-    </div></div>
+  <section class="block prose" id="statement" aria-labelledby="st-h">
+    <h2 id="st-h" class="sr">Statement</h2>
+    <div class="statement" id="statement-body"></div>
   </section>
-
-  <section class="section" aria-labelledby="sk-h">
-    <div class="wrap narrow"><div class="panel">
-      <div class="section-head" data-reveal><h2 id="sk-h">Technical skills</h2></div>
-      <dl class="skills" id="skills-list"></dl>
-    </div></div>
+  <section class="block" id="interests" aria-labelledby="in-h">
+    <p class="micro">Interests</p>
+    <h2 id="in-h" data-split>What I keep <em>returning</em> to</h2>
+    <ul class="interests" id="interest-list"></ul>
+    <p class="looking" id="looking"></p>
   </section>
-
-  <section class="section" aria-labelledby="ed-h">
-    <div class="wrap narrow"><div class="panel">
-      <div class="section-head" data-reveal><h2 id="ed-h">Education &amp; awards</h2></div>
-      <div class="about-grid">
-        <div class="about-col"><div class="mini-list" id="education-list"></div></div>
-        <div class="about-col"><ul class="awards" id="awards-list"></ul></div>
-      </div>
-    </div></div>
+  <section class="block" id="education" aria-labelledby="ed-h">
+    <p class="micro">Education</p>
+    <h2 id="ed-h" data-split><em>Training</em></h2>
+    <ol class="edu" id="edu-list"></ol>
   </section>
-
-  <section class="section" aria-labelledby="pf-h">
-    <div class="wrap narrow"><div class="panel">
-      <div class="section-head" data-reveal><h2 id="pf-h">Find me elsewhere</h2></div>
-      <div class="profiles" id="about-profiles"></div>
-    </div></div>
+  <section class="block" id="tools" aria-labelledby="tl-h">
+    <p class="micro">Instruments</p>
+    <h2 id="tl-h" data-split>Tools I <em>reach for</em></h2>
+    <dl class="tools" id="tools-list"></dl>
+  </section>
+  <section class="block" id="recognition" aria-labelledby="rc-h">
+    <p class="micro">Recognition</p>
+    <h2 id="rc-h" data-split>Awards &amp; <em>fellowships</em></h2>
+    <ul class="awards" id="award-list"></ul>
   </section>
 </main>
-<footer class="footer" id="footer-slot"></footer>
-<script type="module" src="js/about.js"></script>
+<footer class="foot" id="foot"></footer>
 </body>
 </html>
