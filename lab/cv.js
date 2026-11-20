@@ -59,6 +59,7 @@ boot({
       const proof = proofs[a.title];
       return `<li><span class="cv-l">${esc(a.title)}${proof ? ` <a class="cv-proof" href="${esc(hrefOf(proof))}" target="_blank" rel="noopener">Proof<span class="sr"> for ${esc(a.title)}</span></a>` : ""}</span><span class="cv-r">${esc(a.year || "")}</span></li>`;
     }).join("")}</ul>`;
+    const certs = (d.certificates || []).length ? `<ul class="cv-awards">${d.certificates.map((a) => `<li><span class="cv-l">${esc(a.title)}</span><span class="cv-r">${esc(a.year || "")}</span></li>`).join("")}</ul>` : "";
     const skills = `<dl class="cv-skills">${(d.skills || []).map((g) => `<div><dt>${esc(g.category)}</dt><dd>${esc((g.items || []).join(", "))}</dd></div>`).join("")}</dl>`;
 
     $("cv-body").innerHTML = [
@@ -67,6 +68,7 @@ boot({
       section("publications", "Publications", papers + prepHtml + eq),
       section("talks", "Posters and talks", talksHtml),
       section("awards", "Awards and fellowships", awards),
+      certs ? section("certificates", "Certificates and events", certs) : "",
       section("skills", "Skills", skills),
       section("references", "References", '<p class="cv-p">Available on request.</p>'),
     ].join("");

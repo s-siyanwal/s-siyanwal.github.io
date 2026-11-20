@@ -32,6 +32,7 @@ boot({
         <h3 class="cite-t">${esc(p.title)}</h3>
         ${p.authors ? `<p class="cite-a">${authorsHtml(p.authors)}</p>` : ""}
         <p class="cite-v">${venueHtml(p)}</p>
+        ${p.role && !hasDetail(p) ? `<p class="cite-v"><b>My role.</b> ${esc(p.role)}</p>` : ""}
         ${idLinks(p) ? `<p class="ids">${idLinks(p)}</p>` : ""}
         ${p.abstract ? `<details class="abs"><summary>Abstract</summary><p>${esc(p.abstract)}</p></details>` : ""}
         ${hasDetail(p) ? `<p class="ids"><a href="${paperHref(p)}" aria-label="Full write-up: ${esc(p.title)}">Full write-up <span aria-hidden="true">→</span></a></p>` : ""}</li>`).join("")}</ol>

@@ -807,6 +807,8 @@ def cv_html(data):
         + (f", {esc(x['venue'])}" if x.get("venue") else "") + ".</li>" for x in talks)
     awards = "".join(f"<li>{esc(a['title'])}" + (f" ({esc(a['year'])})" if a.get("year") else "") + ".</li>"
                      for a in data.get("awards", []))
+    certs = "".join(f"<li>{esc(a['title'])}" + (f" ({esc(a['year'])})" if a.get("year") else "") + ".</li>"
+                    for a in data.get("certificates", []))
     skills = "".join(f"<li><b>{esc(s['category'])}:</b> {esc(', '.join(s.get('items', [])))}.</li>"
                      for s in data.get("skills", []))
     interests = p.get("research_interests") or ""
@@ -844,6 +846,7 @@ a {{ color: inherit; text-decoration: none; }}
 {sec('Publications', pub_html)}
 {sec('Presentations', f'<ul>{talk_html}</ul>' if talk_html else '')}
 {sec('Awards and fellowships', f'<ul>{awards}</ul>' if awards else '')}
+{sec('Certificates and events', f'<ul>{certs}</ul>' if certs else '')}
 {sec('Technical skills', f'<ul>{skills}</ul>' if skills else '')}
 </body></html>"""
 
