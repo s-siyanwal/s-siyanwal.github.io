@@ -13,7 +13,7 @@ function cite(p) {
   if (p.volume) bits.push(`${esc(p.volume)}${p.issue ? `(${esc(p.issue)})` : ""}${p.article ? `:${esc(p.article)}` : ""}`);
   if (p.pages) bits.push(`pp. ${esc(p.pages)}`);
   if (p.year && !String(p.venue || "").endsWith(String(p.year))) bits.push(esc(p.year));
-  const status = p.status && !/^published$/i.test(p.status) && !/library/i.test(p.status) ? `, ${esc(p.status)}` : "";
+  const status = p.status && !/^published$/i.test(p.status) && !/library/i.test(p.status) ? `, ${esc(p.status.replace(/\.$/, ""))}` : "";
   const ids = [];
   if (p.doi) ids.push(`<a href="https://doi.org/${esc(p.doi)}">doi:${esc(p.doi)}</a>`);
   if (p.arxiv) ids.push(`<a href="https://arxiv.org/abs/${esc(p.arxiv)}">arXiv:${esc(p.arxiv)}</a>`);

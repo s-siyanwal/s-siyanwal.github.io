@@ -213,7 +213,7 @@ export function venueHtml(p) {
   const bits = [p.venue && `<em>${esc(p.venue)}</em>`];
   if (p.volume) bits.push(`${esc(p.volume)}${p.issue ? `(${esc(p.issue)})` : ""}${p.article ? `, ${esc(p.article)}` : ""}`);
   if (p.pages) bits.push(`pp. ${esc(p.pages)}`);
-  bits.push(esc(p.year || ""));
+  if (!(p.year && String(p.venue || "").includes(String(p.year)))) bits.push(esc(p.year || ""));   // the venue may already say the year
   return bits.filter(Boolean).join(", ");
 }
 

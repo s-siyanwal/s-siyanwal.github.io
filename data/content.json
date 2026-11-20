@@ -94,9 +94,9 @@
       "note": "incl. INSPIRE-SHE, DRDO JRF"
     },
     {
-      "value": "5",
-      "label": "Peer-reviewed papers",
-      "note": "2 journal, 3 conference"
+      "value": "",
+      "label": "Published papers",
+      "computed": "published_papers"
     }
   ],
   "skills": [
@@ -271,8 +271,17 @@
       "org": "Mesoscopic Physics Lab (PI: Dr. Ananth Venkatesan)",
       "role": "Intern",
       "location": "",
-      "period": "2018",
-      "summary": "",
+      "period": "May 2018 – Jul 2018",
+      "summary": "Summer 2018 (May–July), intern in Dr. Ananth Venkatesan's Mesoscopic lab, IISER Mohali. I worked on a theoretical design for a water-cooled solenoid reaching 0.5 T, studying Bitter and Swiss-roll magnet models.",
+      "points": [],
+      "tags": []
+    },
+    {
+      "org": "Evolutionary Biology Lab (PI: Dr. N. G. Prasad), IISER Mohali",
+      "role": "Research Intern",
+      "location": "",
+      "period": "May 2019 – Jul 2019",
+      "summary": "In summer 2019 (May–July) I was a research intern in Dr. N. G. Prasad's Evolutionary Biology Lab at IISER Mohali. I developed mathematical models of gene-frequency patterns of sexually dimorphic traits in Drosophila melanogaster, simulated population-genetic evolution in MATLAB, and analysed data in R.",
       "points": [],
       "tags": []
     }
@@ -963,7 +972,8 @@
         "The difficulty is heat. Doubling the current doubles the field, but it quadruples the heat the copper gives off, so the water has to carry that heat away. The simulator on this page ties together the field, the electricity, the heat, the water flow and the mechanical forces, and searches for the design that uses the least power while staying inside its limits.",
         "A separate layer looks at what an MRI scanner needs on top of the magnet itself: extra coils that even out the field, a check on how steady the field stays, and the radio-frequency signal received with Swiss-roll metamaterials, which are small rolled-up resonant structures."
       ],
-      "layman_status": "draft"
+      "layman_status": "draft",
+      "role": "In summer 2018 (May–July) I was an intern in Dr. Ananth Venkatesan's Mesoscopic lab at IISER Mohali, where I worked on a theoretical design for a water-cooled solenoid reaching 0.5 T, studying Bitter and Swiss-roll magnet models."
     },
     {
       "id": "cpinn",
@@ -1005,7 +1015,7 @@
     {
       "id": "worm-like-spin-chain",
       "name": "Worm-like Spin Chain",
-      "blurb": "2020 summer project on worm-like spin chain models with Dr. Abhishek Chaudhuri.",
+      "blurb": "2020 reading project in biophysics under Dr. Abhishek Chaudhuri (a COVID year, with no in-person internship): simulating worm-like chains as polymer models and reproducing published results.",
       "period": "2020",
       "tags": [
         "Spin chains",
@@ -1023,7 +1033,7 @@
       "sections": [
         {
           "h": "Context",
-          "p": "A summer project in 2020 on worm-like spin chain models, with Dr. Abhishek Chaudhuri."
+          "p": "A 2020 reading project in biophysics under Dr. Abhishek Chaudhuri. It was a COVID year, so there was no in-person internship. The work was simulating worm-like chains as polymer models and reproducing published results."
         },
         {
           "h": "Background",
@@ -1031,7 +1041,7 @@
         },
         {
           "h": "Status",
-          "p": "The public repository now holds code, but it is not the 2020 summer-project code. It is a later (2026) Brownian-dynamics toolkit for self-propelled worm-like filaments, built to reproduce a published paper, and it is not a completed replication. The 2020 code and results are still not public, so no 2020 results are reported here."
+          "p": "The public repository now holds code, but it is not the 2020 project code. It is a later (2026) Brownian-dynamics toolkit for self-propelled worm-like filaments, built to reproduce a published paper, and it is not a completed replication. The 2020 code and results are still not public, so no 2020 results are reported here."
         },
         {
           "h": "Code in the repository (2026 toolkit)",
@@ -1049,7 +1059,7 @@
           ]
         }
       ],
-      "abstract": "A 2020 summer project with Dr. Abhishek Chaudhuri on worm-like spin chain models: semiflexible polymers described as classical spin chains.",
+      "abstract": "A 2020 reading project in biophysics under Dr. Abhishek Chaudhuri (a COVID year, with no in-person internship): simulating worm-like chains as polymer models and reproducing published results. Worm-like chains are semiflexible polymers, which can also be described as classical spin chains.",
       "layman": [
         "Think of a long, flexible molecule such as a polymer or a strand of DNA as a rope made of many short segments. Each segment points in some direction, and neighbouring segments prefer to point the same way. That preference is what makes the rope bend smoothly instead of kinking at random.",
         "The same description fits a row of tiny magnets, called spins, where neighbours prefer to line up. Because the mathematics is the same, tools from the physics of magnets can be used on flexible chains. Pulling on the two ends of the chain then plays the part of an external magnetic field.",
@@ -1105,7 +1115,8 @@
         "Mathematical models predict when such a tug of war can keep both versions in a population instead of letting one win. This project rebuilt published models of sexual conflict in fruit flies (Drosophila) in two independent ways: once with the equations from the papers, and once as a simulation of individual animals that is not allowed to use those equations.",
         "Statistical tests then ask whether the simulated populations behave as the equations predict. Agreeing from two independent directions is a stronger check than either one alone."
       ],
-      "layman_status": "draft"
+      "layman_status": "draft",
+      "role": "In summer 2019 (May–July) I was a research intern in Dr. N. G. Prasad's Evolutionary Biology Lab at IISER Mohali. I developed mathematical models of gene-frequency patterns of sexually dimorphic traits in Drosophila melanogaster, simulated population-genetic evolution in MATLAB, and analysed data in R."
     },
     {
       "id": "qca-cfd",
@@ -1142,11 +1153,10 @@
     },
     {
       "id": "qpoland-hqlstm",
-      "name": "Hybrid Quantum LSTM (Qpoland Hackathon 2025)",
-      "blurb": "Submission to the Qpoland Global Quantum Hackathon 2025, FinQbit quantum machine learning track: a hybrid quantum LSTM that predicts closing prices on the test set.",
-      "abstract": "A hybrid quantum–classical LSTM submitted to the FinQbit quantum machine learning track of the Qpoland Global Quantum Hackathon 2025, whose task was to predict closing prices on a test set. The LSTM's gates are classical; its cell candidate comes from a 4-qubit circuit simulated with PennyLane.",
-      "period": "2025",
-      "status": "Hackathon submission",
+      "name": "Hybrid Quantum LSTM (QPoland Hackathon 2025)",
+      "blurb": "Submission to the QPoland Global Quantum Hackathon 2025, Quantum in Finance track: a hybrid quantum LSTM that predicts closing prices on the test set.",
+      "abstract": "A hybrid quantum–classical LSTM submitted to the Quantum in Finance track of the QPoland Global Quantum Hackathon 2025, whose task was to predict closing prices on a test set. The LSTM's gates are classical; its cell candidate comes from a 4-qubit circuit simulated with PennyLane.",
+      "status": "Participant (team PlanckShift), QPoland Global Quantum Hackathon 2025, Quantum in Finance track, 18–26 October 2025.",
       "tags": [
         "QML",
         "PennyLane",
@@ -1163,7 +1173,7 @@
       "sections": [
         {
           "h": "Task",
-          "p": "Predict closing prices on the test set of the FinQbit quantum machine learning track, Qpoland Global Quantum Hackathon 2025."
+          "p": "Predict closing prices on the test set of the Quantum in Finance track, QPoland Global Quantum Hackathon 2025."
         },
         {
           "h": "Model",
@@ -1217,11 +1227,11 @@
       "category": "conference"
     },
     {
-      "venue": "ETTIS 2026",
+      "venue": "6th International Conference on Emerging Trends and Technologies on Intelligent Systems (ETTIS 2026), C-DAC Noida, 1–3 July 2026",
       "year": "2026",
       "title": "Adaptive Multi-Algorithm Imputation Pipeline for Weather and Environmental Time Series",
       "type": "Conference paper",
-      "status": "",
+      "status": "Accepted and presented; proceedings (Springer LNNS) not yet published.",
       "authors": "A. Tiwari, R. Jaware, S. Siyanwal, K. Dave, H. Gupta",
       "doi": "",
       "abstract": "",
