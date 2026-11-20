@@ -3,7 +3,7 @@
    and in print it is an ordinary vertical list. Photos and videos come from data/journey.json (stage key = slug of
    the role or degree title); until they exist each stage shows a quiet "coming soon" frame. */
 import { boot, $, esc, paras, MOTION, DESKTOP, extras } from "./core.js";
-import { slug } from "../js/site.js";
+import { slug, roleHref } from "../js/site.js";
 import { featuredHtml, galleryButton, wireGalleries } from "./gallery.js";
 
 const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
@@ -25,7 +25,7 @@ boot({
       ...(d.education || []).map((e) => ({ kind: "Education", when: e.period, title: e.degree, org: e.school, loc: e.location, sum: e.note, start: startOf(e.period) })),
       ...[...(d.experience || []), ...(d.research || [])].map((e) => ({
         kind: (d.research || []).includes(e) ? "Research" : "Role", when: e.period, title: e.role, org: e.org, loc: e.location,
-        sum: e.summary, narrative: e.narrative, points: e.points, tags: e.tags, now: e.current, start: startOf(e.period),
+        sum: e.summary, narrative: e.narrative, points: e.points, tags: e.tags, now: e.current, start: startOf(e.period), href: roleHref(e),
       })),
     ].sort((x, y) => x.start - y.start);
     $("worldline").innerHTML = events.map((e) => {
@@ -37,6 +37,7 @@ boot({
       <h3 class="ev-title">${esc(e.title)}</h3>
       <p class="ev-org">${esc(e.org)}${e.loc ? ` · ${esc(e.loc)}` : ""}</p>
       ${e.sum ? `<p class="ev-sum">${esc(e.sum)}</p>` : ""}
+      ${e.href ? `<p class="ev-link"><a href="${e.href}" aria-label="Full write-up: ${esc(e.title)}, ${esc(e.org)}">Full write-up <span aria-hidden="true">→</span></a></p>` : ""}
       <div class="ev-media">${featuredHtml(st.featured, { label: "Photos" })}${galleryButton(st.gallery, e.title, key)}</div>
       ${more ? `<details class="ev-more"><summary>Read more</summary>
         ${e.narrative ? `<div class="ev-narr prose">${paras(e.narrative)}</div>` : ""}

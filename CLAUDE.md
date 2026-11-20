@@ -31,9 +31,10 @@ index.html            Home of the main design (formerly "lab"): hero, the questi
                       project-<id>.html; project.html?id=<id> redirects there on the live site)
 lab/                  Scripts, styles and vendored libraries of the main design (old folder name
                       kept; /lab/*.html are build-generated forwarding pages)
-style.css             Styling of the supporting pages only (paper-*, role-*, notes, 404)
-js/site.js            Shared: data loading, helpers; nav and footer of the supporting pages
-js/detail.js, notes.js   Supporting-page renderers
+detail.html           Template of the paper-*.html / role-*.html deep dives (main design)
+style.css             Styling of the notes pages and 404 only
+js/site.js            Shared: data loading, helpers; nav and footer of the notes pages
+js/notes.js           Notes-page renderer
 data/content.json     ★ Single source of truth for ALL content
 assets/               CV PDF; fonts/ holds self-hosted woff2 + OFL licences
 DESIGN.md             Design tokens, type scale, motion rules (Direction A)
@@ -75,7 +76,7 @@ README.md             Technical overview
    correct heading order, AA contrast, meaningful link text, screen-reader-sane
    disclosure widgets.
 9. **Keep the aesthetic.** (The main design is now the former lab design, `lab/lab.css`; the Direction A
-   tokens below describe the supporting pages that still use `style.css`.) **Direction A, "Interference":** Academic-paper look:
+   tokens below describe the notes pages and 404 that still use `style.css`.) **Direction A, "Interference":** Academic-paper look:
    warm paper ground (`--bg #FAF8F2`), ink text, verdigris accent
    (`--accent #0B6A5A`) with vermilion (`--accent-2 #B93A0E`) reserved for
    live/phase state only. Fraunces / Geist / Geist Mono, self-hosted from

@@ -68,11 +68,13 @@ already have.
 index.html            Home (the main design): hero, "the question", research threads, qubit, numbers
 about.html  path.html  papers.html  cv.html  personal.html   The other pages of the main design
 project.html          Research-thread template (built into project-<id>.html; ?id=<id> redirects)
-style.css             Styling for the supporting pages only (paper-*, role-*, notes, 404)
+detail.html           Template of the paper-<slug>.html and role-<slug>.html deep dives (main design;
+                      text baked in by scripts/build.py, script lab/detail.js)
+style.css             Styling of the notes pages and 404 only
 js/
-  site.js             Shared helpers (also used by the main design); nav and footer of supporting pages
+  site.js             Shared helpers (also used by the main design); nav and footer of the notes pages
   figures.js          Schematic figures, shared with the project pages
-  detail.js  notes.js Supporting-page renderers
+  notes.js            Notes-page renderer
 data/content.json     ★ ALL CONTENT
 assets/               CV PDF (generated from content.json by scripts/build.py)
 lab/                  Code and styles of the main design (the folder kept its old name; the pages
