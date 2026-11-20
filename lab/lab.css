@@ -632,6 +632,44 @@ html[data-view="expert"] [data-view="layman"], html[data-view="layman"] [data-vi
 /* ---------- Personal ---------- */
 .ps-sec .ev-media { max-width: 48rem; }
 
+/* ---------- Deep-dive pages (paper-*.html, role-*.html; markup from scripts/build.py) ---------- */
+.dd-hero h1 { font-size: clamp(2.2rem, 5.2vw, 4.2rem); line-height: 1.04; max-width: 24ch; }
+.dd-hero .page-lede { max-width: 52ch; font-size: clamp(1.15rem, 2vw, 1.5rem); }
+.dd-meta { font-family: var(--mono); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin: 1rem 0 0; overflow-wrap: anywhere; }
+.dd-meta + .dd-meta { margin-top: .3rem; }
+.dd-hero .crumbs { margin-bottom: 2.2rem; }
+.dd-body { padding-top: clamp(2.5rem, 7vh, 4.5rem); padding-left: var(--pad); padding-right: var(--pad); padding-bottom: 1rem; }
+.dd-body > * { max-width: 68ch; }
+.dd-body > .dd-fig-wide { max-width: none; }
+.dd-sec { padding: 0; margin: 0 0 2.6rem; }
+.dd-sec h2 { font-size: clamp(1.7rem, 3.4vw, 2.4rem); line-height: 1.08; margin: 0 0 .9rem; }
+.dd-sec p, .dd-sec li { max-width: 68ch; }
+.dd-sec ul { padding-left: 1.2rem; color: var(--muted); line-height: 1.68; }
+.dd-sec .abstract { font-family: var(--display); font-size: clamp(1.2rem, 2vw, 1.4rem); line-height: 1.4; color: var(--ink); border-left: 2px solid var(--accent); padding-left: 1.1rem; }
+.dd-sec a, .dd-body > p a { text-underline-offset: .2em; }
+.dd-sec .coming-soon { color: var(--muted); font-style: italic; }
+.dd-body .draft-note { border: 1px dashed var(--accent); border-radius: 6px; padding: .6rem .8rem; font-size: .94rem; color: var(--muted); }
+.dd-body .tag-row { display: flex; flex-wrap: wrap; gap: .4rem; margin: 2rem 0; padding-top: 1.4rem; border-top: 1px solid var(--line); }
+.dd-body .tag { font-family: var(--mono); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--line-strong); border-radius: 999px; padding: .2rem .7rem; color: var(--muted); }
+.dd-body .read-more { font-family: var(--mono); font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); text-decoration: none; display: inline-flex; min-height: 32px; align-items: center; }
+.dd-body .read-more:hover { text-decoration: underline; }
+.detail-fig { margin: 2rem 0; }
+.detail-fig svg { width: 100%; height: auto; display: block; }
+.detail-fig figcaption { font-family: var(--mono); font-size: .72rem; letter-spacing: .04em; color: var(--faint); margin-top: .5rem; }
+.fl-box { fill: none; stroke: var(--accent); stroke-width: 1.2; }
+.fl-txt { fill: var(--ink); font-family: var(--mono); font-size: 11px; }
+.fl-arrow { stroke: var(--faint); stroke-width: 1.2; fill: none; }
+.fl-head { fill: var(--faint); }
+.tl-bar { fill: var(--faint); opacity: .55; }
+.tl-bar.is-this { fill: var(--accent); opacity: 1; }
+.tl-tick { fill: var(--faint); font-family: var(--mono); font-size: 11px; }
+.tl-label { fill: var(--muted); font-family: var(--text); font-size: 14px; }
+.tl-label.is-this { fill: var(--ink); font-weight: 600; }
+.tl-grid { stroke: var(--line); stroke-width: 1; }
+.tl-fig svg { max-width: 480px; }
+.ev-link { margin: .7rem 0 0; font-family: var(--mono); font-size: .8rem; letter-spacing: .06em; }
+.ev-link a { display: inline-flex; min-height: 32px; align-items: center; }
+
 @media (prefers-reduced-motion: reduce) {
   .toc-more::before { transition: none; }
 }

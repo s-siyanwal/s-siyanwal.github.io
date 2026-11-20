@@ -2,7 +2,7 @@
    and keyboard on desktop), newest first, so the page keeps the same height however long the list grows.
    Filter chips show one type at a time. Abstracts open in place. Without JS the rows are still scrollable lists. */
 import { boot, $, esc, MOTION } from "./core.js";
-import { authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE } from "../js/site.js";
+import { authorsHtml, venueHtml, idLinks, EQ_FOOTNOTE, hasDetail, paperHref } from "../js/site.js";
 
 const GROUPS = [
   ["papers", "Papers", (p) => !["poster", "presentation"].includes(p.category)],
@@ -33,7 +33,8 @@ boot({
         ${p.authors ? `<p class="cite-a">${authorsHtml(p.authors)}</p>` : ""}
         <p class="cite-v">${venueHtml(p)}</p>
         ${idLinks(p) ? `<p class="ids">${idLinks(p)}</p>` : ""}
-        ${p.abstract ? `<details class="abs"><summary>Abstract</summary><p>${esc(p.abstract)}</p></details>` : ""}</li>`).join("")}</ol>
+        ${p.abstract ? `<details class="abs"><summary>Abstract</summary><p>${esc(p.abstract)}</p></details>` : ""}
+        ${hasDetail(p) ? `<p class="ids"><a href="${paperHref(p)}" aria-label="Full write-up: ${esc(p.title)}">Full write-up <span aria-hidden="true">→</span></a></p>` : ""}</li>`).join("")}</ol>
     </section>`).join("") + (prep.length ? `<section class="block pub-group" id="g-prep" aria-labelledby="g-prep-h" data-g="prep">
       <div class="pub-head"><h2 id="g-prep-h" data-split>In preparation <span class="pub-n">${prep.length}</span></h2>
         <div class="row-ctrl"><button type="button" class="ab-btn" data-dir="-1" aria-label="Scroll In preparation back">←</button><button type="button" class="ab-btn" data-dir="1" aria-label="Scroll In preparation forward">→</button></div></div>

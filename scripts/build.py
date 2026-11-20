@@ -57,8 +57,8 @@ SITE_PAGES = ["index.html", "about.html", "path.html", "papers.html", "cv.html",
 
 
 def is_site_page(name):
-    """Pages built from the main design (everything else is a supporting page in the older style)."""
-    return name in SITE_PAGES or name.startswith("project-")
+    """Pages built from the main design (everything else, the notes pages, is still in the older style)."""
+    return name in SITE_PAGES or name.startswith(("project-", "paper-", "role-"))
 
 # Light-theme tokens from style.css (Interference); keep in sync.
 ACCENT = "#0b6a5a"
@@ -471,7 +471,7 @@ def timeline_svg(roles, current):
             '</svg><figcaption>Timeline of listed roles (from the periods on this site); this role is marked.</figcaption></figure>')
 
 def _sec(h, body):
-    return f'<section class="prose-sec"><h2>{esc(h)}</h2>{body}</section>'
+    return f'<section class="dd-sec"><h2 data-split>{esc(h)}</h2>{body}</section>'
 
 
 RESULT_KEYS = ("result", "results", "outcome", "outcomes", "findings", "validation")
@@ -493,8 +493,9 @@ def _table(t):
         (f'<th scope="row">{esc(c)}</th>' if i == 0 else f"<td>{esc(c)}</td>") for i, c in enumerate(r)) + "</tr>"
         for r in t.get("rows", []))
     cap = f"<caption>{esc(t['caption'])}</caption>" if t.get("caption") else ""
-    return (f'<div class="fig-data fig-scroll" tabindex="0"><table>{cap}<thead><tr>{head}</tr></thead>'
-            f"<tbody>{rows}</tbody></table></div>")
+    label = esc(t.get("caption") or "Table")
+    return (f'<div class="tbl" tabindex="0" role="group" aria-label="{label} (scrolls sideways on small screens)">'
+            f"<table>{cap}<thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table></div>")
 
 
 def _body(sec):
@@ -502,8 +503,8 @@ def _body(sec):
 
 
 def _page(tmpl, site, fname, title, desc, active, head, body, og="article"):
-    main = (f'<header class="page-head"><div class="wrap narrow"><div class="panel">{head}</div></div></header>'
-            f'<div class="wrap narrow"><div class="panel prose detail-body">{body}</div></div>')
+    main = (f'<section class="page-hero dd-hero" id="top">{head}</section>'
+            f'<div class="block dd-body prose">{body}</div>')
     doc = tmpl.replace("<!--DETAIL-->", main, 1).replace("<body>", f'<body data-active="{active}">', 1)
     return mark_built(set_head(doc, head_block(site, fname, title, clip(desc), og_type=og)))
 
@@ -527,15 +528,15 @@ def build_details(data, site, name):
         venue = ", ".join(x for x in [p.get("venue", ""), yr if yr not in p.get("venue", "") else ""] if x)
         links = id_links(p) + [(l["label"], l["url"]) for l in (pr or {}).get("links", []) if l.get("url")]
         links = list(dict.fromkeys(links))
-        head = (f'<a class="backlink" href="papers.html">← Papers</a>'
-                f'<p class="eyebrow">{esc(p.get("type") or p.get("category", ""))}</p>'
-                f'<h1>{esc(p["title"])}</h1>'
-                f'<p class="lede">{esc(p.get("authors", ""))}</p>'
-                f'<p class="note-meta">{esc(venue)}{" · " + esc(p["status"]) if p.get("status") else ""}</p>'
-                + (f'<p class="note-meta">Supervisor: {esc(p["supervisor"])}</p>' if p.get("supervisor") else "")
-                + (f'<div class="hero-cta">' + "".join(
-                    f'<a class="btn" href="{esc(u)}" target="_blank" rel="noopener">{esc(l)} ↗</a>' for l, u in links)
-                   + '</div>' if links else ""))
+        head = (f'<nav class="crumbs" aria-label="Back"><a href="papers.html">← Papers</a></nav>'
+                f'<p class="micro">{esc(p.get("type") or p.get("category", ""))}</p>'
+                f'<h1 data-split>{esc(p["title"])}</h1>'
+                f'<p class="page-lede">{esc(p.get("authors", ""))}</p>'
+                f'<p class="dd-meta">{esc(venue)}{" · " + esc(p["status"]) if p.get("status") else ""}</p>'
+                + (f'<p class="dd-meta">Supervisor: {esc(p["supervisor"])}</p>' if p.get("supervisor") else "")
+                + (f'<ul class="artifact-row">' + "".join(
+                    f'<li><a class="btn" href="{esc(u)}" target="_blank" rel="noopener">{esc(l)} <span aria-hidden="true">↗</span></a></li>'
+                    for l, u in links) + '</ul>' if links else ""))
         missing = "Not yet written up on this site; to be filled from the paper."
         body = [_sec("Overview", f'<p class="abstract">{esc(p["abstract"])}</p>' if p.get("abstract")
                      else DRAFT.format("No abstract on this site yet."))]
@@ -560,15 +561,15 @@ def build_details(data, site, name):
                                  "Schematic: structure of the work (from the write-up's sections)"))
             body.append(f'<p><a class="read-more" href="project-{esc(pr["id"])}.html">Project write-up with figures →</a></p>')
         (OUT / fname).write_text(_page(tmpl, site, fname, f"{p['title']} — {name}",
-                                       p.get("abstract") or p["title"], "pubs", head, "".join(body)), encoding="utf-8")
+                                       p.get("abstract") or p["title"], "papers", head, "".join(body)), encoding="utf-8")
         written.append(fname)
 
     roles = data.get("experience", []) + data.get("research", [])
     for e in roles:
         fname = role_file(e)
-        head = (f'<a class="backlink" href="index.html#work">← Work</a>'
-                f'<p class="eyebrow">{esc(e.get("period", ""))}{" · " + esc(e["location"]) if e.get("location") else ""}</p>'
-                f'<h1>{esc(e["role"])}</h1><p class="lede">{esc(e["org"])}</p>')
+        head = (f'<nav class="crumbs" aria-label="Back"><a href="path.html">← Path</a></nav>'
+                f'<p class="micro">{esc(e.get("period", ""))}{" · " + esc(e["location"]) if e.get("location") else ""}</p>'
+                f'<h1 data-split>{esc(e["role"])}</h1><p class="page-lede">{esc(e["org"])}</p>')
         explicit = [x for x in pubs if x["title"] in e.get("related", []) and has_detail(x)]
         rel = explicit or [x for x in pubs if has_detail(x) and any(
             (x.get("arxiv") and x["arxiv"] in pt) or (x.get("venue") and x["title"][:25] in pt) for pt in e.get("points", []))]
@@ -585,7 +586,7 @@ def build_details(data, site, name):
             body.append(_sec("Related papers", "<ul>" + "".join(
                 f'<li><a href="{paper_file(x)}">{esc(x["title"])}</a></li>' for x in rel) + "</ul>"))
         (OUT / fname).write_text(_page(tmpl, site, fname, f"{e['role']} — {name}",
-                                       e.get("summary") or e["role"], "work", head, "".join(body), og="profile"),
+                                       e.get("summary") or e["role"], "path", head, "".join(body), og="profile"),
                                  encoding="utf-8")
         written.append(fname)
     return written
