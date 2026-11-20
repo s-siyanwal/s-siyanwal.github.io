@@ -61,7 +61,7 @@ def cite(p):
     if p.get("year") and not str(p.get("venue") or "").endswith(str(p["year"])):
         bits.append(tex(p["year"]))
     st = p.get("status") or ""
-    status = f", {tex(st)}" if st and not re.match(r"^published$", st, re.I) and "library" not in st.lower() else ""
+    status = f", {tex(st.rstrip('.'))}" if st and not re.match(r"^published$", st, re.I) and "library" not in st.lower() else ""
     ids = []
     if p.get("doi"):
         ids.append(r"\href{https://doi.org/%s}{doi:%s}" % (url(p["doi"]), tex(p["doi"])))

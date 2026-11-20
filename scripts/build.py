@@ -573,13 +573,15 @@ def build_details(data, site, name):
         explicit = [x for x in pubs if x["title"] in e.get("related", []) and has_detail(x)]
         rel = explicit or [x for x in pubs if has_detail(x) and any(
             (x.get("arxiv") and x["arxiv"] in pt) or (x.get("venue") and x["title"][:25] in pt) for pt in e.get("points", []))]
-        body = [_sec("Overview", f"<p>{esc(e['summary'])}</p>" if e.get("summary") else DRAFT.format("Summary to be added.")),
-                _sec("What I worked on", "<ul>" + "".join(f"<li>{esc(x)}</li>" for x in e.get("points", [])) + "</ul>"
-                     if e.get("points") else DRAFT.format("Details to be added.")),
-                _sec("Problem, methods and outcomes", _paras(e["narrative"]) if e.get("narrative") else DRAFT.format(
-                    "A longer narrative of this role (motivation, methods, outcomes) is to be written from Shivanshu's records; "
-                    "the points above are the verified summary.")),
-                timeline_svg(roles, e)]
+        # Empty fields are not shown: a section appears only when the role has text for it.
+        body = []
+        if e.get("summary"):
+            body.append(_sec("Overview", f"<p>{esc(e['summary'])}</p>"))
+        if e.get("points"):
+            body.append(_sec("What I worked on", "<ul>" + "".join(f"<li>{esc(x)}</li>" for x in e["points"]) + "</ul>"))
+        if e.get("narrative"):
+            body.append(_sec("Problem, methods and outcomes", _paras(e["narrative"])))
+        body.append(timeline_svg(roles, e))
         if e.get("tags"):
             body.append('<div class="tag-row">' + "".join(f'<span class="tag">{esc(t)}</span>' for t in e["tags"]) + "</div>")
         if rel:

@@ -112,20 +112,20 @@ boot({
 
     // Expert view: the stored sections, plus a clear gap where results are not written up yet.
     const sections = [...(pr.sections || [])];
-    const hasResults = sections.some((s) => /result/i.test(s.h || ""));
     $("pr-chapters").innerHTML = sections.map((s, k) => `<li class="chapter" data-rv>
       <div class="ch-side"><span class="ch-n">${String(k + 1).padStart(2, "0")}</span><h3 class="ch-h">${esc(s.h || "")}</h3></div>
-      <div class="ch-body prose">${paras(s.p)}${[s.table, ...(s.tables || [])].map(table).join("")}</div></li>`).join("")
-      + (hasResults ? "" : `<li class="chapter"><div class="ch-side"><span class="ch-n">${String(sections.length + 1).padStart(2, "0")}</span><h3 class="ch-h">Results</h3></div>
-      <div class="ch-body prose"><p class="coming-soon">Results write-up coming soon.</p><!-- TODO(Shivanshu): results for ${esc(pr.id)} (content.json → projects → sections) --></div></li>`);
+      <div class="ch-body prose">${paras(s.p)}${[s.table, ...(s.tables || [])].map(table).join("")}</div></li>`).join("");
 
     if (!ABSTRACTS.has(pr.id)) $("abstract").hidden = true;
     const fig = figuresFor(pr.id);
     if (fig) { $("figure").hidden = false; $("pr-figure").innerHTML = fig; }
 
-    $("pr-role").innerHTML = pr.role ? paras(pr.role)
-      : `<p class="coming-soon">Contribution statement coming soon.</p><!-- TODO(Shivanshu): my role in ${esc(pr.id)} (content.json → projects → role) -->`;
-    $("pr-pipeline").innerHTML = pipelineHtml(pr);
+    /* Empty fields are not shown: with no role text and no pipeline the whole "My role" block stays hidden. */
+    const pipeline = pr.role ? pipelineHtml(pr) : "";
+    if (pr.role || pipeline) {
+      $("pr-role").innerHTML = pr.role ? paras(pr.role) : "";
+      $("pr-pipeline").innerHTML = pipeline;
+    } else $("role").hidden = true;
 
     if (pub) {
       $("paper").hidden = false;

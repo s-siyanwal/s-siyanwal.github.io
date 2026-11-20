@@ -44,7 +44,17 @@ boot({
         </a></li>`;
     }).join("");
 
-    $("nums").innerHTML = (d.metrics || []).map((m) => `<li data-rv>
+    /* A metric with "computed" is counted from the publication list, so it cannot drift from the data. */
+    const COMPUTED = {
+      published_papers() {
+        const done = pubs.filter((x) => x.status === "published");
+        const parts = [["journal", "journal"], ["conference", "conference"]].map(([k, w]) => [done.filter((x) => x.category === k).length, w]).filter(([n]) => n);
+        return { value: String(parts.reduce((s, [n]) => s + n, 0)), note: parts.map(([n, w]) => `${n} ${w}`).join(", ") };
+      },
+    };
+    const metrics = (d.metrics || []).map((m) => (m.computed && COMPUTED[m.computed] ? { ...m, ...COMPUTED[m.computed]() } : m))
+      .filter((m) => m.value !== "" && m.value != null);
+    $("nums").innerHTML = metrics.map((m) => `<li data-rv>
       <span class="num-v"${numeric(m.value) ? ` data-count="${esc(m.value)}"` : ""}>${esc(m.value)}</span>
       <span class="num-l">${esc(m.label)}</span>${m.note ? `<span class="num-n">${esc(m.note)}</span>` : ""}</li>`).join("");
 
