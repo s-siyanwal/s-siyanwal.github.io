@@ -65,14 +65,6 @@
         "url": "mailto:shivanshu.siyanwal@gmail.com",
         "primary": true,
         "audience": "both"
-      },
-      {
-        "id": "email-academic",
-        "label": "Academic email",
-        "handle": "shivanshuacademics@gmail.com",
-        "url": "mailto:shivanshuacademics@gmail.com",
-        "primary": true,
-        "audience": "academic"
       }
     ],
     "research_interests": "Quantum information and near-term quantum algorithms: variational quantum circuits and quantum machine learning for scientific data, quantum image representations, entanglement detection on NMR processors, linear-optical quantum networks and QKD, and hybrid quantum–classical implementations including FPGA inference."
@@ -231,7 +223,7 @@
       "role": "Quantum Computing Developer",
       "location": "Pune, India",
       "period": "Sep 2022 – Jul 2023",
-      "summary": "Variational algorithms for finance and time-series on AWS Braket and Rigetti hardware.",
+      "summary": "Mainly quantum-based security and quantum machine learning in finance.",
       "points": [
         "Implemented and optimised VQC, QBM, and VQLS for time-series forecasting and financial analysis on AWS Braket and Rigetti hardware.",
         "Developed quantum data-encoding techniques (amplitude, phase, angle) and Ising-Hamiltonian circuits.",
@@ -242,7 +234,7 @@
         "AWS Braket",
         "Finance"
       ],
-      "narrative": "At Arqanum Technologies I developed variational quantum algorithms for time-series and financial models: data encodings (amplitude, phase and angle), Ising-Hamiltonian circuits, and VQC, QSVM and quantum Boltzmann machine models. I ran VQLS jobs on Amazon Braket and Rigetti hardware, and contributed code to two external projects: Dicke-state simulation for MeitY–QCAL, and a quantum cryptographic hash with IIT Kharagpur."
+      "narrative": "At Arqanum Technologies (September 2022 – July 2023) I worked mainly on quantum-based security and on quantum machine learning in finance. I developed variational quantum algorithms for time-series and financial models: data encodings (amplitude, phase and angle), Ising-Hamiltonian circuits, and VQC, QSVM and quantum Boltzmann machine models. I ran VQLS jobs on Amazon Braket and Rigetti hardware, and contributed code to two external projects: Dicke-state simulation for MeitY–QCAL, and a quantum cryptographic hash with IIT Kharagpur."
     }
   ],
   "research": [
@@ -697,7 +689,7 @@
         },
         {
           "h": "Status",
-          "p": "Published by IEEE, 2026."
+          "p": "Accepted and presented as a talk and paper at SASIGD 2026 (IEEE SSIT, CBIT Hyderabad); to be available online later."
         }
       ],
       "paper": "Variational Quantum Linear Solver for Time Series Forecasting: A Practical Implementation on Financial Data",
@@ -755,7 +747,7 @@
         {
           "h": "Results",
           "p": [
-            "Reported in the submitted manuscript (under review at ICSSCC 2026).",
+            "Reported in the accepted manuscript (ICSSCC 2026, in processing).",
             "Setup: Intel i7 workstation with 16 GB RAM and no GPU; 256 × 64 grid, Δt = 10⁻³, ν = 0.01; accuracy measured against a dense finite-difference solution on the same grid.",
             "At D_max = 30 the L2 error is below 10⁻² and memory falls from about 8 GB to 5.8 MB, a reduction of roughly 1.4 × 10³. The L2 velocity error falls roughly exponentially with D_max at Re = 15, 30, 100 and 500; higher Re needs a moderately larger D_max.",
             "Scalability: on a 1024 × 256 grid with D_max = 50, TensNet uses about 35 MB; the manuscript estimates about 2 TB for a dense finite-difference solver."
@@ -871,7 +863,7 @@
         },
         {
           "h": "Status",
-          "p": "Submitted to ICSSCC 2026 (under review)."
+          "p": "Accepted at ICSSCC 2026; in processing there."
         }
       ],
       "paper": "TensNet: Memory-Efficient Tensor Network Methods for 2D Incompressible Flow Simulation",
@@ -879,7 +871,7 @@
       "layman": [
         "Simulating how a fluid flows, for example air around a pillar, means storing the velocity at every point of a fine grid, which quickly needs gigabytes of memory.",
         "TensNet stores those flow fields in a compressed form borrowed from quantum physics: tensor networks, specifically matrix product states. One setting, the bond dimension, controls how much detail is kept; larger means more accurate and more memory.",
-        "In the submitted manuscript, the compressed simulations stay close to a standard full-grid solver while using megabytes instead of gigabytes on the test cases."
+        "In the accepted manuscript, the compressed simulations stay close to a standard full-grid solver while using megabytes instead of gigabytes on the test cases."
       ],
       "layman_status": "draft",
       "pipeline": [
@@ -908,8 +900,8 @@
     {
       "id": "bitter-solenoid",
       "name": "Bitter Solenoid Simulator (0.5 T)",
-      "blurb": "A real-time simulator for a 0.5 T water-cooled copper Bitter solenoid, with Swiss-roll RF metamaterials for early-stage fMRI.",
-      "abstract": "A simulator that couples the field, electrical, thermal, hydraulic and mechanical models of a 0.5 T water-cooled copper Bitter solenoid, optimises the design under engineering constraints, and adds an fMRI layer: shim coils, B0 stability and an RF signal-to-noise model with Swiss-roll metamaterials. It runs on a laptop, Kaggle or Colab, and a browser demo needs no install.",
+      "blurb": "A real-time simulator for a 0.5 T water-cooled copper Bitter solenoid design, with shim coils and Swiss-roll RF metamaterial models.",
+      "abstract": "A simulator that couples the field, electrical, thermal, hydraulic and mechanical models of a 0.5 T water-cooled copper Bitter solenoid, optimises the design under engineering constraints, and adds shim-coil, B0-stability and RF signal-to-noise models with Swiss-roll metamaterials. It runs on a laptop, Kaggle or Colab, and a browser demo needs no install.",
       "metrics": [
         {
           "value": "0.5 T",
@@ -942,7 +934,7 @@
       "sections": [
         {
           "h": "Problem",
-          "p": "Design a 0.5 T water-cooled copper Bitter solenoid for early-stage fMRI and evaluate it in real time on modest hardware (a 32 GB Ryzen 5 laptop, Kaggle or Colab), using only Python-3.6-compatible NumPy, SciPy, Numba and Matplotlib APIs that existed before July 2018."
+          "p": "Design a 0.5 T water-cooled copper Bitter solenoid and evaluate it in real time on modest hardware (a 32 GB Ryzen 5 laptop, Kaggle or Colab), using only Python-3.6-compatible NumPy, SciPy, Numba and Matplotlib APIs that existed before July 2018."
         },
         {
           "h": "Approach",
@@ -954,7 +946,7 @@
             "From the repository's generated results (differential-evolution run, seed 1).",
             "The optimum has an inner radius of 50.0 mm, an outer radius of 300 mm and a 1.10 m stack. It carries 2576 A at 4.54 V, dissipating 11.7 kW plus 81 W of pump power, with 99.95 ppm peak-to-peak homogeneity over a 30 mm-diameter sphere and a 25.9 °C copper hot spot. The active limits are field homogeneity and size, not cooling.",
             "Two Z2/Z4 shim-loop pairs bring the homogeneity over the same sphere to 0.26 ppm.",
-            "With the fMRI layer's assumed inputs, the field at the centre varies by about 4.4 ppm over 10 minutes with a current-regulated supply, against about 600 ppm with a voltage-regulated one, so the magnet needs a current-regulated supply and tightly held cooling-water temperature.",
+            "With the simulator's assumed inputs, the field at the centre varies by about 4.4 ppm over 10 minutes with a current-regulated supply, against about 600 ppm with a voltage-regulated one, so the magnet needs a current-regulated supply and tightly held cooling-water temperature.",
             "In the quasi-static RF model, a Swiss-roll slab improves SNR over the same coil held off over an air gap, but does not beat a coil placed directly on the tissue."
           ]
         },
@@ -978,8 +970,8 @@
     {
       "id": "cpinn",
       "name": "CPINN",
-      "blurb": "2021 project on CPINNs for NMR quantum pulse design, in Prof. Kavita Dorai's NMR Quantum Computing Group, IISER Mohali.",
-      "period": "2021",
+      "blurb": "Summer 2021 (May–July) project on CPINNs for NMR quantum pulse design, in Prof. Kavita Dorai's NMR Quantum Computing Group, IISER Mohali.",
+      "period": "May – Jul 2021",
       "tags": [
         "NMR",
         "Pulse design",
@@ -991,7 +983,7 @@
       "sections": [
         {
           "h": "Context",
-          "p": "A 2021 project in the NMR Quantum Computing Group at IISER Mohali, led by Prof. Kavita Dorai. The project studies CPINNs for NMR quantum pulse design."
+          "p": "A summer 2021 (May–July) project in the NMR Quantum Computing Group at IISER Mohali, led by Prof. Kavita Dorai. The project studies CPINNs for NMR quantum pulse design."
         },
         {
           "h": "Status",
@@ -1187,16 +1179,17 @@
           "h": "Repository",
           "p": "The notebook, the trained weights, the training metrics and the test-set close-price predictions."
         }
-      ]
+      ],
+      "role": "Team PlanckShift, which included Kshitij Dave. I contributed equally to the research, code development and testing."
     }
   ],
   "publications": [
     {
-      "venue": "IEEE",
+      "venue": "SASIGD 2026 (IEEE SSIT, CBIT Hyderabad)",
       "year": "2026",
       "title": "Variational Quantum Linear Solver for Time Series Forecasting: A Practical Implementation on Financial Data",
-      "type": "Conference paper",
-      "status": "published",
+      "type": "Conference paper and talk",
+      "status": "Accepted and presented; online later",
       "authors": "S. Siyanwal, B. Kape, C. Pushkarna, K. Islur, T. Kumar, N. Khan, K. Dave",
       "doi": "",
       "abstract": "A variational quantum linear solver (VQLS) applied to time series forecasting on real financial market data. Hankel-like trajectory matrices are built from historical Reliance Industries stock prices and the resulting linear system is solved with a quantum-classical hybrid approach: Hadamard test circuits evaluate the cost function, COBYLA optimizes the variational parameters, and a SWAP test estimates the overlap of the solution state with recent market data to give the next-day forecast. Quantum advantage is not realized at this problem scale (2 × 2 system), and classical baselines reach equivalent accuracy; the workflow runs end to end on the Aer simulator with shallow circuits (depth ~6) compatible with NISQ hardware, and the paper identifies its scalability bottlenecks.",
@@ -1206,12 +1199,12 @@
       "venue": "ICSSCC 2026",
       "year": "2026",
       "title": "TensNet: Memory-Efficient Tensor Network Methods for 2D Incompressible Flow Simulation",
-      "type": "Manuscript",
-      "status": "submitted (under review)",
+      "type": "Conference paper",
+      "status": "Accepted, in processing",
       "authors": "S. Siyanwal, N. Khan, S. S. Pandey, K. Y. Islur, K. Dave, S. Chhipa",
       "doi": "",
       "abstract": "TensNet is a library implementing tensor network methods, using Matrix Product States (MPS) and Matrix Product Operators (MPO), for simulating the 2D incompressible Navier–Stokes equations. It is designed to reduce memory use compared with standard grid-based solvers, keeping accuracy through adaptive bond-dimension truncation; it uses the DMRG algorithm to solve the implicit pressure-correction equations and cross-approximation to handle complex immersed boundaries.",
-      "category": "manuscript"
+      "category": "conference"
     },
     {
       "venue": "IEEE TQCEBT 2026",
@@ -1232,10 +1225,11 @@
       "title": "Adaptive Multi-Algorithm Imputation Pipeline for Weather and Environmental Time Series",
       "type": "Conference paper",
       "status": "Accepted and presented; proceedings (Springer LNNS) not yet published.",
-      "authors": "A. Tiwari, R. Jaware, S. Siyanwal, K. Dave, H. Gupta",
+      "authors": "A. Tiwari, S. Kumar, P. Tyagi, R. Jaware, S. Siyanwal, K. Dave, H. Gupta",
       "doi": "",
       "abstract": "",
-      "category": "conference"
+      "category": "conference",
+      "role": "I prepared the fundamental ideas, workflow, algorithms and framework, and helped improve and generalise the pipeline after R. Jaware developed it. B. Kape and S. Sakhuja are acknowledged only."
     },
     {
       "venue": "IEEE AIMLSystems 2025",
@@ -1264,7 +1258,7 @@
           "p": "The models reach reasonable accuracy on both prediction and classification, best on binary classification. Hardware limitations and noise limit scalability and generalisation."
         }
       ],
-      "role": "I built the QLSTM and QSVM models and their classical baselines (LSTM and SVM), extracted the dataset from ERA5, and carried out the data analysis. S. Sakhuja carried out the remaining work."
+      "role": "I contributed equally to the code, data, algorithm and comparisons."
     },
     {
       "venue": "The Journal of Supercomputing",
@@ -1352,7 +1346,8 @@
       "authors": "S. Siyanwal",
       "doi": "",
       "abstract": "",
-      "category": "poster"
+      "category": "poster",
+      "role": "Poster presenting my entanglement-detection paper work."
     },
     {
       "venue": "IAI, TCG CREST",
@@ -1363,18 +1358,8 @@
       "authors": "S. Siyanwal",
       "doi": "",
       "abstract": "",
-      "category": "poster"
-    },
-    {
-      "venue": "The LNM Institute of Information Technology (LNMIIT), Jaipur",
-      "year": "2026",
-      "title": "12th International Conference on Mathematics and Computing (ICMC) 2026",
-      "type": "Presentation",
-      "status": "",
-      "authors": "S. Siyanwal",
-      "doi": "",
-      "abstract": "",
-      "category": "presentation"
+      "category": "poster",
+      "role": "Poster presenting my work at TCG CREST."
     }
   ],
   "education": [
@@ -1396,7 +1381,8 @@
   "awards": [
     {
       "title": "Honorable Mention, Quandela Q-volution Hackathon (Track B, photonic quantum computing) — FinTeQ: Photonic Quantum Kernel for Swaption IVS Forecasting",
-      "year": "2026"
+      "year": "2026",
+      "detail": "Team entry with Kshitij Dave. I contributed equally to the research, code development and testing."
     },
     {
       "title": "INSPIRE-SHE Fellow, Department of Science and Technology, Government of India",
@@ -1468,6 +1454,28 @@
       "topic": "Quantum Optimization for Urban Heat Island",
       "kind": "Manuscript",
       "detail": "With Vikramaditya Bisani, since March 2025"
+    }
+  ],
+  "certificates": [
+    {
+      "title": "ETTIS 2026 (6th International Conference on Emerging Trends and Technologies on Intelligent Systems), C-DAC Noida",
+      "year": "2026"
+    },
+    {
+      "title": "SASIGD 2026, IEEE SSIT, CBIT Hyderabad (VQLS paper presented as a talk and paper)",
+      "year": "2026"
+    },
+    {
+      "title": "12th International Conference on Mathematics and Computing (ICMC) 2026, LNMIIT Jaipur (attended)",
+      "year": "2026"
+    },
+    {
+      "title": "QGSS 2026, Qiskit Global Summer School",
+      "year": "2026"
+    },
+    {
+      "title": "Trainer, faculty programme, C-DAC Mohali",
+      "year": ""
     }
   ]
 }

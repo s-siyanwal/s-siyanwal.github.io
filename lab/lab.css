@@ -232,6 +232,8 @@ h1 em, h2 em, .foot-big em { color: var(--accent); }
 .awards li { display: grid; gap: .1rem 1.6rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
 @media (min-width: 720px) { .awards li { grid-template-columns: 8rem 1fr; } }
 .aw-t { font-family: var(--display); font-size: 1.35rem; line-height: 1.22; }
+.aw-d { display: block; margin-top: .3rem; font-family: Geist, system-ui, sans-serif; font-size: .95rem; line-height: 1.4; opacity: .7; }
+#certificates[hidden] { display: none; }
 
 /* ---------- Path: the worldline ---------- */
 .worldline-wrap { position: relative; padding-left: 2.4rem; }

@@ -236,6 +236,7 @@ export function projectStatus(pr, pubs) {
   const when = pr.period ? ` · ${pr.period}` : "";
   if (!pub) return `${pr.status || "Research project (unpublished)"}${when}`;
   if (/submitted|under review/i.test(pub.status || "")) return `Submitted · ${pub.venue || ""}`.replace(/ · $/, "") + when;
+  if (/^accepted/i.test(pub.status || "")) return `Accepted · ${pub.venue || ""}`.replace(/ · $/, "") + when;
   if (pub.category === "manuscript" || /manuscript/i.test(pub.status || "")) return `Manuscript in preparation${when}`;
   const venue = pub.venue || "", year = String(pub.year || "");
   return `Published · ${venue}${year && !venue.endsWith(year) ? ` ${year}` : ""}${when}`;
@@ -249,7 +250,7 @@ export const THREADS = {
   "qcrypto-circuits": ["qkd", "Quantum cryptography"],
   "vqls-forecasting": ["vqls", "VQLS forecasting"],
   "tensnet": ["tensor", "Tensor networks"],
-  "bitter-solenoid": ["fpga", "Magnet design · fMRI"],
+  "bitter-solenoid": ["fpga", "Magnet design · 0.5 T"],
   "cpinn": ["nmr", "NMR group · 2021"],
   "worm-like-spin-chain": ["weather", "Spin chains"],
   "ebl-sexual-antagonism": ["image", "Evolutionary biology"],

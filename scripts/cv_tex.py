@@ -113,6 +113,10 @@ def body(d, proofs):
         proof = proofs.get(a["title"]) or ""
         link = (r" \href{%s}{\small[proof]}" % url(proof)) if proof.startswith("http") else ""
         out.append(r"\cvaward{%s%s}{%s}" % (tex(a["title"]), link, tex(a.get("year"))))
+    if d.get("certificates"):
+        out.append(r"\cvsection{Certificates and events}")
+        for a in d["certificates"]:
+            out.append(r"\cvaward{%s}{%s}" % (tex(a["title"]), tex(a.get("year"))))
     out.append(r"\cvsection{Skills}")
     out.append(r"\begin{tabular}{@{}>{\bfseries}p{0.24\linewidth}p{0.72\linewidth}@{}}")
     out += [r"%s & %s \\[2pt]" % (tex(g["category"]), tex(", ".join(g.get("items", [])))) for g in d.get("skills", [])]
