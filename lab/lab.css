@@ -451,7 +451,7 @@ html[data-view="expert"] [data-view="layman"], html[data-view="layman"] [data-vi
 .crumbs-pn a { color: var(--faint); max-width: 22ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; line-height: 32px; }
 .crumbs-pn a:hover { color: var(--accent); }
 .artifact-row { list-style: none; margin: 1.4rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .55rem; }
-.artifact-row .btn { min-height: 40px; font-size: .72rem; }
+.artifact-row .btn { min-height: 40px; font-size: .72rem; max-width: 100%; overflow-wrap: anywhere; }
 .draft-note { font-family: var(--mono); font-size: .76rem; letter-spacing: .04em; color: var(--muted); border-left: 3px solid var(--th, var(--accent)); padding: .5rem .8rem; background: var(--veil); max-width: 68ch; }
 .coming-soon { font-family: var(--mono); font-size: .8rem; letter-spacing: .04em; color: var(--faint); }
 .plain p { font-size: clamp(1.08rem, 1.4vw, 1.2rem); line-height: 1.7; }
@@ -620,6 +620,7 @@ html[data-view="expert"] [data-view="layman"], html[data-view="layman"] [data-vi
 .cv-ul li { margin-bottom: .1rem; }
 .cv-refs { list-style: none; margin: 0; padding: 0; }
 .cv-refs li { padding-left: 3rem; text-indent: -3rem; margin-bottom: .35rem; }
+.cv-refs a { overflow-wrap: anywhere; } /* long DOIs must wrap on phones */
 .cv-key { display: inline-block; width: 3rem; text-indent: 0; }
 .cv-awards { list-style: none; margin: 0; padding: 0; }
 .cv-awards li { margin-bottom: .25rem; }
