@@ -603,6 +603,10 @@
         {
           "label": "Preprint",
           "url": "https://arxiv.org/abs/2409.19739"
+        },
+        {
+          "label": "Code",
+          "url": "https://github.com/s-siyanwal/ann-multipartite-entanglement-nmr"
         }
       ],
       "featured": false,
@@ -1273,6 +1277,12 @@
       "category": "journal",
       "related": [
         "Entanglement detection and gate optimization in the system of three and four NMR qubits using deep learning and machine learning"
+      ],
+      "links": [
+        {
+          "label": "Code",
+          "url": "https://github.com/s-siyanwal/ann-multipartite-entanglement-nmr"
+        }
       ]
     },
     {
