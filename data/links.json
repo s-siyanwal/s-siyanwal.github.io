@@ -2,11 +2,9 @@
   "_readme": [
     "One place for the site's downloadable artefacts and proof links. Leave a value as \"\" until you have it: empty links are hidden on the site.",
     "artifacts: per research thread (keyed by the project id in content.json). pdf / slides may point at a file you put in assets/docs/ (e.g. \"assets/docs/vqls-slides.pdf\") or at a full https:// URL.",
-    "proofs: per award, keyed by the award title exactly as it appears in content.json. Use a file in assets/proofs/ (e.g. \"assets/proofs/name.pdf\") or a public https:// URL such as a Credly badge page.",
+    "proofs: per award, keyed by the award title exactly as it appears in content.json. Use the Google Drive share link of the certificate.",
     "Paper DOIs, arXiv ids and profile links stay in content.json, because the inbox pipeline writes them there.",
-    "A Code or Live demo link can also live in content.json → projects → links (both sites read it); bitter-solenoid and ebl-sexual-antagonism keep their GitHub links there.",
-    "certificate_proofs: per certificate, keyed by the certificate title exactly as in content.json. Same value rules as proofs.",
-    "role_proofs: per path/CV role, keyed by \"role @ org\" exactly as those two fields appear in content.json (experience and research). Same value rules as proofs."
+    "A Code or Live demo link can also live in content.json → projects → links (both sites read it); bitter-solenoid and ebl-sexual-antagonism keep their GitHub links there."
   ],
   "artifacts": {
     "vqc-fpga": {
@@ -87,22 +85,10 @@
     "INSPIRE-SHE Fellow, Department of Science and Technology, Government of India": "",
     "Merit-cum-Means fellowship, Ministry of Minority Affairs": "",
     "DRDO Junior Research Fellowship, TCG CREST": "",
-    "IBM Certified Associate Developer — Quantum Computation using Qiskit v0.2X": "assets/proofs/qiskit-associate-developer.pdf",
-    "Qiskit Global Summer School, Quantum Simulations, Quantum Excellence": "https://www.credly.com/badges/cd52c3e4-1cae-4fb3-ae60-c25ee429dc6b",
-    "Qiskit Global Summer School, Quantum Machine Learning, Certificate of Excellence": "assets/proofs/qgss-2021-qml.pdf",
-    "IBM Quantum Challenge Africa, Achievement": "https://www.credly.com/badges/399fb6c7-e40a-40be-98de-1aa3ffbfbd38",
+    "IBM Certified Associate Developer — Quantum Computation using Qiskit v0.2X": "",
+    "Qiskit Global Summer School, Quantum Simulations, Quantum Excellence": "",
+    "Qiskit Global Summer School, Quantum Machine Learning, Certificate of Excellence": "",
+    "IBM Quantum Challenge Africa, Achievement": "",
     "TOEFL iBT 96": ""
-  },
-  "certificate_proofs": {
-    "ETTIS 2026 (6th International Conference on Emerging Trends and Technologies on Intelligent Systems), C-DAC Noida": "assets/proofs/ettis-2026.pdf",
-    "BQIT:22, Bristol, 25–28 Apr 2022: attended and presented the poster 'Machine Learning/Deep Learning-based Entanglement detection and Gate Optimization in NMR Quantum Computation'": "assets/proofs/bqit-2022.pdf",
-    "Tutor, PHY102 (Introduction to Electromagnetism) help sessions, IISER Mohali, Summer semester 2021 (AY 2021–22); letter from the Dean (Students) dated 6 Sep 2022": "assets/proofs/phy102-ta.pdf",
-    "Certificate of Participation, IEEE-IISc Communications Society quantum communications workshop with IndiQ, 3–5 Sep 2021": "assets/proofs/ieee-iisc-2021.pdf",
-    "AI Shiksha: Introduction to Machine Learning — National Supercomputing Mission / C-DAC with NSM nodal centres at IITs Goa, Kharagpur, Madras, Palakkad, Feb–Mar 2021": "assets/proofs/ai-shiksha-2021.pdf"
-  },
-  "role_proofs": {
-    "Junior Quantum Computing Developer @ Arqanum Technologies Pvt. Ltd.": "assets/proofs/arqanum-experience.pdf",
-    "Research Intern — Quantum Cryptography @ Institute for Advancing Intelligence, TCG CREST (PI: Dr. Arpita Maitra)": "assets/proofs/tcg-crest-internship.pdf",
-    "MS Research Student @ NMR Quantum Computing Group, IISER Mohali (PI: Prof. Kavita Dorai)": "assets/proofs/dorai-nmr-experience.pdf"
   }
 }
