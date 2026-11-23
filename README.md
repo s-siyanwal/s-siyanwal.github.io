@@ -83,7 +83,7 @@ lab/                  Code and styles of the main design (the folder kept its ol
                       core.js (data, nav, contents drawer, sign-offs, Lenis + GSAP motion, curtain),
                       field3d.js (three.js shader background), sphere3d.js (Bloch sphere in the
                       contents panel), qubit3d.js (home "qubit you can steer"), gallery.js (field
-                      notes lightbox), abstracts/<id>.js (interactive abstract per thread), lab.css.
+                      notes lightbox), deck.js (sideways decks: plain overflow-x scrollers, never scroll-jacked), abstracts/<id>.js (interactive abstract per thread), lab.css.
                       The build writes forwarding pages at /lab/*.html so old /lab/ links still work.
 intro/                Home-page intro: wave → measurement → name (WebGL, 2D fallback,
                       reduced-motion fade); all timings/colours in intro/config.js.

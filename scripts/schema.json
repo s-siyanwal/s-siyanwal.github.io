@@ -72,6 +72,7 @@
           "tags": {"$ref": "#/$defs/strs"},
           "audience": {"enum": ["academic", "industry", "both"]},
           "featured": {"type": "boolean"},
+          "group": {"enum": ["hackathons"]},
           "links": {"type": "array", "items": {"$ref": "#/$defs/link"}},
           "metrics": {"type": "array", "items": {"type": "object", "required": ["value", "label"]}},
           "sections": {"type": "array", "items": {"type": "object", "required": ["h", "p"]}}

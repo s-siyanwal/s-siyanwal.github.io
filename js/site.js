@@ -254,7 +254,6 @@ export const THREADS = {
   "cpinn": ["nmr", "NMR group · 2021"],
   "worm-like-spin-chain": ["weather", "Spin chains"],
   "ebl-sexual-antagonism": ["image", "Evolutionary biology"],
-  "qca-cfd": ["tensor", "Lattice Boltzmann · CFD"],
   "qpoland-hqlstm": ["vqls", "Hackathon · QML"],
 };
 
