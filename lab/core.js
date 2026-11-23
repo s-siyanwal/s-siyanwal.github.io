@@ -38,12 +38,12 @@ export const hrefOf = (v) => (!v ? "" : /^(https?:|mailto:)/.test(v) ? v : Strin
 
 /* ---------------------------------------------------------------- chrome */
 const NAV = [["index.html#work", "Work", "work"], ["about.html", "About", "about"], ["path.html", "Path", "path"], ["papers.html", "Papers", "papers"],
-  ["cv.html", "CV", "cv"], ["personal.html", "Personal", "personal"]];
+  ["cv.html", "CV", "cv"], ["personal.html", "Personal", "personal"], ["references.html", "References", "references"]];
 
 /* Footer sign-offs: one per page, chosen from the page name so it is stable between visits and in the prerendered HTML. */
 export const SIGNOFFS = [["Still", "measuring."], ["Still", "initializing."], ["Still", "optimizing."], ["Still", "entangled."],
   ["Awaiting", "collapse."], ["Still", "in superposition."], ["Still", "converging."]];
-const PAGE_SIGNOFF = { work: 0, about: 1, path: 2, papers: 3, cv: 4, personal: 5 };
+const PAGE_SIGNOFF = { work: 0, about: 1, path: 2, papers: 3, cv: 4, personal: 5, references: 6 };
 function signoff(page) {
   if (page in PAGE_SIGNOFF) return SIGNOFFS[PAGE_SIGNOFF[page]];
   let h = 0; for (const c of location.pathname) h = (h * 31 + c.charCodeAt(0)) >>> 0;
@@ -63,6 +63,7 @@ export function chrome(data, active) {
   const links = [];
   if (p.email) links.push([`mailto:${p.email}`, "Email"]);
   (p.profiles || []).filter((x) => x.url && !x.url.startsWith("mailto:")).forEach((x) => links.push([x.url, x.label]));
+  links.push(["references.html", "References"]);
   const [lead, word] = signoff(active);
   $("foot").innerHTML = `
     <p class="foot-big" data-split>${lead} <em>${word}</em></p>

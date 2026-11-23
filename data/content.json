@@ -1486,5 +1486,54 @@
       "title": "Trainer, faculty programme, C-DAC Mohali",
       "year": ""
     }
+  ],
+  "references": [
+    {
+      "name": "Mr Abhishek Tiwari",
+      "post": "Scientist 'F', C-DAC, Noida",
+      "relation": "Supervisor, Quantum Applications Engineer, 2024–present",
+      "email": "abhishek@cdac.in"
+    },
+    {
+      "name": "Dr Arpita Maitra",
+      "post": "Associate Professor, TCG CREST, Kolkata",
+      "relation": "Supervisor, Research Intern (Quantum Cryptography) then DRDO JRF (Quantum Networks & Linear Optics), 2023–2024",
+      "email": "arpita.maitra@tcgcrest.org"
+    },
+    {
+      "name": "Prof. Kavita Dorai",
+      "post": "Professor, Department of Physical Sciences, IISER Mohali (NMR Quantum Computing group)",
+      "relation": "MS thesis advisor, 2021–2022",
+      "email": "kavita@iisermohali.ac.in"
+    },
+    {
+      "name": "Dr. Arvind",
+      "post": "Professor, Department of Physical Sciences, IISER Mohali",
+      "relation": "MS thesis co-supervisor, 2021–2022; co-author (QIP 2025)",
+      "email": "arvind@iisermohali.ac.in"
+    },
+    {
+      "name": "Dr Ananth Venkatesan",
+      "post": "Associate Professor, Department of Physical Sciences, IISER Mohali",
+      "relation": "Internship supervisor, Mesoscopic Physics Lab, 2018",
+      "email": "ananthv@iisermohali.ac.in"
+    },
+    {
+      "name": "Prof. N. G. Prasad",
+      "post": "Professor, Department of Biological Sciences, IISER Mohali",
+      "relation": "Research internship supervisor, Evolutionary Biology Lab, 2019",
+      "email": "prasad@iisermohali.ac.in"
+    },
+    {
+      "name": "Dr. Vaishali Gulati",
+      "post": "Assistant Professor, School of Artificial Intelligence, Amrita Vishwa Vidyapeetham, Faridabad",
+      "relation": "Equal-contribution co-author (QIP 2025). The three-qubit MS research (2021–2022) was developed with her into that paper",
+      "email": "vaishali@dl.amrita.edu"
+    },
+    {
+      "name": "Dr. Kapil Kumar Sharma",
+      "post": "Associate Professor Grade 2, Department of Quantum AI, School of Computer Science and Engineering, Vellore Institute of Technology, Vellore",
+      "relation": "Research correspondence on quantum imaginary-time evolution and quantum machine learning, 2025"
+    }
   ]
 }

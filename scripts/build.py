@@ -50,10 +50,10 @@ DEFAULT_SITE_URL = "https://s-siyanwal.github.io"
 
 # The site is the former "lab" design: its pages sit at the root and its scripts, styles and vendored libraries live
 # in lab/. style.css belongs only to the supporting pages (paper-*, role-*, notes, 404).
-COPY = ["index.html", "about.html", "path.html", "papers.html", "cv.html", "personal.html", "project.html",
+COPY = ["index.html", "about.html", "path.html", "papers.html", "cv.html", "personal.html", "references.html", "project.html",
         "notes.html", "lab", "intro", "style.css", ".nojekyll", "js", "data", "assets"]
 PAGES = ["notes.html"]
-SITE_PAGES = ["index.html", "about.html", "path.html", "papers.html", "cv.html", "personal.html"]
+SITE_PAGES = ["index.html", "about.html", "path.html", "papers.html", "cv.html", "personal.html", "references.html"]
 
 
 def is_site_page(name):
@@ -632,6 +632,8 @@ def assemble(data, site):
                               clip(f"Academic CV of {name}: education, research experience, publications, awards and skills.")),
         "personal.html": head_block(site, "personal.html", f"Personal — {name}",
                                     clip(f"Life outside research: {name}.")),
+        "references.html": head_block(site, "references.html", f"References — {name}",
+                                      clip(f"Institutional points of contact for {name}'s research and training.")),
     }
     for page, block in pages.items():
         f = OUT / page
