@@ -394,8 +394,6 @@ h1 em, h2 em, .foot-big em { color: var(--accent); }
   .pub-row { display: block !important; overflow: visible !important; }
   .deck { overflow: visible !important; }
   .deck-ctrl, .wl-tools .chip { display: none !important; }
-  .worldline-sec.is-gallery .worldline { display: block; width: auto; }
-  .worldline-sec.is-gallery .event { width: auto !important; }
   .ev-more:not([open]) > :not(summary) { display: block; }
   [data-view] { display: block !important; }
   .cv-sheet { box-shadow: none !important; border: 0 !important; padding: 0 !important; }
@@ -586,21 +584,15 @@ html[data-view="expert"] [data-view="layman"], html[data-view="layman"] [data-vi
 .fn-nav { display: flex; justify-content: space-between; margin-top: .6rem; }
 .fn-nav button, .fn-close { font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; min-height: 36px; padding: 0 .9rem; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--bg); color: var(--ink); cursor: pointer; }
 
-/* ---------- Path: vertical by default, a sideways deck in gallery mode ---------- */
+/* ---------- Path: a vertical worldline; Photos is an optional field-notes layer ---------- */
 .worldline-sec { max-width: calc(var(--maxw) + 2 * var(--pad)); margin: 0 auto; padding-top: clamp(3rem, 9vh, 6rem); }
 .ev-more { margin-top: .9rem; }
 .ev-more summary { font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); cursor: pointer; display: inline-flex; min-height: 32px; align-items: center; }
 .wl-tools { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.2rem; }
 .wl-tools .work-hint { margin: 0; }
-.wl-gallery { flex: none; min-height: 32px; font-size: .7rem; padding: 0 .8rem; }
-/* Gallery mode: the stages as a sideways deck (deck.js). Off by default; the vertical list is the normal view. */
-.worldline-sec.is-gallery .worldline-wrap { padding: 2.2rem 0 1rem; }
-.worldline-sec.is-gallery .wl-line, .worldline-sec.is-gallery .wl-fill { display: none; }
-.worldline-sec.is-gallery .worldline { position: relative; display: flex; gap: 2rem; width: max-content; padding-right: 2rem; }
-.worldline-sec.is-gallery .worldline::before { content: ""; position: absolute; left: 0; right: 0; top: -1.2rem; height: 1px; background: var(--line-strong); }
-.worldline-sec.is-gallery .event { width: min(27rem, 82vw); flex: 0 0 auto; padding: 0 0 1.2rem; }
-.worldline-sec.is-gallery .ev-dot { left: 0; top: -1.75rem; }
-.worldline-sec.is-gallery .ev-title { font-size: clamp(1.5rem, 2.2vw, 2.1rem); }
+.wl-photos { flex: none; min-height: 32px; font-size: .7rem; padding: 0 .8rem; }
+/* Off by default, and without JS: no photo frames, placeholders, or field-notes buttons, and no leftover gap. */
+.worldline-sec:not(.is-photos) .ev-media { display: none; }
 
 /* ---------- Papers: one row per type ---------- */
 .pub-group { padding-top: clamp(3rem, 8vh, 5rem); }
