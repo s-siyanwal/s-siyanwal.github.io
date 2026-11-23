@@ -1,9 +1,8 @@
-/* Site: the path — every role and degree in time order, oldest first. Gallery mode (a toggle, off by default,
-   remembered in localStorage) lays the stages out as a sideways deck; with it off, and always without JS and in
-   print, the worldline is an ordinary vertical list. Vertical scroll is never captured by the deck. Photos and videos come from data/journey.json (stage key = slug of
-   the role or degree title); until they exist each stage shows a quiet "coming soon" frame. */
+/* Site: the path — every role and degree in time order, oldest first, as an ordinary vertical list.
+   A Photos toggle (off by default, remembered in localStorage) shows field-note photos and placeholders;
+   with it off, and always without JS and in print unless already on, no photo frames are shown.
+   Photos and videos come from data/journey.json (stage key = slug of the role or degree title). */
 import { boot, $, esc, paras, extras } from "./core.js";
-import { deckControls, wireDeck } from "./deck.js";
 import { slug, roleHref } from "../js/site.js";
 import { featuredHtml, galleryButton, wireGalleries } from "./gallery.js";
 
@@ -46,40 +45,24 @@ boot({
         ${(e.tags || []).length ? `<p class="ev-tags">${esc(e.tags.join(" / "))}</p>` : ""}</details>` : ""}</li>`;
     }).join("");
     wireGalleries($("worldline"), (k) => (stages[k] || {}).gallery || []);
-    return { after: galleryMode };
+    return { after: photosMode };
   },
 });
 
-/* Gallery mode: off by default. The choice is remembered in localStorage ("worldline-gallery": "1" or "0"). */
-const KEY = "worldline-gallery";
+/* Photos: off by default. The choice is remembered in localStorage ("worldline-photos": "1" or "0"). */
+const KEY = "worldline-photos";
 const readPref = () => { try { return localStorage.getItem(KEY) === "1"; } catch (e) { return false; } };
 const savePref = (on) => { try { localStorage.setItem(KEY, on ? "1" : "0"); } catch (e) { /* storage blocked */ } };
 
-function galleryMode({ ScrollTrigger }) {
-  const section = $("worldline-sec"), wrap = section.querySelector(".worldline-wrap"), hint = $("wl-hint"), btn = $("wl-gallery");
-  wrap.insertAdjacentHTML("afterend", deckControls("stage"));
+function photosMode() {
+  const section = $("worldline-sec"), btn = $("wl-photos");
+  if (!section || !btn) return;
   btn.hidden = false;
-  const ctrl = section.querySelector(".deck-ctrl");
-  const sync = wireDeck(wrap, ctrl, ".event");
-  const refresh = () => { sync(); if (ScrollTrigger) ScrollTrigger.refresh(); };
+  try { localStorage.removeItem("worldline-gallery"); } catch (e) { /* storage blocked */ }
   const apply = (on) => {
-    section.classList.toggle("is-gallery", on);
-    wrap.classList.toggle("deck", on);
-    ctrl.hidden = !on;
+    section.classList.toggle("is-photos", on);
     btn.setAttribute("aria-pressed", String(on));
-    if (on) {
-      wrap.tabIndex = 0;
-      wrap.setAttribute("role", "region");
-      wrap.setAttribute("aria-label", "Worldline gallery, scrolls sideways");
-    } else {
-      wrap.removeAttribute("tabindex"); wrap.removeAttribute("role"); wrap.removeAttribute("aria-label"); wrap.scrollLeft = 0;
-    }
-    hint.textContent = on
-      ? "Scroll down as usual. Sideways: swipe, trackpad, shift + wheel, arrow keys or the buttons."
-      : "Education and roles in time order, oldest first.";
-    requestAnimationFrame(refresh);
   };
   btn.addEventListener("click", () => { const on = btn.getAttribute("aria-pressed") !== "true"; savePref(on); apply(on); });
   apply(readPref());
-  if (document.fonts) document.fonts.ready.then(refresh);
 }

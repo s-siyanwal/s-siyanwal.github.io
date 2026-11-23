@@ -1,4 +1,4 @@
-/* Horizontal decks (home "Research threads", worldline gallery mode) without scroll-jacking.
+/* Horizontal decks (home "Research threads") without scroll-jacking.
    A deck is an ordinary overflow-x scroller: the vertical wheel and middle-click autoscroll always move the page
    (nothing pins the section or turns vertical scroll into sideways motion), while sideways travel comes from a
    trackpad, shift + wheel, touch swipe, the arrow keys on the focused deck, or the Previous / Next buttons. */
