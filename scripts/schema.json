@@ -92,6 +92,8 @@
           "status": {"$ref": "#/$defs/str"},
           "authors": {"$ref": "#/$defs/str"},
           "doi": {"$ref": "#/$defs/str"},
+          "arxiv": {"$ref": "#/$defs/str"},
+          "links": {"type": "array", "items": {"$ref": "#/$defs/link"}},
           "abstract": {"$ref": "#/$defs/str"}
         }
       }

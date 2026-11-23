@@ -36,7 +36,7 @@ function artifactsHtml(pr, pub) {
   const fromContent = (re) => ((pr.links || []).find((x) => re.test(x.label) && x.url) || {}).url || "";
   const items = [
     ["Read the paper", paperUrl(pr, pub), "primary"],
-    ["Preprint", pub && pub.arxiv ? `https://arxiv.org/abs/${pub.arxiv}` : fromContent(/preprint/i)],
+    ["Preprint", (pub && pub.arxiv ? `https://arxiv.org/abs/${pub.arxiv}` : "") || ((pub && (pub.links || []).find((x) => /preprint/i.test(x.label) && x.url)) || {}).url || fromContent(/preprint/i)],
     ["PDF", hrefOf(a.pdf)],
     ["Code", hrefOf(a.code) || fromContent(/code|github/i)],
     ["Data", hrefOf(a.data) || fromContent(/data/i)],

@@ -222,6 +222,9 @@ export function idLinks(p) {
   if (p.doi) out.push(`<a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">doi:${esc(p.doi)}</a>`);
   if (p.arxiv) out.push(`<a href="https://arxiv.org/abs/${esc(p.arxiv)}" target="_blank" rel="noopener">arXiv:${esc(p.arxiv)}</a>`);
   if (p.xplore) out.push(`<a href="https://ieeexplore.ieee.org/document/${esc(p.xplore)}" target="_blank" rel="noopener">IEEE Xplore ${esc(p.xplore)}</a>`);
+  for (const l of p.links || []) {
+    if (l && l.url && l.label) out.push(`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`);
+  }
   return out.join("");
 }
 

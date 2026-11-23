@@ -71,10 +71,13 @@ def test_cv_tex_escapes_specials():
 def test_in_preparation_is_well_formed():
     ids = {p["id"] for p in DATA["projects"]}
     for m in DATA.get("in_preparation", []):
-        assert set(m) <= {"topic", "kind", "detail", "project"}, m
+        assert set(m) <= {"topic", "kind", "detail", "project", "links"}, m
         assert isinstance(m.get("topic"), str) and m["topic"].strip(), m
         assert m.get("project") in (None, *ids), f"unknown project {m.get('project')}"
-        assert not PHONE.search(" ".join(str(v) for v in m.values())), "no phone-like numbers"
+        for link in m.get("links", []):
+            assert set(link) == {"label", "url"}, link
+            assert link["url"].startswith("https://"), link
+        assert not PHONE.search(" ".join(str(v) for v in m.values() if not isinstance(v, list))), "no phone-like numbers"
 
 
 def test_cv_tex_lists_manuscripts_in_preparation():

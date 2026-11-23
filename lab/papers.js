@@ -43,6 +43,7 @@ boot({
         <p class="cite-k">${esc(m.kind || "Manuscript")} · in preparation</p>
         <h3 class="cite-t">${esc(m.topic)}</h3>
         ${m.detail ? `<p class="cite-v">${esc(m.detail)}</p>` : ""}
+        ${idLinks(m) ? `<p class="ids">${idLinks(m)}</p>` : ""}
         ${m.project && nameOf(m.project) ? `<p class="ids"><a href="project-${esc(m.project)}.html">Thread: ${esc(nameOf(m.project))} <span aria-hidden="true">→</span></a></p>` : ""}</li>`).join("")}</ol>
     </section>` : "");
     $("biblio-foot").innerHTML = pubs.some((p) => p.equal_contribution) ? EQ_FOOTNOTE : "";
