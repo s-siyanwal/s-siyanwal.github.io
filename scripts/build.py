@@ -388,6 +388,9 @@ def id_links(p):
         out.append((f"arXiv:{p['arxiv']}", f"https://arxiv.org/abs/{p['arxiv']}"))
     if p.get("xplore"):
         out.append((f"IEEE Xplore {p['xplore']}", f"https://ieeexplore.ieee.org/document/{p['xplore']}"))
+    for l in p.get("links") or []:
+        if l.get("url") and l.get("label"):
+            out.append((l["label"], l["url"]))
     return out
 
 
@@ -769,6 +772,9 @@ def _cite_cv(p):
         bits.append(f"IEEE Xplore {esc(p['xplore'])}")
     if p.get("arxiv"):
         bits.append(f"arXiv:{esc(p['arxiv'])}")
+    for l in p.get("links") or []:
+        if l.get("url") and l.get("label"):
+            bits.append(f'<a href="{esc(l["url"])}">{esc(l["label"])}</a>')
     eq = " <sup>∗</sup>Equal contribution." if p.get("equal_contribution") else ""
     return (f'<li>{_authors_cv(p.get("authors"))}. {esc(p["title"])}. ' + ". ".join(bits) + "." + eq + "</li>")
 

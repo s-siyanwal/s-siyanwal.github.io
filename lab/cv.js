@@ -17,6 +17,9 @@ function cite(p) {
   const ids = [];
   if (p.doi) ids.push(`<a href="https://doi.org/${esc(p.doi)}">doi:${esc(p.doi)}</a>`);
   if (p.arxiv) ids.push(`<a href="https://arxiv.org/abs/${esc(p.arxiv)}">arXiv:${esc(p.arxiv)}</a>`);
+  for (const l of p.links || []) {
+    if (l && l.url && l.label) ids.push(`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`);
+  }
   return `${p.authors ? `${authorsHtml(p.authors)}. ` : ""}${esc(p.title)}. ${bits.join(", ")}${status}.${ids.length ? ` ${ids.join(" · ")}` : ""}`;
 }
 
@@ -50,11 +53,11 @@ boot({
     }).join("");
     const prep = d.in_preparation || [];
     const prepHtml = prep.length ? `<h3 class="cv-h3">Manuscripts in preparation</h3><ul class="cv-ul">${prep.map((m) =>
-      `<li>${esc(m.topic)}.${m.detail ? ` ${esc(m.detail)}.` : ""}</li>`).join("")}</ul>` : "";
+      `<li>${esc(m.topic)}.${m.detail ? ` ${esc(m.detail)}.` : ""}${(m.links || []).filter((l) => l && l.url && l.label).map((l) => ` <a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join("")}</li>`).join("")}</ul>` : "";
     const eq = pubs.some((x) => x.equal_contribution) ? '<p class="cv-foot">* Equal contribution.</p>' : "";
     const talks = pubs.filter((x) => x.category === "poster" || x.category === "presentation");
     const seen = { poster: 0, presentation: 0 };                  // posters [Po1..] and talks [T1..] numbered separately
-    const talksHtml = `<ol class="cv-refs">${talks.map((x) => `<li><span class="cv-key">[${x.category === "poster" ? "Po" : "T"}${++seen[x.category]}]</span> ${x.authors ? `${authorsHtml(x.authors)}. ` : ""}${esc(x.title)}. ${x.category === "poster" ? "Poster" : "Talk"}, <em>${esc(x.venue || "")}</em>${x.year ? `, ${esc(x.year)}` : ""}.</li>`).join("")}</ol>`;
+    const talksHtml = `<ol class="cv-refs">${talks.map((x) => `<li><span class="cv-key">[${x.category === "poster" ? "Po" : "T"}${++seen[x.category]}]</span> ${x.authors ? `${authorsHtml(x.authors)}. ` : ""}${esc(x.title)}. ${x.category === "poster" ? "Poster" : "Talk"}, <em>${esc(x.venue || "")}</em>${x.year ? `, ${esc(x.year)}` : ""}.${(x.links || []).filter((l) => l && l.url && l.label).map((l) => ` <a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join("")}</li>`).join("")}</ol>`;
     const awards = `<ul class="cv-awards">${(d.awards || []).map((a) => {
       const proof = proofs[a.title];
       return `<li><span class="cv-l">${esc(a.title)}${proof ? ` <a class="cv-proof" href="${esc(hrefOf(proof))}" target="_blank" rel="noopener">Proof<span class="sr"> for ${esc(a.title)}</span></a>` : ""}</span><span class="cv-r">${esc(a.year || "")}</span></li>`;

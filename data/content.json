@@ -165,7 +165,7 @@
       "current": true,
       "summary": "Primarily responsible for the QML-based weather forecasting project in the Embedded Systems Division.",
       "points": [
-        "Co-developed quantum-assisted weather models (QGRU, QLSTM, QNN, VQC, QSVM) on ERA5 single-level data for Safdarjung, Delhi; equal-contribution preprint arXiv:2503.23408 and a related IEEE AIMLSystems 2025 paper.",
+        "Co-developed quantum-assisted weather models (QGRU, QLSTM, QNN, VQC, QSVM) on ERA5 single-level data for Safdarjung, Delhi; IEEE AIMLSystems 2025 paper.",
         "Compared quantum image encodings (NASS, QBIR, FTQR, FRQCI) in QNNs for binary classification; equal-contribution paper in The Journal of Supercomputing (2026).",
         "Co-authored the FPGA deployment of a hybrid variational circuit for temperature forecasting on an AMD Alveo U55C (HLS, HBM); IEEE TQCEBT 2026."
       ],
@@ -174,7 +174,7 @@
         "PennyLane",
         "FPGA"
       ],
-      "narrative": "At C-DAC's Embedded Systems Division I am primarily responsible for the quantum machine learning (QML) based weather forecasting project, under the supervision of Mr. Abhishek Tiwari (Scientist F, Principal Investigator). I research and develop QML models for weather forecasting, including quantum recurrent neural networks (QLSTM and QGRU), quantum generative adversarial networks (QGANs) and quantum neural networks (QNNs). Published outcomes so far: the weather-prediction paper at IEEE AIMLSystems 2025 (arXiv:2503.23408), a comparison of quantum image encodings in QNNs in The Journal of Supercomputing (2026), and a co-authored FPGA deployment of a hybrid variational circuit for temperature forecasting at IEEE TQCEBT 2026.",
+      "narrative": "At C-DAC's Embedded Systems Division I am primarily responsible for the quantum machine learning (QML) based weather forecasting project, under the supervision of Mr. Abhishek Tiwari (Scientist F, Principal Investigator). I research and develop QML models for weather forecasting, including quantum recurrent neural networks (QLSTM and QGRU), quantum generative adversarial networks (QGANs) and quantum neural networks (QNNs). Published outcomes so far: the weather-prediction paper at IEEE AIMLSystems 2025, a comparison of quantum image encodings in QNNs in The Journal of Supercomputing (2026), and a co-authored FPGA deployment of a hybrid variational circuit for temperature forecasting at IEEE TQCEBT 2026.",
       "related": [
         "Quantum machine learning models for enhanced weather prediction",
         "Quantum image representation-based quantum neural networks for binary classification",
@@ -1197,7 +1197,13 @@
       "doi": "",
       "abstract": "",
       "category": "conference",
-      "role": "I prepared the fundamental ideas, workflow, algorithms and framework, and helped improve and generalise the pipeline after R. Jaware developed it. B. Kape and S. Sakhuja are acknowledged only."
+      "role": "I prepared the fundamental ideas, workflow, algorithms and framework, and helped improve and generalise the pipeline after R. Jaware developed it. B. Kape and S. Sakhuja are acknowledged only.",
+      "links": [
+        {
+          "label": "Code",
+          "url": "https://github.com/s-siyanwal/AMAI"
+        }
+      ]
     },
     {
       "venue": "IEEE AIMLSystems 2025",
@@ -1211,7 +1217,6 @@
       "pages": "446–451",
       "xplore": "11330613",
       "category": "conference",
-      "arxiv": "2503.23408",
       "sections": [
         {
           "h": "Problem",
@@ -1242,7 +1247,13 @@
       "note": "NASS, QBIR, FTQR, FRQCI; binary MNIST 0/1 at 2×2 to 16×16; three-class FashionMNIST.",
       "category": "journal",
       "article": "495",
-      "issue": "8"
+      "issue": "8",
+      "links": [
+        {
+          "label": "Open-access preprint (Research Square, CC BY 4.0)",
+          "url": "https://doi.org/10.21203/rs.3.rs-7621070/v1"
+        }
+      ]
     },
     {
       "venue": "Quantum Information Processing",
@@ -1328,6 +1339,18 @@
       "abstract": "",
       "category": "poster",
       "role": "Poster presenting my work at TCG CREST."
+    },
+    {
+      "venue": "BQIT:22, Bristol, 26–28 Apr 2022",
+      "year": "2022",
+      "title": "Machine Learning/Deep Learning-based Entanglement detection and Gate Optimization in NMR Quantum Computation",
+      "type": "Poster",
+      "status": "",
+      "authors": "S. Siyanwal",
+      "doi": "",
+      "abstract": "",
+      "category": "poster",
+      "role": "I attended and presented this poster."
     }
   ],
   "education": [
@@ -1421,7 +1444,13 @@
     {
       "topic": "Quantum Optimization for Urban Heat Island",
       "kind": "Manuscript",
-      "detail": "With Vikramaditya Bisani, since March 2025"
+      "detail": "With Vikramaditya Bisani, since March 2025",
+      "links": [
+        {
+          "label": "Code",
+          "url": "https://github.com/s-siyanwal/q_uhi"
+        }
+      ]
     }
   ],
   "certificates": [
@@ -1440,6 +1469,18 @@
     {
       "title": "QGSS 2026, Qiskit Global Summer School",
       "year": "2026"
+    },
+    {
+      "title": "BQIT:22, Bristol, 26–28 Apr 2022: attended and presented the poster 'Machine Learning/Deep Learning-based Entanglement detection and Gate Optimization in NMR Quantum Computation'",
+      "year": "2022"
+    },
+    {
+      "title": "Tutor, PHY102 (Introduction to Electromagnetism) help sessions, IISER Mohali, Summer semester 2021 (AY 2021–22); letter from the Dean (Students) dated 6 Sep 2022",
+      "year": "2021"
+    },
+    {
+      "title": "Certificate of Participation, IEEE-IISc Communications Society quantum communications workshop with IndiQ, 3–5 Sep 2021",
+      "year": "2021"
     },
     {
       "title": "Trainer, faculty programme, C-DAC Mohali",

@@ -67,6 +67,9 @@ def cite(p):
         ids.append(r"\href{https://doi.org/%s}{doi:%s}" % (url(p["doi"]), tex(p["doi"])))
     if p.get("arxiv"):
         ids.append(r"\href{https://arxiv.org/abs/%s}{arXiv:%s}" % (url(p["arxiv"]), tex(p["arxiv"])))
+    for l in p.get("links") or []:
+        if l.get("url") and l.get("label"):
+            ids.append(r"\href{%s}{%s}" % (url(l["url"]), tex(l["label"])))
     head = (authors(p.get("authors")) + ". ") if p.get("authors") else ""
     return f"{head}{tex(p.get('title'))}. {', '.join(bits)}{status}." + (" " + r" \textperiodcentered{} ".join(ids) if ids else "")
 
@@ -94,8 +97,12 @@ def body(d, proofs):
     prep = d.get("in_preparation") or []                           # topics only: no title or author list yet
     if prep:
         out.append(r"\cvsubsection{Manuscripts in preparation}")
-        out.append(r"\begin{cvitems}" + "".join(r"\item %s.%s" % (tex(m["topic"]), (" " + tex(m["detail"]) + ".") if m.get("detail") else "")
-                                                for m in prep) + r"\end{cvitems}")
+        def prep_item(m):
+            tail = (" " + tex(m["detail"]) + ".") if m.get("detail") else ""
+            links = " ".join(r"\href{%s}{%s}" % (url(l["url"]), tex(l["label"]))
+                             for l in m.get("links") or [] if l.get("url") and l.get("label"))
+            return tex(m["topic"]) + "." + tail + ((" " + links) if links else "")
+        out.append(r"\begin{cvitems}" + "".join(r"\item %s" % prep_item(m) for m in prep) + r"\end{cvitems}")
     if any(p.get("equal_contribution") for p in pubs):
         out.append(r"\par\vspace{2pt}{\footnotesize $^{*}$Equal contribution.}\par")
     talks = [p for p in pubs if p.get("category") in ("poster", "presentation")]
@@ -106,8 +113,10 @@ def body(d, proofs):
             kind = "Poster" if p["category"] == "poster" else "Talk"
             count[kind] += 1
             head = (authors(p.get("authors")) + ". ") if p.get("authors") else ""
-            out.append(r"\cvref{%s%d}{%s%s. %s, \textit{%s}%s.}" % ("Po" if kind == "Poster" else "T", count[kind], head, tex(p["title"]), kind,
-                                                                    tex(p.get("venue")), (", " + tex(p["year"])) if p.get("year") else ""))
+            extra = "".join(" " + r"\href{%s}{%s}" % (url(l["url"]), tex(l["label"]))
+                            for l in p.get("links") or [] if l.get("url") and l.get("label"))
+            out.append(r"\cvref{%s%d}{%s%s. %s, \textit{%s}%s.%s}" % ("Po" if kind == "Poster" else "T", count[kind], head, tex(p["title"]), kind,
+                                                                    tex(p.get("venue")), (", " + tex(p["year"])) if p.get("year") else "", extra))
     out.append(r"\cvsection{Awards and fellowships}")
     for a in d.get("awards", []):
         proof = proofs.get(a["title"]) or ""
