@@ -648,7 +648,15 @@ html[data-view="expert"] [data-view="layman"], html[data-view="layman"] [data-vi
 .cv-key { display: inline-block; width: 3rem; text-indent: 0; }
 .cv-awards { list-style: none; margin: 0; padding: 0; }
 .cv-awards li { margin-bottom: .25rem; }
-.cv-proof { font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; margin-left: .4rem; color: var(--accent) !important; }
+a.view-proof, a.view-proof-mail {
+  font-family: var(--mono); font-size: .68rem; font-weight: 400; font-style: normal;
+  letter-spacing: .04em; line-height: 1.2; color: var(--faint) !important;
+  text-decoration: none; text-transform: none; margin-left: .5rem; white-space: nowrap;
+  vertical-align: middle; border: 0; background: none; padding: 0; box-shadow: none;
+}
+a.view-proof:hover, a.view-proof:focus-visible, a.view-proof-mail:hover, a.view-proof-mail:focus-visible {
+  color: var(--muted) !important; text-decoration: underline; text-underline-offset: 2px;
+}
 .cv-skills { margin: 0; display: grid; gap: .25rem; }
 .cv-skills div { display: grid; grid-template-columns: minmax(8rem, 13rem) 1fr; gap: 1rem; }
 .cv-skills dt { font-weight: 700; }

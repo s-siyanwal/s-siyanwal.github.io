@@ -36,6 +36,17 @@ export const extras = { links: {}, journey: {} };
 /* A link stored in links.json: an https URL, or a repo path such as assets/docs/x.pdf (relative to the site root). */
 export const hrefOf = (v) => (!v ? "" : /^(https?:|mailto:)/.test(v) ? v : String(v).replace(/^\/+/, ""));
 
+/* A proof in links.json: proofs (awards), certificate_proofs, or role_proofs ("role @ org"). Empty values stay hidden. */
+export const proofOf = (bucket, key) => hrefOf(((extras.links || {})[bucket] || {})[key]);
+export const viewProof = (href, label, email) => {
+  if (!href) return "";
+  const proof = ` <a class="view-proof" href="${esc(href)}" target="_blank" rel="noopener">View proof<span class="sr">: ${esc(label)}</span></a>`;
+  if (!email) return proof;
+  const mail = `mailto:${esc(email)}?subject=${encodeURIComponent(`Request: details for ${label} proof`)}`;
+  return proof + ` <a class="view-proof-mail" href="${mail}">Email me for redacted details<span class="sr">: ${esc(label)}</span></a>`;
+};
+
+
 /* ---------------------------------------------------------------- chrome */
 const NAV = [["index.html#work", "Work", "work"], ["about.html", "About", "about"], ["path.html", "Path", "path"], ["papers.html", "Papers", "papers"],
   ["cv.html", "CV", "cv"], ["personal.html", "Personal", "personal"], ["references.html", "References", "references"]];

@@ -1,8 +1,8 @@
 /* Site: the academic CV as a page, laid out like the LaTeX CV that scripts/cv_tex.py generates from the same
    content.json (education, research experience, publications, posters and talks, awards and fellowships, skills,
-   references on a dedicated page). Award proofs come from data/links.json → proofs; an award without a link shows none.
+   references on a dedicated page). Proofs come from data/links.json (proofs, certificate_proofs, role_proofs); an item without a link shows none.
    No phone number is ever shown. */
-import { boot, $, esc, extras, hrefOf } from "./core.js";
+import { boot, $, esc, proofOf, viewProof } from "./core.js";
 import { authorsHtml } from "../js/site.js";
 
 const PAPER_GROUPS = [["journal", "Journal articles", "J"], ["conference", "Conference papers", "C"], ["manuscript", "Manuscripts under review", "M"], ["preprint", "Preprints", "P"], ["thesis", "Thesis", "Th"]];
@@ -30,7 +30,7 @@ boot({
   page: "cv",
   fieldMode: 0,
   render(d) {
-    const p = d.profile || {}, proofs = (extras.links || {}).proofs || {};
+    const p = d.profile || {};
     const cv = (p.links || {}).cv_pdf;
     $("cv-actions").innerHTML = `<ul class="artifact-row">${cv ? `<li><a class="btn btn--solid" href="${esc(cv)}" download>Download PDF <span aria-hidden="true">↓</span></a></li>` : ""}
       <li><a class="btn" href="assets/Shivanshu_Siyanwal_CV.tex">LaTeX source</a></li></ul>`;
@@ -42,7 +42,7 @@ boot({
 
     const edu = (d.education || []).map((e) => entry(`<strong>${esc(e.degree)}</strong>`, esc(e.period || ""), `${esc(e.school)}${e.location ? `, ${esc(e.location)}` : ""}`,
       e.note ? `<p class="cv-p">${esc(e.note)}</p>` : "")).join("");
-    const roles = [...(d.experience || []), ...(d.research || [])].map((e) => entry(`<strong>${esc(e.role)}</strong>`, esc(e.period || ""),
+    const roles = [...(d.experience || []), ...(d.research || [])].map((e) => entry(`<strong>${esc(e.role)}</strong>${viewProof(proofOf("role_proofs", `${e.role} @ ${e.org}`), e.role, p.email)}`, esc(e.period || ""),
       `${esc(e.org)}${e.location ? `, ${esc(e.location)}` : ""}`,
       (e.points || []).length ? `<ul class="cv-ul">${e.points.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : e.summary ? `<p class="cv-p">${esc(e.summary)}</p>` : "")).join("");
 
@@ -58,11 +58,10 @@ boot({
     const talks = pubs.filter((x) => x.category === "poster" || x.category === "presentation");
     const seen = { poster: 0, presentation: 0 };                  // posters [Po1..] and talks [T1..] numbered separately
     const talksHtml = `<ol class="cv-refs">${talks.map((x) => `<li><span class="cv-key">[${x.category === "poster" ? "Po" : "T"}${++seen[x.category]}]</span> ${x.authors ? `${authorsHtml(x.authors)}. ` : ""}${esc(x.title)}. ${x.category === "poster" ? "Poster" : "Talk"}, <em>${esc(x.venue || "")}</em>${x.year ? `, ${esc(x.year)}` : ""}.${(x.links || []).filter((l) => l && l.url && l.label).map((l) => ` <a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join("")}</li>`).join("")}</ol>`;
-    const awards = `<ul class="cv-awards">${(d.awards || []).map((a) => {
-      const proof = proofs[a.title];
-      return `<li><span class="cv-l">${esc(a.title)}${proof ? ` <a class="cv-proof" href="${esc(hrefOf(proof))}" target="_blank" rel="noopener">Proof<span class="sr"> for ${esc(a.title)}</span></a>` : ""}</span><span class="cv-r">${esc(a.year || "")}</span></li>`;
-    }).join("")}</ul>`;
-    const certs = (d.certificates || []).length ? `<ul class="cv-awards">${d.certificates.map((a) => `<li><span class="cv-l">${esc(a.title)}</span><span class="cv-r">${esc(a.year || "")}</span></li>`).join("")}</ul>` : "";
+    const awards = `<ul class="cv-awards">${(d.awards || []).map((a) =>
+      `<li><span class="cv-l">${esc(a.title)}${viewProof(proofOf("proofs", a.title), a.title, p.email)}</span><span class="cv-r">${esc(a.year || "")}</span></li>`).join("")}</ul>`;
+    const certs = (d.certificates || []).length ? `<ul class="cv-awards">${d.certificates.map((a) =>
+      `<li><span class="cv-l">${esc(a.title)}${viewProof(proofOf("certificate_proofs", a.title), a.title, p.email)}</span><span class="cv-r">${esc(a.year || "")}</span></li>`).join("")}</ul>` : "";
     const skills = `<dl class="cv-skills">${(d.skills || []).map((g) => `<div><dt>${esc(g.category)}</dt><dd>${esc((g.items || []).join(", "))}</dd></div>`).join("")}</dl>`;
 
     $("cv-body").innerHTML = [

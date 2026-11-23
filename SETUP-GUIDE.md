@@ -186,7 +186,7 @@ anything left empty is simply hidden on the site.
 |---|---|---|
 | Hero photo | `assets/img/profile.jpg` | Upload a portrait crop (about 900 × 1100 px). Until it exists, your existing portrait is used. |
 | PDF / code / data / slides buttons on each research thread | `data/links.json` → `artifacts` → the thread's id | Paste a full `https://` link, or put a small PDF in `assets/docs/` and write `assets/docs/name.pdf`. |
-| "Proof" links next to awards on the CV | `data/links.json` → `proofs` → the award title exactly as in `content.json` | Paste the Google Drive share link of the certificate. |
+| “View proof” links next to awards, certificates and roles | `data/links.json` → `proofs` / `certificate_proofs` / `role_proofs` | Put a redacted PDF in `assets/proofs/` and write `assets/proofs/name.pdf`, or paste a public `https://` URL (for example a Credly badge page). Role keys are `role @ org` exactly as in `content.json`. |
 | Photos and videos on the Path page ("Field notes") | `data/journey.json` → `stages` → the stage | Upload files to `assets/media/`, then list them under `featured` (up to 3 shown) or `gallery`. Each item: `{"type": "image", "src": "assets/media/name.jpg", "alt": "what it shows", "caption": ""}`. |
 | Personal page | `data/journey.json` → `personal` | Write an `intro` and add `sections` with a `title`, `text` and media. |
 | Layman write-ups on research threads | `data/content.json` → `projects` → `layman` | They are drafts written from your papers; read them, edit, then set `layman_status` to `"verified"` to remove the draft note. |

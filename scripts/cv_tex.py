@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate the LaTeX academic CV from data/content.json (+ data/links.json for award proofs) using
+Generate the LaTeX academic CV from data/content.json (+ data/links.json for proof links) using
 cv/cv-template.tex, and compile it with pdflatex when available.
 
   python3 scripts/cv_tex.py                 # writes cv/cv.tex, and cv/cv.pdf if pdflatex exists
@@ -18,6 +18,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = ROOT / "cv" / "cv-template.tex"
@@ -74,18 +75,36 @@ def cite(p):
     return f"{head}{tex(p.get('title'))}. {', '.join(bits)}{status}." + (" " + r" \textperiodcentered{} ".join(ids) if ids else "")
 
 
-def body(d, proofs):
+
+SITE = "https://s-siyanwal.github.io/"
+
+def proof_href(value, label="", email=""):
+    """A links.json proof: an https URL, or a repo path published at the GitHub Pages origin."""
+    v = value or ""
+    href = v if v.startswith("http") else (SITE + v if v.startswith("assets/") else "")
+    if not href:
+        return ""
+    out = r" \href{%s}{\small\textit{View proof}}" % url(href)
+    if email:
+        mail = "mailto:%s?subject=%s" % (email, quote("Request: details for %s proof" % label, safe=""))
+        out += r" \href{%s}{\small\textit{Email me for redacted details}}" % url(mail)
+    return out
+
+
+def body(d, links):
     out = []
+    email = (d.get("profile") or {}).get("email") or ""
     out.append(r"\cvsection{Education}")
     for e in d.get("education", []):
         note = tex(e.get("note")) if e.get("note") else ""
         out.append(r"\cventry{%s}{%s}{%s}{%s}" % (tex(e["degree"]), tex(e.get("period")),
                                                   tex(e["school"] + (", " + e["location"] if e.get("location") else "")), note))
     out.append(r"\cvsection{Research experience}")
+    role_proofs = (links or {}).get("role_proofs") or {}
     for e in d.get("experience", []) + d.get("research", []):
         pts = e.get("points") or []
         b = (r"\begin{cvitems}" + "".join(r"\item " + tex(t) for t in pts) + r"\end{cvitems}") if pts else tex(e.get("summary"))
-        out.append(r"\cventry{%s}{%s}{%s}{%s}" % (tex(e["role"]), tex(e.get("period")),
+        out.append(r"\cventry{%s%s}{%s}{%s}{%s}" % (tex(e["role"]), proof_href(role_proofs.get(f"{e.get('role', '')} @ {e.get('org', '')}"), e.get("role") or "", email), tex(e.get("period")),
                                                   tex(e["org"] + (", " + e["location"] if e.get("location") else "")), b))
     pubs = d.get("publications", [])
     out.append(r"\cvsection{Publications}")
@@ -118,14 +137,14 @@ def body(d, proofs):
             out.append(r"\cvref{%s%d}{%s%s. %s, \textit{%s}%s.%s}" % ("Po" if kind == "Poster" else "T", count[kind], head, tex(p["title"]), kind,
                                                                     tex(p.get("venue")), (", " + tex(p["year"])) if p.get("year") else "", extra))
     out.append(r"\cvsection{Awards and fellowships}")
+    proofs = (links or {}).get("proofs") or {}
     for a in d.get("awards", []):
-        proof = proofs.get(a["title"]) or ""
-        link = (r" \href{%s}{\small[proof]}" % url(proof)) if proof.startswith("http") else ""
-        out.append(r"\cvaward{%s%s}{%s}" % (tex(a["title"]), link, tex(a.get("year"))))
+        out.append(r"\cvaward{%s%s}{%s}" % (tex(a["title"]), proof_href(proofs.get(a["title"]), a.get("title") or "", email), tex(a.get("year"))))
     if d.get("certificates"):
         out.append(r"\cvsection{Certificates and events}")
+        cert_proofs = (links or {}).get("certificate_proofs") or {}
         for a in d["certificates"]:
-            out.append(r"\cvaward{%s}{%s}" % (tex(a["title"]), tex(a.get("year"))))
+            out.append(r"\cvaward{%s%s}{%s}" % (tex(a["title"]), proof_href(cert_proofs.get(a["title"]), a.get("title") or "", email), tex(a.get("year"))))
     out.append(r"\cvsection{Skills}")
     out.append(r"\begin{tabular}{@{}>{\bfseries}p{0.24\linewidth}p{0.72\linewidth}@{}}")
     out += [r"%s & %s \\[2pt]" % (tex(g["category"]), tex(", ".join(g.get("items", [])))) for g in d.get("skills", [])]
@@ -137,7 +156,6 @@ def body(d, proofs):
 
 def generate(data, links=None):
     p = data.get("profile", {})
-    proofs = (links or {}).get("proofs", {})
     contact = [tex(p.get("location"))] if p.get("location") else []
     if p.get("email"):
         contact.append(r"\href{mailto:%s}{%s}" % (url(p["email"]), tex(p["email"])))
@@ -146,7 +164,7 @@ def generate(data, links=None):
             contact.append(r"\href{%s}{%s}" % (url(x["url"]), tex(x["label"])))
     t = TEMPLATE.read_text(encoding="utf-8")
     t = t.replace("%%NAME%%", tex(p.get("name"))).replace("%%TITLE%%", tex(p.get("title")))
-    t = t.replace("%%CONTACT%%", r" \textperiodcentered{} ".join(contact)).replace("%%BODY%%", body(data, proofs))
+    t = t.replace("%%CONTACT%%", r" \textperiodcentered{} ".join(contact)).replace("%%BODY%%", body(data, links))
     return t
 
 
