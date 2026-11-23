@@ -18,6 +18,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = ROOT / "cv" / "cv-template.tex"
@@ -77,15 +78,22 @@ def cite(p):
 
 SITE = "https://s-siyanwal.github.io/"
 
-def proof_href(value):
+def proof_href(value, label="", email=""):
     """A links.json proof: an https URL, or a repo path published at the GitHub Pages origin."""
     v = value or ""
     href = v if v.startswith("http") else (SITE + v if v.startswith("assets/") else "")
-    return (r" \href{%s}{\small\textit{View proof}}" % url(href)) if href else ""
+    if not href:
+        return ""
+    out = r" \href{%s}{\small\textit{View proof}}" % url(href)
+    if email:
+        mail = "mailto:%s?subject=%s" % (email, quote("Request: details for %s proof" % label, safe=""))
+        out += r" \href{%s}{\small\textit{Email me for redacted details}}" % url(mail)
+    return out
 
 
 def body(d, links):
     out = []
+    email = (d.get("profile") or {}).get("email") or ""
     out.append(r"\cvsection{Education}")
     for e in d.get("education", []):
         note = tex(e.get("note")) if e.get("note") else ""
@@ -96,7 +104,7 @@ def body(d, links):
     for e in d.get("experience", []) + d.get("research", []):
         pts = e.get("points") or []
         b = (r"\begin{cvitems}" + "".join(r"\item " + tex(t) for t in pts) + r"\end{cvitems}") if pts else tex(e.get("summary"))
-        out.append(r"\cventry{%s%s}{%s}{%s}{%s}" % (tex(e["role"]), proof_href(role_proofs.get(f"{e.get('role', '')} @ {e.get('org', '')}")), tex(e.get("period")),
+        out.append(r"\cventry{%s%s}{%s}{%s}{%s}" % (tex(e["role"]), proof_href(role_proofs.get(f"{e.get('role', '')} @ {e.get('org', '')}"), e.get("role") or "", email), tex(e.get("period")),
                                                   tex(e["org"] + (", " + e["location"] if e.get("location") else "")), b))
     pubs = d.get("publications", [])
     out.append(r"\cvsection{Publications}")
@@ -131,12 +139,12 @@ def body(d, links):
     out.append(r"\cvsection{Awards and fellowships}")
     proofs = (links or {}).get("proofs") or {}
     for a in d.get("awards", []):
-        out.append(r"\cvaward{%s%s}{%s}" % (tex(a["title"]), proof_href(proofs.get(a["title"])), tex(a.get("year"))))
+        out.append(r"\cvaward{%s%s}{%s}" % (tex(a["title"]), proof_href(proofs.get(a["title"]), a.get("title") or "", email), tex(a.get("year"))))
     if d.get("certificates"):
         out.append(r"\cvsection{Certificates and events}")
         cert_proofs = (links or {}).get("certificate_proofs") or {}
         for a in d["certificates"]:
-            out.append(r"\cvaward{%s%s}{%s}" % (tex(a["title"]), proof_href(cert_proofs.get(a["title"])), tex(a.get("year"))))
+            out.append(r"\cvaward{%s%s}{%s}" % (tex(a["title"]), proof_href(cert_proofs.get(a["title"]), a.get("title") or "", email), tex(a.get("year"))))
     out.append(r"\cvsection{Skills}")
     out.append(r"\begin{tabular}{@{}>{\bfseries}p{0.24\linewidth}p{0.72\linewidth}@{}}")
     out += [r"%s & %s \\[2pt]" % (tex(g["category"]), tex(", ".join(g.get("items", [])))) for g in d.get("skills", [])]

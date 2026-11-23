@@ -42,7 +42,7 @@ boot({
 
     const edu = (d.education || []).map((e) => entry(`<strong>${esc(e.degree)}</strong>`, esc(e.period || ""), `${esc(e.school)}${e.location ? `, ${esc(e.location)}` : ""}`,
       e.note ? `<p class="cv-p">${esc(e.note)}</p>` : "")).join("");
-    const roles = [...(d.experience || []), ...(d.research || [])].map((e) => entry(`<strong>${esc(e.role)}</strong>${viewProof(proofOf("role_proofs", `${e.role} @ ${e.org}`), e.role)}`, esc(e.period || ""),
+    const roles = [...(d.experience || []), ...(d.research || [])].map((e) => entry(`<strong>${esc(e.role)}</strong>${viewProof(proofOf("role_proofs", `${e.role} @ ${e.org}`), e.role, p.email)}`, esc(e.period || ""),
       `${esc(e.org)}${e.location ? `, ${esc(e.location)}` : ""}`,
       (e.points || []).length ? `<ul class="cv-ul">${e.points.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : e.summary ? `<p class="cv-p">${esc(e.summary)}</p>` : "")).join("");
 
@@ -59,9 +59,9 @@ boot({
     const seen = { poster: 0, presentation: 0 };                  // posters [Po1..] and talks [T1..] numbered separately
     const talksHtml = `<ol class="cv-refs">${talks.map((x) => `<li><span class="cv-key">[${x.category === "poster" ? "Po" : "T"}${++seen[x.category]}]</span> ${x.authors ? `${authorsHtml(x.authors)}. ` : ""}${esc(x.title)}. ${x.category === "poster" ? "Poster" : "Talk"}, <em>${esc(x.venue || "")}</em>${x.year ? `, ${esc(x.year)}` : ""}.${(x.links || []).filter((l) => l && l.url && l.label).map((l) => ` <a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join("")}</li>`).join("")}</ol>`;
     const awards = `<ul class="cv-awards">${(d.awards || []).map((a) =>
-      `<li><span class="cv-l">${esc(a.title)}${viewProof(proofOf("proofs", a.title), a.title)}</span><span class="cv-r">${esc(a.year || "")}</span></li>`).join("")}</ul>`;
+      `<li><span class="cv-l">${esc(a.title)}${viewProof(proofOf("proofs", a.title), a.title, p.email)}</span><span class="cv-r">${esc(a.year || "")}</span></li>`).join("")}</ul>`;
     const certs = (d.certificates || []).length ? `<ul class="cv-awards">${d.certificates.map((a) =>
-      `<li><span class="cv-l">${esc(a.title)}${viewProof(proofOf("certificate_proofs", a.title), a.title)}</span><span class="cv-r">${esc(a.year || "")}</span></li>`).join("")}</ul>` : "";
+      `<li><span class="cv-l">${esc(a.title)}${viewProof(proofOf("certificate_proofs", a.title), a.title, p.email)}</span><span class="cv-r">${esc(a.year || "")}</span></li>`).join("")}</ul>` : "";
     const skills = `<dl class="cv-skills">${(d.skills || []).map((g) => `<div><dt>${esc(g.category)}</dt><dd>${esc((g.items || []).join(", "))}</dd></div>`).join("")}</dl>`;
 
     $("cv-body").innerHTML = [

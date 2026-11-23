@@ -15,10 +15,10 @@ boot({
       <span class="edu-when">${esc(e.period || "")}</span><h3>${esc(e.degree)}</h3>
       <p class="edu-school">${esc(e.school)}${e.location ? ` · ${esc(e.location)}` : ""}</p>${e.note ? `<p class="edu-note">${esc(e.note)}</p>` : ""}</li>`).join("");
     $("tools-list").innerHTML = (d.skills || []).map((g) => `<div data-rv><dt>${esc(g.category)}</dt><dd>${esc((g.items || []).join(" · "))}</dd></div>`).join("");
-    $("award-list").innerHTML = (d.awards || []).map((x) => `<li data-rv><span class="aw-y">${esc(x.year || "")}</span><span class="aw-t">${esc(x.title)}${viewProof(proofOf("proofs", x.title), x.title)}${x.detail ? ` <span class="aw-d">${esc(x.detail)}</span>` : ""}</span></li>`).join("");
+    $("award-list").innerHTML = (d.awards || []).map((x) => `<li data-rv><span class="aw-y">${esc(x.year || "")}</span><span class="aw-t">${esc(x.title)}${viewProof(proofOf("proofs", x.title), x.title, p.email)}${x.detail ? ` <span class="aw-d">${esc(x.detail)}</span>` : ""}</span></li>`).join("");
     const certs = d.certificates || [];
     $("certificates").hidden = !certs.length;
-    $("cert-list").innerHTML = certs.map((x) => `<li data-rv><span class="aw-y">${esc(x.year || "")}</span><span class="aw-t">${esc(x.title)}${viewProof(proofOf("certificate_proofs", x.title), x.title)}</span></li>`).join("");
+    $("cert-list").innerHTML = certs.map((x) => `<li data-rv><span class="aw-y">${esc(x.year || "")}</span><span class="aw-t">${esc(x.title)}${viewProof(proofOf("certificate_proofs", x.title), x.title, p.email)}</span></li>`).join("");
     return {};
   },
 });
