@@ -30,11 +30,6 @@
       "featured": [],
       "gallery": []
     },
-    "quantum-computing-developer": {
-      "label": "Quantum Computing Developer · Arqanum Technologies Pvt. Ltd.",
-      "featured": [],
-      "gallery": []
-    },
     "ms-research-student": {
       "label": "MS Research Student · NMR Quantum Computing Group, IISER Mohali (PI: Prof. Kavita Dorai)",
       "featured": [],
@@ -42,6 +37,11 @@
     },
     "intern": {
       "label": "Intern · Mesoscopic Physics Lab (PI: Dr. Ananth Venkatesan), 2018",
+      "featured": [],
+      "gallery": []
+    },
+    "junior-quantum-computing-developer": {
+      "label": "Junior Quantum Computing Developer · Arqanum Technologies Pvt. Ltd.",
       "featured": [],
       "gallery": []
     }
