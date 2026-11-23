@@ -1,6 +1,6 @@
 /* Site: the academic CV as a page, laid out like the LaTeX CV that scripts/cv_tex.py generates from the same
    content.json (education, research experience, publications, posters and talks, awards and fellowships, skills,
-   references on request). Award proofs come from data/links.json → proofs; an award without a link shows none.
+   references on a dedicated page). Award proofs come from data/links.json → proofs; an award without a link shows none.
    No phone number is ever shown. */
 import { boot, $, esc, extras, hrefOf } from "./core.js";
 import { authorsHtml } from "../js/site.js";
@@ -73,7 +73,7 @@ boot({
       section("awards", "Awards and fellowships", awards),
       certs ? section("certificates", "Certificates and events", certs) : "",
       section("skills", "Skills", skills),
-      section("references", "References", '<p class="cv-p">Available on request.</p>'),
+      section("references", "References", '<p class="cv-p">Available on the <a href="references.html">References</a> page.</p>'),
     ].join("");
     return {};
   },

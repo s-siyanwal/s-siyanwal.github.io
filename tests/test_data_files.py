@@ -93,3 +93,36 @@ def test_project_links_are_https_or_empty():
         for link in p.get("links", []):
             assert set(link) == {"label", "url"}, link
             assert link["url"] == "" or link["url"].startswith("https://"), link
+
+
+PERSONAL_MAIL = re.compile(r"@(gmail|googlemail|yahoo|outlook|hotmail|rediffmail|icloud|me\.com|proton|aol)\.", re.I)
+MONTH = re.compile(r"\b(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\b")
+
+
+def test_references_are_institutional_and_have_no_phones():
+    refs = DATA["references"]
+    assert [r["name"] for r in refs] == [
+        "Mr Abhishek Tiwari",
+        "Dr Arpita Maitra",
+        "Prof. Kavita Dorai",
+        "Dr. Arvind",
+        "Dr Ananth Venkatesan",
+        "Prof. N. G. Prasad",
+        "Dr. Vaishali Gulati",
+        "Dr. Kapil Kumar Sharma",
+    ]
+    for r in refs:
+        assert set(r) <= {"name", "post", "relation", "email"}
+        assert r["name"].strip() and r["post"].strip()
+        blob = " ".join(str(v) for v in r.values())
+        assert not PHONE.search(blob), r
+        assert not MONTH.search(r.get("relation") or ""), r
+        if "email" in r:
+            assert "@" in r["email"] and " " not in r["email"]
+            assert not r["email"].startswith("mailto:")
+            assert not PERSONAL_MAIL.search(r["email"]), r["email"]
+    by = {r["name"]: r for r in refs}
+    assert by["Dr. Vaishali Gulati"]["email"] == "vaishali@dl.amrita.edu"
+    assert by["Dr. Arvind"]["email"] == "arvind@iisermohali.ac.in"
+    assert "email" not in by["Dr. Kapil Kumar Sharma"]
+

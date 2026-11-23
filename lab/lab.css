@@ -255,6 +255,16 @@ h1 em, h2 em, .foot-big em { color: var(--accent); }
 .aw-d { display: block; margin-top: .3rem; font-family: Geist, system-ui, sans-serif; font-size: .95rem; line-height: 1.4; opacity: .7; }
 #certificates[hidden] { display: none; }
 
+/* ---------- References ---------- */
+.refs { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.refs li { padding: 1.6rem 0; border-bottom: 1px solid var(--line); }
+.ref-n { font-family: var(--mono); font-size: .78rem; color: var(--accent); }
+.refs h2 { font-family: var(--display); font-size: clamp(1.6rem, 2.8vw, 2.2rem); line-height: 1.14; margin: .15rem 0 .25rem; }
+.ref-post { margin: 0; color: var(--muted); max-width: 68ch; }
+.ref-rel { margin: .45rem 0 0; max-width: 68ch; }
+.ref-mail { margin: .45rem 0 0; font-family: var(--mono); font-size: .82rem; letter-spacing: .02em; }
+
+
 /* ---------- Path: the worldline ---------- */
 .worldline-wrap { position: relative; padding-left: 2.4rem; }
 .wl-line, .wl-fill { position: absolute; left: .5rem; top: .5rem; bottom: .5rem; width: 1px; background: var(--line-strong); }

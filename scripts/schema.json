@@ -106,6 +106,20 @@
       "type": "array",
       "items": {"type": "object", "required": ["title"]}
     },
-    "about": {"type": "object"}
+    "about": {"type": "object"},
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "post"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "post": {"type": "string", "minLength": 1},
+          "relation": {"$ref": "#/$defs/str"},
+          "email": {"type": "string", "minLength": 1}
+        }
+      }
+    }
   }
 }
