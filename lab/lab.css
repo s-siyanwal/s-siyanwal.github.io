@@ -148,18 +148,20 @@ h1 em, h2 em, .foot-big em { color: var(--accent); }
 .hz-track { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.2rem; }
 @media (min-width: 720px) { .hz-track { grid-template-columns: 1fr 1fr; } }
 .hz-card { perspective: 900px; }
-.hz-card a {
+.hz-card .hz-in {
   position: relative; display: flex; flex-direction: column; gap: .5rem; height: 100%; min-height: 22rem; padding: 1.6rem 1.5rem 1.4rem;
-  background: var(--veil); border: 1px solid var(--line); border-top: 3px solid var(--th, var(--accent)); border-radius: 6px; text-decoration: none;
+  background: var(--veil); border: 1px solid var(--line); border-top: 3px solid var(--th, var(--accent)); border-radius: 6px;
   transition: transform .5s var(--ease), border-color .3s var(--ease);
 }
-@supports (backdrop-filter: blur(1px)) { .hz-card a { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); } }
-.hz-card a:hover, .hz-card a:focus-visible { transform: translateY(-6px); border-color: var(--line-strong); color: inherit; }
+@supports (backdrop-filter: blur(1px)) { .hz-card .hz-in { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); } }
+/* A click anywhere on the card opens it (home.js), but only the title is a link, so a middle click elsewhere on the card autoscrolls. */
+.hz-card { cursor: pointer; }
+.hz-card:hover .hz-in, .hz-card:focus-within .hz-in { transform: translateY(-6px); border-color: var(--line-strong); }
 .hz-n { font-family: var(--mono); font-size: .8rem; color: var(--accent); }
 .hz-of { color: var(--faint); }
 .hz-thread { font-family: var(--mono); font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
-.hz-title { font-family: var(--display); font-size: clamp(1.9rem, 3vw, 2.6rem); line-height: 1.04; }
-.hz-card a:hover .hz-title, .hz-card a:focus-visible .hz-title { color: var(--accent); }
+.hz-title { display: block; font-family: var(--display); font-size: clamp(1.9rem, 3vw, 2.6rem); line-height: 1.04; color: inherit; text-decoration: none; }
+.hz-card:hover .hz-title, .hz-title:focus-visible { color: var(--accent); }
 .hz-status { font-family: var(--mono); font-size: .78rem; color: var(--muted); }
 .hz-blurb { color: var(--muted); }
 .hz-metric { margin-top: auto; display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
@@ -168,13 +170,31 @@ h1 em, h2 em, .foot-big em { color: var(--accent); }
 .hz-go { font-family: var(--mono); font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-top: .4rem; }
 .hz-metric + .hz-go { margin-top: .4rem; }
 .hz-blurb + .hz-go, .hz-status + .hz-go { margin-top: auto; }
-/* Pinned (desktop with motion): one row that GSAP moves sideways as you scroll down. */
-.work.is-pinned { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-top: calc(var(--bar-h) + 1.5rem); padding-bottom: 2rem; overflow: hidden; }
-.work.is-pinned .work-head { width: 100%; }
-.work.is-pinned .hz { max-width: none; width: 100%; }
-.work.is-pinned .hz-track { display: flex; gap: 1.6rem; width: max-content; padding-left: max(0px, calc((100vw - var(--maxw)) / 2 - var(--pad))); padding-right: 30vw; }
-.work.is-pinned .hz-card { width: min(30rem, 40vw); flex: 0 0 auto; }
-.work.is-pinned .hz-card a { min-height: min(31rem, 60vh); }
+/* Deck (desktop with motion): one sideways row, an ordinary overflow-x scroller. Nothing pins or captures the vertical wheel. */
+.deck { overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+.deck:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.deck-ctrl { display: flex; align-items: center; gap: 1rem; max-width: var(--maxw); margin: .9rem auto 0; }
+.deck-ctrl[hidden] { display: none; }
+.deck-pos { margin: 0; min-width: 9ch; }
+.deck-bar { flex: 1; height: 2px; background: var(--line); }
+.deck-fill { display: block; height: 100%; background: var(--accent); transform-origin: left center; transition: transform .2s linear; }
+.deck-btns { display: flex; gap: .4rem; }
+.work.is-deck { padding-bottom: 1rem; }
+.work.is-deck .hz { max-width: none; width: 100%; }
+.work.is-deck .hz-track { display: flex; gap: 1.6rem; width: max-content; padding: .8rem max(0px, calc((100vw - var(--maxw)) / 2 - var(--pad))) 1rem; }
+.work.is-deck .hz-card { width: min(30rem, 40vw); flex: 0 0 auto; }
+.work.is-deck .hz-card .hz-in { min-height: min(31rem, 60vh); }
+
+/* Hackathons: kept apart from the main research threads. */
+.other-projects { max-width: var(--maxw); margin: clamp(3rem, 8vh, 5rem) auto 0; padding-top: 1.4rem; border-top: 1px solid var(--line); }
+.other-projects[hidden] { display: none; }
+.other-projects h3 { font-family: var(--mono); font-size: .76rem; font-weight: 400; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); margin: 0 0 1rem; }
+.op-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.2rem; }
+.op-item { display: grid; gap: .25rem; max-width: 64ch; }
+.op-title { font-family: var(--display); font-size: clamp(1.4rem, 2.2vw, 1.8rem); line-height: 1.15; color: inherit; text-decoration: none; }
+.op-title:hover, .op-title:focus-visible { color: var(--accent); }
+.op-status { font-family: var(--mono); font-size: .78rem; color: var(--muted); }
+.op-blurb { color: var(--muted); }
 
 /* ---------- Home: numbers, short path, citations, contact ---------- */
 .nums { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
@@ -362,8 +382,8 @@ h1 em, h2 em, .foot-big em { color: var(--accent); }
 
 /* ---------- Reduced motion and print ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .hz-card a, .next-card, .btn { transition: none; }
-  .hz-card a:hover, .hz-card a:focus-visible, .next-card:hover, .next-card:focus-visible { transform: none; }
+  .hz-card .hz-in, .next-card, .btn { transition: none; }
+  .hz-card:hover .hz-in, .hz-card:focus-within .hz-in, .next-card:hover, .next-card:focus-visible { transform: none; }
 }
 @media print {
   :root, :root[data-theme="dark"] {
@@ -372,17 +392,18 @@ h1 em, h2 em, .foot-big em { color: var(--accent); }
   }
   .lab-field, .curtain, .bar, .page-nav, .cue, .skip, .hero-cta, .filters, .next, .wl-fill, .view-bar, .toc-toggle, .replay-tools, .ab-controls, .row-ctrl, .fn-open, .play, #abstract, .crumbs-pn, .cv-hero .artifacts { display: none !important; }
   .pub-row { display: block !important; overflow: visible !important; }
-  .worldline-sec.is-horizontal .worldline { display: block; transform: none !important; }
-  .worldline-sec.is-horizontal .event { width: auto !important; max-height: none !important; overflow: visible !important; }
+  .deck { overflow: visible !important; }
+  .deck-ctrl, .wl-tools .chip { display: none !important; }
+  .worldline-sec.is-gallery .worldline { display: block; width: auto; }
+  .worldline-sec.is-gallery .event { width: auto !important; }
   .ev-more:not([open]) > :not(summary) { display: block; }
   [data-view] { display: block !important; }
   .cv-sheet { box-shadow: none !important; border: 0 !important; padding: 0 !important; }
-  .hero, .question, .work.is-pinned { min-height: 0; }
-  .work.is-pinned { overflow: visible; }
-  .work.is-pinned .hz-track { display: grid; width: auto; padding: 0; transform: none !important; }
-  .work.is-pinned .hz-card { width: auto; }
+  .hero, .question { min-height: 0; }
+  .work.is-deck .hz-track { display: grid; width: auto; padding: 0; }
+  .work.is-deck .hz-card { width: auto; }
   .wi, .chi, [data-rv], .hz-card { opacity: 1 !important; transform: none !important; }
-  .hz-card a, .interest, .paper-card, .chapter, .event, .cite, .bib, .fig { break-inside: avoid; }
+  .hz-card .hz-in, .interest, .paper-card, .chapter, .event, .cite, .bib, .fig { break-inside: avoid; }
   .ch-side { position: static; }
 }
 
@@ -565,20 +586,21 @@ html[data-view="expert"] [data-view="layman"], html[data-view="layman"] [data-vi
 .fn-nav { display: flex; justify-content: space-between; margin-top: .6rem; }
 .fn-nav button, .fn-close { font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; min-height: 36px; padding: 0 .9rem; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--bg); color: var(--ink); cursor: pointer; }
 
-/* ---------- Path: vertical by default, horizontal when pinned ---------- */
+/* ---------- Path: vertical by default, a sideways deck in gallery mode ---------- */
 .worldline-sec { max-width: calc(var(--maxw) + 2 * var(--pad)); margin: 0 auto; padding-top: clamp(3rem, 9vh, 6rem); }
-.worldline-sec .work-hint { margin-bottom: 1.2rem; }
 .ev-more { margin-top: .9rem; }
 .ev-more summary { font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); cursor: pointer; display: inline-flex; min-height: 32px; align-items: center; }
-.worldline-sec.is-horizontal { max-width: none; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-top: calc(var(--bar-h) + 1rem); padding-bottom: 1.5rem; overflow: hidden; }
-.worldline-sec.is-horizontal .work-hint { max-width: var(--maxw); width: 100%; margin: 0 auto 1rem; }
-.worldline-sec.is-horizontal .worldline-wrap { padding: 2.2rem 0 0; }
-.worldline-sec.is-horizontal .wl-line, .worldline-sec.is-horizontal .wl-fill { left: 0; right: 0; top: 1rem; bottom: auto; width: auto; height: 1px; }
-.worldline-sec.is-horizontal .wl-fill { height: 3px; top: calc(1rem - 1px); transform-origin: left center; }
-.worldline-sec.is-horizontal .worldline { display: flex; gap: 2rem; width: max-content; padding-left: max(0px, calc((100vw - var(--maxw)) / 2 - var(--pad))); padding-right: 20vw; }
-.worldline-sec.is-horizontal .event { width: min(27rem, 34vw); flex: 0 0 auto; max-height: calc(100vh - var(--bar-h) - 7rem); overflow: auto; padding: 0 .4rem 1rem 0; overscroll-behavior: contain; }
-.worldline-sec.is-horizontal .ev-dot { left: 0; top: -1.75rem; }
-.worldline-sec.is-horizontal .ev-title { font-size: clamp(1.5rem, 2.2vw, 2.1rem); }
+.wl-tools { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.2rem; }
+.wl-tools .work-hint { margin: 0; }
+.wl-gallery { flex: none; min-height: 32px; font-size: .7rem; padding: 0 .8rem; }
+/* Gallery mode: the stages as a sideways deck (deck.js). Off by default; the vertical list is the normal view. */
+.worldline-sec.is-gallery .worldline-wrap { padding: 2.2rem 0 1rem; }
+.worldline-sec.is-gallery .wl-line, .worldline-sec.is-gallery .wl-fill { display: none; }
+.worldline-sec.is-gallery .worldline { position: relative; display: flex; gap: 2rem; width: max-content; padding-right: 2rem; }
+.worldline-sec.is-gallery .worldline::before { content: ""; position: absolute; left: 0; right: 0; top: -1.2rem; height: 1px; background: var(--line-strong); }
+.worldline-sec.is-gallery .event { width: min(27rem, 82vw); flex: 0 0 auto; padding: 0 0 1.2rem; }
+.worldline-sec.is-gallery .ev-dot { left: 0; top: -1.75rem; }
+.worldline-sec.is-gallery .ev-title { font-size: clamp(1.5rem, 2.2vw, 2.1rem); }
 
 /* ---------- Papers: one row per type ---------- */
 .pub-group { padding-top: clamp(3rem, 8vh, 5rem); }

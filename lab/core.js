@@ -236,7 +236,8 @@ export const scrollState = { progress: () => {
 
 function smoothScroll() {
   if (!MOTION || !window.Lenis) return;
-  lenis = new window.Lenis({ lerp: 0.085, wheelMultiplier: 0.9, smoothWheel: true });
+  /* shift + wheel is left to the browser, so it scrolls a horizontal deck sideways instead of moving the page. */
+  lenis = new window.Lenis({ lerp: 0.085, wheelMultiplier: 0.9, smoothWheel: true, virtualScroll: ({ event }) => !event.shiftKey });
   lenis.on("scroll", ScrollTrigger.update);
   gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);

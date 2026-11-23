@@ -27,7 +27,7 @@ boot({
     $("pub-groups").innerHTML = groups.map(([k, label, list]) => `<section class="block pub-group" id="g-${k}" aria-labelledby="g-${k}-h" data-g="${k}">
       <div class="pub-head"><h2 id="g-${k}-h" data-split>${esc(label)} <span class="pub-n">${list.length}</span></h2>
         <div class="row-ctrl"><button type="button" class="ab-btn" data-dir="-1" aria-label="Scroll ${esc(label)} back">←</button><button type="button" class="ab-btn" data-dir="1" aria-label="Scroll ${esc(label)} forward">→</button></div></div>
-      <ol class="pub-row" tabindex="0" aria-label="${esc(label)}, scrolls sideways" data-lenis-prevent>${list.map((p) => `<li class="bib" data-rv>
+      <ol class="pub-row" tabindex="0" aria-label="${esc(label)}, scrolls sideways">${list.map((p) => `<li class="bib" data-rv>
         <p class="cite-k">${esc(p.year || "")} · ${esc(p.type || p.category || "")}${p.status && p.status !== "published" ? ` · ${esc(p.status)}` : ""}</p>
         <h3 class="cite-t">${esc(p.title)}</h3>
         ${p.authors ? `<p class="cite-a">${authorsHtml(p.authors)}</p>` : ""}
@@ -39,7 +39,7 @@ boot({
     </section>`).join("") + (prep.length ? `<section class="block pub-group" id="g-prep" aria-labelledby="g-prep-h" data-g="prep">
       <div class="pub-head"><h2 id="g-prep-h" data-split>In preparation <span class="pub-n">${prep.length}</span></h2>
         <div class="row-ctrl"><button type="button" class="ab-btn" data-dir="-1" aria-label="Scroll In preparation back">←</button><button type="button" class="ab-btn" data-dir="1" aria-label="Scroll In preparation forward">→</button></div></div>
-      <ol class="pub-row" tabindex="0" aria-label="In preparation, scrolls sideways" data-lenis-prevent>${prep.map((m) => `<li class="bib" data-rv>
+      <ol class="pub-row" tabindex="0" aria-label="In preparation, scrolls sideways">${prep.map((m) => `<li class="bib" data-rv>
         <p class="cite-k">${esc(m.kind || "Manuscript")} · in preparation</p>
         <h3 class="cite-t">${esc(m.topic)}</h3>
         ${m.detail ? `<p class="cite-v">${esc(m.detail)}</p>` : ""}

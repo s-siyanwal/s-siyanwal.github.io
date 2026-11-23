@@ -1111,39 +1111,6 @@
       "role": "In summer 2019 (May–July) I was a research intern in Dr. N. G. Prasad's Evolutionary Biology Lab at IISER Mohali. I developed mathematical models of gene-frequency patterns of sexually dimorphic traits in Drosophila melanogaster, simulated population-genetic evolution in MATLAB, and analysed data in R."
     },
     {
-      "id": "qca-cfd",
-      "name": "QCA CFD",
-      "blurb": "Repository for a discrete solver of the 2D fluid equations based on quantum cellular automata. So far it holds a classical lattice-Boltzmann solver.",
-      "abstract": "The repository's stated aim is a discrete solver of the 2D fluid equations based on quantum cellular automata (QCA). What it holds so far is a classical D2Q9 lattice-Boltzmann solver, built one component at a time, with tests, verification notebooks and an example configuration for flow past a cylinder at Re = 100.",
-      "status": "Public repository",
-      "tags": [
-        "Quantum cellular automata",
-        "CFD",
-        "Lattice Boltzmann"
-      ],
-      "audience": "academic",
-      "links": [
-        {
-          "label": "Code",
-          "url": "https://github.com/s-siyanwal/QCA_CFD"
-        }
-      ],
-      "featured": false,
-      "sections": [
-        {
-          "h": "Aim",
-          "p": "A discrete solver of the 2D fluid equations based on quantum cellular automata, as stated in the repository's README."
-        },
-        {
-          "h": "What the repository holds",
-          "p": [
-            "A classical D2Q9 lattice-Boltzmann solver, built one component at a time: a YAML configuration manager that checks each file against a JSON schema; the D2Q9 lattice (velocities, weights and the equilibrium distribution); a geometry builder for circular, rectangular and NACA 4-digit aerofoil obstacles; and a core engine with BGK collision and streaming with bounce-back walls, compiled with Numba.",
-            "It also has pytest tests, verification notebooks and an example configuration for flow past a cylinder at Re = 100 on an 800 × 400 grid. No quantum cellular automaton code is in the repository so far."
-          ]
-        }
-      ]
-    },
-    {
       "id": "qpoland-hqlstm",
       "name": "Hybrid Quantum LSTM (QPoland Hackathon 2025)",
       "blurb": "Submission to the QPoland Global Quantum Hackathon 2025, Quantum in Finance track: a hybrid quantum LSTM that predicts closing prices on the test set.",
@@ -1162,6 +1129,7 @@
         }
       ],
       "featured": false,
+      "group": "hackathons",
       "sections": [
         {
           "h": "Task",

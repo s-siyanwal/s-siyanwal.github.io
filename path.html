@@ -23,11 +23,14 @@
   <section class="page-hero" id="top" aria-labelledby="pa-h">
     <p class="micro">Path</p>
     <h1 id="pa-h" data-split>A <em>worldline</em></h1>
-    <p class="page-lede">Education and roles in time order, oldest first. On a wide screen the line runs sideways as you scroll; each stage opens its field notes.</p>
+    <p class="page-lede">Education and roles in time order, oldest first. Turn on gallery mode to lay the stages out as a sideways row; each stage opens its field notes.</p>
   </section>
   <section class="worldline-sec" id="worldline-sec" aria-labelledby="wl-h">
     <h2 id="wl-h" class="sr">Timeline</h2>
-    <p class="work-hint" id="wl-hint"></p>
+    <div class="wl-tools">
+      <p class="work-hint" id="wl-hint">Education and roles in time order, oldest first.</p>
+      <button type="button" class="chip wl-gallery" id="wl-gallery" aria-pressed="false" hidden>Gallery mode</button>
+    </div>
     <div class="worldline-wrap"><span class="wl-line" aria-hidden="true"></span><span class="wl-fill" data-draw aria-hidden="true"></span>
       <ol class="worldline" id="worldline"></ol></div>
   </section>

@@ -1,5 +1,6 @@
 /* Site: home. */
 import { boot, $, esc, kineticName, MOTION, DESKTOP, PRERENDER, REDUCE } from "./core.js";
+import { deckControls, wireDeck } from "./deck.js";
 import { THREADS, projectStatus, authorsHtml, venueHtml, idLinks } from "../js/site.js";
 
 const shortRole = (r = "") => r.split("—")[0].trim();
@@ -29,20 +30,35 @@ boot({
     const a = d.about || {};
     $("q-text").textContent = a.question || (a.statement || [])[0] || p.research_interests || "";
 
-    $("work-track").innerHTML = projects.map((pr, i) => {
+    const deckProjects = projects.filter((x) => x.group !== "hackathons"), hackathons = projects.filter((x) => x.group === "hackathons");
+    $("work-track").innerHTML = deckProjects.map((pr, i) => {
       const [th, label] = THREADS[pr.id] || ["", "Project"];
       const m = (pr.metrics || [])[0];
-      return `<li class="hz-card th-${esc(th)}" data-rv>
-        <a href="project-${esc(pr.id)}.html">
-          <span class="hz-n">${String(i + 1).padStart(2, "0")} <span class="hz-of">/ ${String(projects.length).padStart(2, "0")}</span></span>
+      return `<li class="hz-card th-${esc(th)}" data-rv data-href="project-${esc(pr.id)}.html">
+        <div class="hz-in">
+          <span class="hz-n">${String(i + 1).padStart(2, "0")} <span class="hz-of">/ ${String(deckProjects.length).padStart(2, "0")}</span></span>
           <span class="hz-thread">${esc(label)}</span>
-          <span class="hz-title">${esc(pr.name)}</span>
+          <a class="hz-title" href="project-${esc(pr.id)}.html">${esc(pr.name)}</a>
           <span class="hz-status">${esc(projectStatus(pr, pubs))}</span>
           <span class="hz-blurb">${esc(pr.blurb || "")}</span>
           ${m ? `<span class="hz-metric"><span class="v"${numeric(m.value) ? ` data-count="${esc(m.value)}"` : ""}>${esc(m.value)}</span><span class="l">${esc(m.label)}</span></span>` : ""}
-          <span class="hz-go">Open the breakdown <span aria-hidden="true">→</span></span>
-        </a></li>`;
+          <span class="hz-go" aria-hidden="true">Open the breakdown →</span>
+        </div></li>`;
     }).join("");
+    /* A click anywhere on a card opens it, but only the title is a link: a middle click on the rest of the card is
+       left to the browser, so it starts autoscroll instead of opening a tab. */
+    $("work-track").addEventListener("click", (e) => {
+      const card = e.target.closest(".hz-card");
+      if (!card || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.target.closest("a") || String(getSelection())) return;
+      location.href = card.dataset.href;
+    });
+
+    /* Hackathon entries sit apart from the main research threads. */
+    $("other-projects").hidden = !hackathons.length;
+    $("other-list").innerHTML = hackathons.map((pr) => `<li class="op-item">
+        <a class="op-title" href="project-${esc(pr.id)}.html">${esc(pr.name)}</a>
+        <span class="op-status">${esc(pr.status || "")}</span>
+        <span class="op-blurb">${esc(pr.blurb || "")}</span></li>`).join("");
 
     /* A metric with "computed" is counted from the publication list, so it cannot drift from the data. */
     const COMPUTED = {
@@ -79,37 +95,27 @@ boot({
     (p.profiles || []).filter((x) => x.url && !x.url.startsWith("mailto:")).forEach((x) => links.push([x.url, x.label]));
     $("links").innerHTML = links.map(([h, l]) => `<li><a href="${esc(h)}"${/^(http|\.\.)/.test(h) ? ' target="_blank" rel="noopener"' : ""}>${esc(l)} <span aria-hidden="true">↗</span></a></li>`).join("");
 
-    return { kickers: ".hz-card a", after: (ctx) => { horizontal(ctx); playground(); navAwayAtHero(); } };
+    return { kickers: ".hz-card .hz-in", after: (ctx) => { horizontal(ctx); playground(); navAwayAtHero(); } };
   },
 });
 
-/* Work: on desktop with motion, the section pins and vertical scroll drives the track sideways. Keyboard focus
-   on a card scrolls the page to the point where that card is in view. Elsewhere it is a plain vertical list. */
-function horizontal({ gsap, ScrollTrigger, lenis }) {
+/* Work: on desktop with motion the threads form a sideways deck (see deck.js). It never pins or captures the vertical
+   wheel, so the page always scrolls past it. Elsewhere it is a plain vertical list. */
+function horizontal({ ScrollTrigger }) {
   if (!MOTION || !DESKTOP) return;
-  const section = $("work"), track = $("work-track"), wrap = section.querySelector(".hz");
-  section.classList.add("is-pinned");
-  $("work-hint").textContent = "Scroll to move through the threads; each one opens a full breakdown.";
-  const distance = () => Math.max(0, track.scrollWidth - wrap.clientWidth);
+  const section = $("work"), deck = section.querySelector(".hz");
+  section.classList.add("is-deck");
+  deck.classList.add("deck");
+  deck.tabIndex = 0;
+  deck.setAttribute("role", "region");
+  deck.setAttribute("aria-label", "Research threads, scrolls sideways");
+  deck.insertAdjacentHTML("afterend", deckControls("thread"));
+  const sync = wireDeck(deck, section.querySelector(".deck-ctrl"), ".hz-card");
+  $("work-hint").textContent = "Each thread opens a full breakdown. Scroll down as usual. Sideways: swipe, trackpad, shift + wheel, arrow keys or the buttons.";
+  // The side navigator steps aside while the deck is on screen, so it never covers a card.
   const nav = document.querySelector(".page-nav");
-  const tween = gsap.to(track, {
-    x: () => -distance(), ease: "none",
-    scrollTrigger: { trigger: section, pin: true, start: "top top", end: () => `+=${distance()}`, scrub: 0.8, invalidateOnRefresh: true, anticipatePin: 1,
-      // The side navigator steps aside while the track is pinned, so it never covers a card.
-      onToggle: (self) => nav && nav.classList.toggle("is-away", self.isActive) },
-  });
-  track.querySelectorAll(".hz-card").forEach((card) => {
-    gsap.fromTo(card, { rotateY: -16, scale: 0.94 }, { rotateY: 0, scale: 1, ease: "none",
-      scrollTrigger: { trigger: card, containerAnimation: tween, start: "left 95%", end: "left 55%", scrub: true } });
-    card.querySelector("a").addEventListener("focus", () => {
-      const st = tween.scrollTrigger, max = distance();
-      if (!st || !max) return;
-      const x = Math.min(max, Math.max(0, card.offsetLeft - wrap.clientWidth * 0.2));
-      const y = st.start + (x / max) * (st.end - st.start);
-      lenis ? lenis.scrollTo(y, { immediate: true }) : window.scrollTo(0, y);
-    });
-  });
-  if (document.fonts) document.fonts.ready.then(() => ScrollTrigger.refresh());
+  ScrollTrigger.create({ trigger: deck, start: "top 85%", end: "bottom 15%", onToggle: (self) => nav && nav.classList.toggle("is-away", self.isActive) });
+  if (document.fonts) document.fonts.ready.then(() => { sync(); ScrollTrigger.refresh(); });
 }
 
 /* Play: the three.js qubit is fetched only when its section approaches the viewport (it shares the vendored
