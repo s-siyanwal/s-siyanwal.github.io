@@ -205,7 +205,7 @@
       "org": "Institute for Advancing Intelligence, TCG CREST (PI: Dr. Arpita Maitra)",
       "role": "Research Intern — Quantum Cryptography",
       "location": "Kolkata, India",
-      "period": "Aug 2023 – Mar 2024",
+      "period": "Aug 2023 – Oct 2023",
       "summary": "Quantum circuits for block ciphers and a Grover-based plaintext–ciphertext attack.",
       "points": [
         "Built quantum circuits for an 8-bit AES (Mini-AES / S-AES) and Galois-field arithmetic; ran them on Qiskit and IBM Quantum hardware.",
@@ -220,7 +220,7 @@
     },
     {
       "org": "Arqanum Technologies Pvt. Ltd.",
-      "role": "Quantum Computing Developer",
+      "role": "Junior Quantum Computing Developer",
       "location": "Pune, India",
       "period": "Sep 2022 – Jul 2023",
       "summary": "Mainly quantum-based security and quantum machine learning in finance.",
@@ -234,7 +234,7 @@
         "AWS Braket",
         "Finance"
       ],
-      "narrative": "At Arqanum Technologies (September 2022 – July 2023) I worked mainly on quantum-based security and on quantum machine learning in finance. I developed variational quantum algorithms for time-series and financial models: data encodings (amplitude, phase and angle), Ising-Hamiltonian circuits, and VQC, QSVM and quantum Boltzmann machine models. I ran VQLS jobs on Amazon Braket and Rigetti hardware, and contributed code to two external projects: Dicke-state simulation for MeitY–QCAL, and a quantum cryptographic hash with IIT Kharagpur."
+      "narrative": "At Arqanum Technologies (Sep 2022 – Jul 2023) I worked mainly on quantum-based security and on quantum machine learning in finance. I developed variational quantum algorithms for time-series and financial models: data encodings (amplitude, phase and angle), Ising-Hamiltonian circuits, and VQC, QSVM and quantum Boltzmann machine models. I ran VQLS jobs on Amazon Braket and Rigetti hardware, and contributed code to two external projects: Dicke-state simulation for MeitY–QCAL, and a quantum cryptographic hash with IIT Kharagpur."
     }
   ],
   "research": [
@@ -571,7 +571,7 @@
           "by": "me"
         }
       ],
-      "period": "Aug 2023 – Mar 2024",
+      "period": "Aug 2023 – Oct 2023",
       "status": "Manuscript in preparation"
     },
     {
@@ -1341,7 +1341,7 @@
       "role": "Poster presenting my work at TCG CREST."
     },
     {
-      "venue": "BQIT:22, Bristol, 26–28 Apr 2022",
+      "venue": "BQIT:22, Bristol, 25–28 Apr 2022",
       "year": "2022",
       "title": "Machine Learning/Deep Learning-based Entanglement detection and Gate Optimization in NMR Quantum Computation",
       "type": "Poster",
@@ -1380,15 +1380,19 @@
       "year": "2017–2022"
     },
     {
+      "title": "Merit-cum-Means fellowship, Ministry of Minority Affairs",
+      "year": "2020–2022"
+    },
+    {
       "title": "DRDO Junior Research Fellowship, TCG CREST",
       "year": "2024"
     },
     {
       "title": "IBM Certified Associate Developer — Quantum Computation using Qiskit v0.2X",
-      "year": "2026"
+      "year": "2022"
     },
     {
-      "title": "Qiskit Global Summer School, Quantum Simulations, Advanced Level",
+      "title": "Qiskit Global Summer School, Quantum Simulations, Quantum Excellence",
       "year": "2022"
     },
     {
@@ -1396,7 +1400,7 @@
       "year": "2021"
     },
     {
-      "title": "IBM Quantum Challenge Africa, Advanced Achievement",
+      "title": "IBM Quantum Challenge Africa, Achievement",
       "year": "2021"
     },
     {
@@ -1438,7 +1442,7 @@
     {
       "topic": "Quantum circuits for a scaled-down AES (Mini-AES / S-AES) and a Grover-search plaintext–ciphertext attack",
       "kind": "Manuscript",
-      "detail": "TCG CREST, Aug 2023 – Mar 2024",
+      "detail": "TCG CREST, Aug 2023 – Oct 2023",
       "project": "qcrypto-circuits"
     },
     {
@@ -1471,7 +1475,7 @@
       "year": "2026"
     },
     {
-      "title": "BQIT:22, Bristol, 26–28 Apr 2022: attended and presented the poster 'Machine Learning/Deep Learning-based Entanglement detection and Gate Optimization in NMR Quantum Computation'",
+      "title": "BQIT:22, Bristol, 25–28 Apr 2022: attended and presented the poster 'Machine Learning/Deep Learning-based Entanglement detection and Gate Optimization in NMR Quantum Computation'",
       "year": "2022"
     },
     {
@@ -1480,6 +1484,10 @@
     },
     {
       "title": "Certificate of Participation, IEEE-IISc Communications Society quantum communications workshop with IndiQ, 3–5 Sep 2021",
+      "year": "2021"
+    },
+    {
+      "title": "AI Shiksha: Introduction to Machine Learning — National Supercomputing Mission / C-DAC with NSM nodal centres at IITs Goa, Kharagpur, Madras, Palakkad, Feb–Mar 2021",
       "year": "2021"
     },
     {
