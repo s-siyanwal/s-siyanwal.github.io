@@ -2,7 +2,7 @@
    A Photos toggle (off by default, remembered in localStorage) shows field-note photos and placeholders;
    with it off, and always without JS and in print unless already on, no photo frames are shown.
    Photos and videos come from data/journey.json (stage key = slug of the role or degree title). */
-import { boot, $, esc, paras, extras } from "./core.js";
+import { boot, $, esc, paras, extras, proofOf, viewProof } from "./core.js";
 import { slug, roleHref } from "../js/site.js";
 import { featuredHtml, galleryButton, wireGalleries } from "./gallery.js";
 
@@ -34,7 +34,7 @@ boot({
       return `<li class="event${e.now ? " is-now" : ""}" data-rv>
       <span class="ev-dot" aria-hidden="true"></span>
       <p class="ev-when">${esc(e.when || "")}<span class="ev-kind"> · ${esc(e.kind)}${e.now ? " · now" : ""}</span></p>
-      <h3 class="ev-title">${esc(e.title)}</h3>
+      <h3 class="ev-title">${esc(e.title)}${viewProof(proofOf("role_proofs", `${e.title} @ ${e.org}`), e.title)}</h3>
       <p class="ev-org">${esc(e.org)}${e.loc ? ` · ${esc(e.loc)}` : ""}</p>
       ${e.sum ? `<p class="ev-sum">${esc(e.sum)}</p>` : ""}
       ${e.href ? `<p class="ev-link"><a href="${e.href}" aria-label="Full write-up: ${esc(e.title)}, ${esc(e.org)}">Full write-up <span aria-hidden="true">→</span></a></p>` : ""}

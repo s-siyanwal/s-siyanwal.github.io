@@ -26,14 +26,31 @@ def test_links_keys_match_content():
         assert set(v) <= {"pdf", "code", "data", "slides"}
     titles = {a["title"] for a in DATA["awards"]}
     assert set(LINKS.get("proofs", {})) <= titles, "links.json proofs must be keyed by award titles exactly"
+    cert_titles = {c["title"] for c in DATA.get("certificates", [])}
+    assert set(LINKS.get("certificate_proofs", {})) <= cert_titles, "certificate_proofs must be keyed by certificate titles exactly"
+    role_keys = {f"{e['role']} @ {e['org']}" for e in DATA["experience"] + DATA["research"]}
+    assert set(LINKS.get("role_proofs", {})) <= role_keys, "role_proofs must be keyed by 'role @ org' exactly"
+
+
+def _link_values():
+    vals = [v for a in LINKS["artifacts"].values() for v in a.values()]
+    for bucket in ("proofs", "certificate_proofs", "role_proofs"):
+        vals.extend(LINKS.get(bucket, {}).values())
+    return vals
 
 
 def test_links_are_urls_or_repo_paths():
-    vals = [v for a in LINKS["artifacts"].values() for v in a.values()] + list(LINKS["proofs"].values())
-    for v in vals:
+    for v in _link_values():
         assert v == "" or v.startswith("https://") or v.startswith("assets/"), v
         if v.startswith("assets/"):
             assert (ROOT / v).exists(), f"missing file {v}"
+
+
+def test_proof_pdfs_are_small():
+    for v in _link_values():
+        if v.startswith("assets/") and v.endswith(".pdf"):
+            size = (ROOT / v).stat().st_size
+            assert size <= 500_000, f"{v} is {size} bytes; keep each proof under 500 KB"
 
 
 def test_journey_stages_match_path_events():
